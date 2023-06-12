@@ -7,7 +7,8 @@ namespace Asteroids.Tools
 {
     public enum LogCategory
     {
-        Common
+        Common,
+        Resources,
     }
 
     public enum LogType
@@ -65,6 +66,15 @@ namespace Asteroids.Tools
         {
             {
                 LogCategory.Common, new Dictionary<LogType, LogOutput>()
+                {
+                    { LogType.Assertion, DefaultAssertionLogOutput },
+                    { LogType.Debug, DefaultDebugLogOutput },
+                    { LogType.Warning, DefaultWarningLogOutput },
+                    { LogType.Error, DefaultErrorLogOutput },
+                }
+            },
+            {
+                LogCategory.Resources, new Dictionary<LogType, LogOutput>()
                 {
                     { LogType.Assertion, DefaultAssertionLogOutput },
                     { LogType.Debug, DefaultDebugLogOutput },

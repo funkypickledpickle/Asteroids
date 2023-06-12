@@ -9,6 +9,7 @@ namespace Asteroids.Tools
     {
         Common,
         Resources,
+        ECS,
     }
 
     public enum LogType
@@ -75,6 +76,15 @@ namespace Asteroids.Tools
             },
             {
                 LogCategory.Resources, new Dictionary<LogType, LogOutput>()
+                {
+                    { LogType.Assertion, DefaultAssertionLogOutput },
+                    { LogType.Debug, DefaultDebugLogOutput },
+                    { LogType.Warning, DefaultWarningLogOutput },
+                    { LogType.Error, DefaultErrorLogOutput },
+                }
+            },
+            {
+                LogCategory.ECS, new Dictionary<LogType, LogOutput>()
                 {
                     { LogType.Assertion, DefaultAssertionLogOutput },
                     { LogType.Debug, DefaultDebugLogOutput },

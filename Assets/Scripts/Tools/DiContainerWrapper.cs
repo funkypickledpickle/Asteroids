@@ -2,12 +2,20 @@ using Zenject;
 
 namespace Asteroids.Tools
 {
-    public interface IDiContainerWrapper
+    public interface IInstanceSpawner
+    {
+        T Instantiate<T>();
+    }
+
+    public interface IDiContainerWrapper : IInstanceSpawner
     {
         void Inject(object target);
         void Bind<T>(T instance);
+        void Bind<TFrom, TTarget>() where TTarget : TFrom;
         T Resolve<T>();
         IDiContainerWrapper CreateChildContainer();
+
+        T Instantiate<T>();
     }
 
     public class DiContainerWrapper : IDiContainerWrapper
@@ -27,6 +35,11 @@ namespace Asteroids.Tools
         public void Bind<T>(T instance)
         {
             _container.Bind<T>().FromInstance(instance).AsSingle();
+        }
+
+        public void Bind<TFrom, TTarget>() where TTarget : TFrom
+        {
+            _container.Bind<TFrom>().To<TTarget>().AsSingle();
         }
 
         public T Instantiate<T>()

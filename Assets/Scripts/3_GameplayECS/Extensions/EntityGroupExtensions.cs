@@ -1,4 +1,6 @@
 using Asteroids.ValueTypeECS.Components;
+using Asteroids.ValueTypeECS.Delegates;
+using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
 
 namespace Asteroids.GameplayECS.Extensions
@@ -7,6 +9,15 @@ namespace Asteroids.GameplayECS.Extensions
 
     public static class EntityGroupExtensions
     {
+        public static void ForEach(this EntityGroup entityGroup, ActionReference<Entity> actionReference)
+        {
+            var world = entityGroup.World;
+            foreach (var id in entityGroup)
+            {
+                actionReference(ref world.GetEntity(id));
+            }
+        }
+
         public static void ForEachOnlyComponents<TComponent1, TComponent2>(this EntityGroup entityGroup, ActionReference<TComponent1, TComponent2> actionReference) where TComponent1 : struct, IECSComponent where TComponent2 : struct, IECSComponent
         {
             var world = entityGroup.World;

@@ -3,6 +3,12 @@ using UnityEngine;
 
 namespace Asteroids.Services.Project
 {
+    public interface IFrameInfoService
+    {
+        public float DeltaTime { get; }
+        public float StartTime { get; }
+    }
+
     public interface IUnityExecutionService
     {
         void PauseUpdate();

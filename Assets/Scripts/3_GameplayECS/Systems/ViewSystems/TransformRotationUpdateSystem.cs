@@ -10,7 +10,10 @@ namespace Asteroids.GameplayECS.Systems.ViewSystems
     {
         protected override EntityGroup CreateContainer()
         {
-            return new EntityGroup(World, (ref Entity referenced) => referenced.HasComponent<RotationComponent>() && referenced.HasComponent<ViewComponent>());
+            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
+               .RequireComponent<RotationComponent>()
+               .RequireComponent<ViewComponent>()
+               .Build();
         }
 
         public override void Execute()

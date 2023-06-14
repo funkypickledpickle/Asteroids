@@ -66,5 +66,10 @@ namespace Asteroids.GameplayECS.Extensions
                 actionReference(ref component1, ref component2, value);
             }
         }
+
+        public static ref Entity GetFirst(this EntityGroup entityGroup)
+        {
+            return ref entityGroup.World.GetEntity(entityGroup.IdsList[0]);
+        }
     }
 }

@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: DefaultPlayer
   m_EditorClassIdentifier: 
   _mass: 100
+  _maxSpeed: 10
   _maxAcceleration: 1000
+  _speedTotalDumpingFactor: 0.03
+  _speedStartDumpingFactor: 20
+  _maxAngularSpeed: 480
   _maxAngularAcceleration: 80000
+  _angularSpeedStartDumpingFactor: 10
+  _angularSpeedTotalDumpingFactor: 0.0005
   _viewKey:
     _key: 1

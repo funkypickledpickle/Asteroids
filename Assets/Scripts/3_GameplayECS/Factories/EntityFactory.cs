@@ -1,4 +1,5 @@
 using Asteroids.Configuration.Game;
+using Asteroids.Extensions;
 using Asteroids.GameplayECS.Components;
 using Asteroids.Services.Project;
 using Asteroids.ValueTypeECS.Entities;
@@ -46,8 +47,20 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent(new MassComponent { Mass = playerConfiguration.Mass });
 
             entity.CreateComponent<VelocityComponent>();
+            entity.CreateComponent(new VelocityLimiterComponent { MaxSpeed = playerConfiguration.MaxSpeed });
+            entity.CreateComponent(new VelocityDumpComponent
+            {
+                StartFactor = playerConfiguration.SpeedStartDumpingFactor,
+                TotalFactor = playerConfiguration.SpeedTotalDumpingFactor,
+            });
 
             entity.CreateComponent<AngularVelocityComponent>();
+            entity.CreateComponent(new AngularVelocityLimiterComponent { MaxSpeed = playerConfiguration.MaxAngularSpeed });
+            entity.CreateComponent(new AngularVelocityDumpComponent
+            {
+                StartFactor = playerConfiguration.AngularSpeedStartDumpingFactor,
+                TotalFactor = playerConfiguration.AngularSpeedTotalDumpingFactor,
+            });
 
             entity.CreateComponent(new ViewKeyComponent { ViewKey = playerConfiguration.ViewKey });
         }

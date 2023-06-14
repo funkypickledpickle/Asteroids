@@ -7,6 +7,7 @@ namespace Asteroids.GameplayECS.Extensions
 {
     public delegate void ActionReference<TReferenced1, TReferenced2>(ref TReferenced1 referenced1, ref TReferenced2 referenced2) where TReferenced1 : struct where TReferenced2 : struct;
     public delegate void ActionReference<TReferenced1, TReferenced2, TReferenced3>(ref TReferenced1 referenced1, ref TReferenced2 referenced2, ref TReferenced3 referenced3) where TReferenced1 : struct where TReferenced2 : struct where TReferenced3 : struct;
+    public delegate void ActionReference<TReferenced1, TReferenced2, TReferenced3, TReferenced4>(ref TReferenced1 referenced1, ref TReferenced2 referenced2, ref TReferenced3 referenced3, ref TReferenced4 referenced4) where TReferenced1 : struct where TReferenced2 : struct where TReferenced3 : struct where TReferenced4 : struct;
     public delegate void ActionReferenceValue<TReferenced1, TReferenced2, TValue>(ref TReferenced1 referenced1, ref TReferenced2 referenced2, TValue value) where TReferenced1 : struct where TReferenced2 : struct;
 
     public static class EntityGroupExtensions
@@ -40,6 +41,19 @@ namespace Asteroids.GameplayECS.Extensions
                 ref var component1 = ref entity.GetComponent<TComponent1>();
                 ref var component2 = ref entity.GetComponent<TComponent2>();
                 actionReferenceRef2(ref entity, ref component1, ref component2);
+            }
+        }
+
+        public static void ForEachComponents<TComponent1, TComponent2, TComponent3>(this EntityGroup entityGroup, ActionReference<Entity, TComponent1, TComponent2, TComponent3> actionReference) where TComponent1 : struct, IECSComponent where TComponent2 : struct, IECSComponent where TComponent3 : struct, IECSComponent
+        {
+            var world = entityGroup.World;
+            foreach (var id in entityGroup)
+            {
+                ref var entity = ref world.GetEntity(id);
+                ref var component1 = ref entity.GetComponent<TComponent1>();
+                ref var component2 = ref entity.GetComponent<TComponent2>();
+                ref var component3 = ref entity.GetComponent<TComponent3>();
+                actionReference(ref entity, ref component1, ref component2, ref component3);
             }
         }
 

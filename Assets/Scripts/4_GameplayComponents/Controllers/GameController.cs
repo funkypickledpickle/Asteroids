@@ -53,12 +53,16 @@ namespace Asteroids.GameplayComponents.Controllers
 
             _systemsManager.AddSystem<ViewManagementSystem>();
 
+            _systemsManager.AddSystem<VelocityDumpingSystem>();
             _systemsManager.AddSystem<ForceSystem>();
             _systemsManager.AddSystem<VelocitySystem>();
+            _systemsManager.AddSystem<VelocityLimiterSystem>();
             _systemsManager.AddSystem<ForceResetSystem>();
 
+            _systemsManager.AddSystem<AngularVelocityDumpingSystem>();
             _systemsManager.AddSystem<AngularForceSystem>();
             _systemsManager.AddSystem<AngularVelocitySystem>();
+            _systemsManager.AddSystem<AngularVelocityLimiterSystem>();
             _systemsManager.AddSystem<AngularForceResetSystem>();
 
             _systemsManager.AddSystem<TransformPositionUpdateSystem>();

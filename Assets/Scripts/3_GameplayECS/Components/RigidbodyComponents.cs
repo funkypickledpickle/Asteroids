@@ -19,6 +19,17 @@ namespace Asteroids.GameplayECS.Components
         public Vector2 Velocity;
     }
 
+    public struct VelocityLimiterComponent : IECSComponent
+    {
+        public float MaxSpeed;
+    }
+
+    public struct VelocityDumpComponent : IECSComponent
+    {
+        public float StartFactor;
+        public float TotalFactor;
+    }
+
     public struct UpdatableAngularForceComponent : IECSComponent
     {
         public bool IsApplied => AngularForce != 0;
@@ -28,5 +39,16 @@ namespace Asteroids.GameplayECS.Components
     public struct AngularVelocityComponent : IECSComponent
     {
         public float AngularSpeed;
+    }
+
+    public struct AngularVelocityLimiterComponent : IECSComponent
+    {
+        public float MaxSpeed;
+    }
+
+    public struct AngularVelocityDumpComponent : IECSComponent
+    {
+        public float StartFactor;
+        public float TotalFactor;
     }
 }

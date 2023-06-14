@@ -1,4 +1,5 @@
 using System;
+using Asteroids.Configuration.Game;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Factories;
 using Asteroids.GameplayECS.Systems.AngularSystems;
@@ -33,6 +34,9 @@ namespace Asteroids.GameplayComponents.Controllers
 
         public GameController(IConfigurationService configurationService, IInstanceSpawner spawner)
         {
+            var gameConfiguration = configurationService.Get<GameConfiguration>();
+            UnityApplication.targetFrameRate = gameConfiguration.TargetFramerate;
+
             _playerGroup = spawner.Instantiate<EntityGroupBuilder>().RequireComponent<PlayerComponent>().Build();
             _playerGroup.SubscribeToEntityRemovedEvent(PlayerDestroyedHandler);
 

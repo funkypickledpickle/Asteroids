@@ -6,7 +6,9 @@ namespace Asteroids.Configuration.Game
     public class GameConfiguration : ScriptableObject
     {
         [SerializeField] private PlayerConfiguration _playerConfiguration;
+        [SerializeField] private int _targetFramerate;
 
         public PlayerConfiguration PlayerConfiguration => _playerConfiguration;
+        public int TargetFramerate => _targetFramerate;
     }
 }

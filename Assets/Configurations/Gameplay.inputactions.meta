@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 38abadcf735a44fc6a4e2037ffd3c910
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 8404be70184654265930450def6a9037, type: 3}
+  generateWrapperCode: 1
+  wrapperCodePath: Assets/Scripts/4_GameplayComponents/Generated/GameplayInputCollection.cs
+  wrapperClassName: GameplayInputCollection
+  wrapperCodeNamespace: Asteroids.GameplayComponents.Generated

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Asteroids.Configuration.Game;
 using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Components;
 using Asteroids.ValueTypeECS.DataContainers;
@@ -53,10 +54,10 @@ namespace Asteroids.ValueTypeECS.EntityContainer
         private readonly List<IEntityObserver> _observers = new List<IEntityObserver>();
         private readonly List<IComponentObserver> _entityObserver = new List<IComponentObserver>();
 
-        public World(int segmentedListCapacity, IComponentsContainer componentsContainer)
+        public World(WorldConfiguration worldConfiguration, IComponentsContainer componentsContainer)
         {
             _componentsContainer = componentsContainer;
-            _entities = new UnorderedSegmentedList<Entity>(segmentedListCapacity);
+            _entities = new UnorderedSegmentedList<Entity>(worldConfiguration.ArraySizeForEntitySegmentedList);
             _componentsContainer = componentsContainer;
         }
 

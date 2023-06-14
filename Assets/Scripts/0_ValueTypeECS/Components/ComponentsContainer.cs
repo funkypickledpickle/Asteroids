@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Asteroids.Configuration.Game;
 using Asteroids.ValueTypeECS.DataContainers;
 using Asteroids.ValueTypeECS.ECSTypes;
 
@@ -17,9 +18,9 @@ namespace Asteroids.ValueTypeECS.Components
         private readonly int _arraySizeInSegmentedList;
         private readonly Dictionary<ECSTypeKey, ISegmentedList> _componentsCollection = new Dictionary<ECSTypeKey, ISegmentedList>(new ECSTypeKeyEqualityComparer());
 
-        public ComponentsContainer(int segmentedListCapacity)
+        public ComponentsContainer(WorldConfiguration worldConfiguration)
         {
-            _arraySizeInSegmentedList = segmentedListCapacity;
+            _arraySizeInSegmentedList = worldConfiguration.ArraySizeForComponentsSegmentedList;
         }
 
         public ref TComponent CreateComponent<TComponent>(out int index) where TComponent : struct, IECSComponent

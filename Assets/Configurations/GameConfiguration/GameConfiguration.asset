@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: GameConfiguration
   m_EditorClassIdentifier: 
   _playerConfiguration: {fileID: 11400000, guid: e862a165b3ad64978a81c2cfa9d9e38d, type: 2}
+  _playerBulletConfiguration: {fileID: 11400000, guid: 4612db967e16045718fff780491a736d, type: 2}
   _targetFramerate: 60

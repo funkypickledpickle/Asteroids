@@ -21,5 +21,7 @@ MonoBehaviour:
   _maxAngularAcceleration: 80000
   _angularSpeedStartDumpingFactor: 10
   _angularSpeedTotalDumpingFactor: 0.0005
+  _gunFiringInterval: 0.2
+  _bulletSpawnPositionOffset: {x: 0, y: 0.6}
   _viewKey:
     _key: 1

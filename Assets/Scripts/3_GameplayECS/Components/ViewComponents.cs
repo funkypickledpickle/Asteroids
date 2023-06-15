@@ -15,5 +15,11 @@ namespace Asteroids.GameplayECS.Components
         public Transform Transform;
     }
 
+    public struct ViewCollisionComponent : IECSComponent
+    {
+        public GameObject Host;
+        public GameObject Client;
+    }
+
     public struct ViewCreatedComponent : IECSComponent { }
 }

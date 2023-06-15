@@ -51,4 +51,9 @@ namespace Asteroids.GameplayECS.Components
         public float StartFactor;
         public float TotalFactor;
     }
+
+    public struct CollisionComponent : IECSComponent
+    {
+        public int EntityId;
+    }
 }

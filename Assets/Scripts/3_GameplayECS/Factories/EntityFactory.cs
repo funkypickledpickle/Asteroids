@@ -35,6 +35,7 @@ namespace Asteroids.GameplayECS.Factories
             AddFieldComponents(ref entity, position, rotationDegrees);
 
             entity.CreateComponent<PlayerComponent>();
+            entity.CreateComponent<ShipComponent>();
             entity.CreateComponent<MainControlComponent>();
 
             entity.CreateComponent(new MainEngineConfigurationComponent { MaxForce = playerConfiguration.MaxAcceleration });
@@ -63,6 +64,12 @@ namespace Asteroids.GameplayECS.Factories
             });
 
             entity.CreateComponent(new ViewKeyComponent { ViewKey = playerConfiguration.ViewKey });
+        }
+
+        public void CreateUnityCollision(GameObject host, GameObject client)
+        {
+            ref var entity = ref _world.CreateEntity();
+            entity.CreateComponent(new ViewCollisionComponent { Host = host, Client = client });
         }
 
         private void AddFieldComponents(ref Entity entity, Vector2 position, float rotationDegrees)

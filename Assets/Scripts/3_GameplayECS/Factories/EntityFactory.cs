@@ -14,11 +14,13 @@ namespace Asteroids.GameplayECS.Factories
         [Inject] private readonly World _world;
 
         private readonly GameConfiguration _gameConfiguration;
+        private readonly BulletConfiguration _bulletConfiguration;
         private readonly PlayerConfiguration _playerConfiguration;
 
         public EntityFactory(IConfigurationService configurationService)
         {
             _gameConfiguration = configurationService.Get<GameConfiguration>();
+            _bulletConfiguration = _gameConfiguration.BulletConfiguration;
             _playerConfiguration = _gameConfiguration.PlayerConfiguration;
         }
 
@@ -26,6 +28,17 @@ namespace Asteroids.GameplayECS.Factories
         {
             ref var entity = ref _world.CreateEntity();
             entity.CreateComponent<GameComponent>();
+        }
+
+        public void CreateBullet(Vector2 position, float rotationDegrees, Vector2 speed)
+        {
+            var bulletConfiguration = _bulletConfiguration;
+            ref var entity = ref _world.CreateEntity();
+            AddFieldComponents(ref entity, position, rotationDegrees);
+
+            entity.CreateComponent<BulletComponent>();
+            entity.CreateComponent(new VelocityComponent { Velocity = speed });
+            entity.CreateComponent(new ViewKeyComponent { ViewKey = bulletConfiguration.ViewKey });
         }
 
         public void CreateShip(Vector3 position, float rotationDegrees)
@@ -42,6 +55,17 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent<MainEngineComponent>();
             entity.CreateComponent(new RotationEngineConfigurationComponent { MaxAngularForce = playerConfiguration.MaxAngularAcceleration });
             entity.CreateComponent<RotationEngineComponent>();
+
+            entity.CreateComponent(new GunComponent()
+            {
+                Configuration = new GunConfigurationComponent
+                {
+                    BulletSpeed = _bulletConfiguration.BulletSpeed,
+                    FiringInterval = playerConfiguration.GunFiringInterval,
+                    BulletSpawnPositionOffset = playerConfiguration.BulletSpawnPositionOffset
+                }
+            });
+            entity.CreateComponent<GunControlComponent>();
 
             entity.CreateComponent<UpdatableForceComponent>();
             entity.CreateComponent<UpdatableAngularForceComponent>();

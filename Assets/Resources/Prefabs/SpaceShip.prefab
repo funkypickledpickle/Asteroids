@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2446519589719772868}
   - component: {fileID: 5678619004593804395}
   - component: {fileID: 559738001396068045}
+  - component: {fileID: 4608309882077527628}
   m_Layer: 8
   m_Name: SpaceShip
   m_TagString: Untagged
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 942938489
-  m_SortingLayer: 0
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 5442f134162f3439da394e19d45451f7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -197,3 +198,16 @@ Rigidbody2D:
   m_SleepingMode: 2
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &4608309882077527628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2446519589719772871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b943abf31b95c4983bcadfd57b92f2d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rootGameObject: {fileID: 2446519589719772871}

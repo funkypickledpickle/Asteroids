@@ -21,6 +21,15 @@ namespace Asteroids.GameplayECS.Extensions
             }
         }
 
+        public static void ForEach<TValue>(this EntityGroup entityGroup, ActionReferenceValue<Entity, TValue> actionReference, TValue value)
+        {
+            var world = entityGroup.World;
+            foreach (var id in entityGroup)
+            {
+                actionReference(ref world.GetEntity(id), value);
+            }
+        }
+
         public static void ForEachComponent<TComponent>(this EntityGroup entityGroup, ActionReference<Entity, TComponent> actionReference) where TComponent : struct, IECSComponent
         {
             var world = entityGroup.World;

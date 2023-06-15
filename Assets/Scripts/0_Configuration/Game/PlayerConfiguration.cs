@@ -18,6 +18,9 @@ namespace Asteroids.Configuration.Game
         [SerializeField] private float _angularSpeedStartDumpingFactor;
         [SerializeField] private float _angularSpeedTotalDumpingFactor;
 
+        [SerializeField] private float _gunFiringInterval;
+        [SerializeField] private Vector2 _bulletSpawnPositionOffset;
+
         [SerializeField] private ViewKey _viewKey;
 
         public float Mass => _mass;
@@ -31,6 +34,10 @@ namespace Asteroids.Configuration.Game
         public float MaxAngularAcceleration => _maxAngularAcceleration;
         public float AngularSpeedStartDumpingFactor => _angularSpeedStartDumpingFactor;
         public float AngularSpeedTotalDumpingFactor => _angularSpeedTotalDumpingFactor;
+
+        public float GunFiringInterval => _gunFiringInterval;
+        public Vector2 BulletSpawnPositionOffset => _bulletSpawnPositionOffset;
+
         public ViewKey ViewKey => _viewKey;
     }
 }

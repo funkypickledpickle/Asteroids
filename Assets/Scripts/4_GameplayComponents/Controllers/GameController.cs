@@ -81,6 +81,8 @@ namespace Asteroids.GameplayComponents.Controllers
 
             _systemsManager.AddSystem<ViewActivationSystem>();
 
+            _systemsManager.AddSystem<LifeTimeManagementSystem>();
+            _systemsManager.AddSystem<TimedDeathExecutionSystem>();
             _systemsManager.AddSystem<DestroyingSystem>();
 
             _systemsManager.Initialize();

@@ -1,5 +1,4 @@
 using Asteroids.Configuration.Game;
-using Asteroids.Extensions;
 using Asteroids.GameplayECS.Components;
 using Asteroids.Services.Project;
 using Asteroids.ValueTypeECS.Entities;
@@ -39,6 +38,7 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent<BulletComponent>();
             entity.CreateComponent(new VelocityComponent { Velocity = speed });
             entity.CreateComponent(new ViewKeyComponent { ViewKey = bulletConfiguration.ViewKey });
+            entity.CreateComponent(new LifeTimeComponent { LifeTime = bulletConfiguration.LifeTime });
         }
 
         public void CreateShip(Vector3 position, float rotationDegrees)

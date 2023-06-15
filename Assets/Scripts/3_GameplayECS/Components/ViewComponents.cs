@@ -22,4 +22,9 @@ namespace Asteroids.GameplayECS.Components
     }
 
     public struct ViewCreatedComponent : IECSComponent { }
+
+    public struct ViewScaleComponent : IECSComponent
+    {
+        public Vector3 Scale;
+    }
 }

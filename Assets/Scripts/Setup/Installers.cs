@@ -2,6 +2,7 @@ using Asteroids.Configuration.Game;
 using Asteroids.Extensions;
 using Asteroids.GameplayComponents.Controllers;
 using Asteroids.GameplayComponents.Generated;
+using Asteroids.GameplayECS.Containers;
 using Asteroids.GameplayECS.Factories;
 using Asteroids.Services.EntityView;
 using Asteroids.Services.Project;
@@ -46,6 +47,7 @@ namespace Asteroids.Common
             Container.BindAsSingle<EntityFactory>();
 
             Container.BindAsSingle<IEntityViewService, EntityViewService>();
+            Container.BindAsSingle<IEntityViewContainer, EntityViewContainer>();
         }
     }
 

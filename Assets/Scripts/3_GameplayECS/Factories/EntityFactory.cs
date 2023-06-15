@@ -29,6 +29,12 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent<GameComponent>();
         }
 
+        public void CreateMeteorite(int groupConfigurationIndex, int stateIndex, Vector2 position, float rotationDegrees, Vector3 velocity, float angularSpeed, AsteroidGroupConfiguration.StateInfo stateInfo)
+        {
+            ref var entity = ref CreateAsteroidInternal(groupConfigurationIndex, stateIndex, position, rotationDegrees, velocity, angularSpeed, stateInfo);
+            entity.CreateComponent<MeteoriteComponent>();
+        }
+
         public void CreateAsteroid(int groupConfigurationIndex, int stateIndex, Vector2 position, float rotationDegrees, Vector2 velocity, float angularSpeed, AsteroidGroupConfiguration.StateInfo stateInfo)
         {
             CreateAsteroidInternal(groupConfigurationIndex, stateIndex, position, rotationDegrees, velocity, angularSpeed, stateInfo);
@@ -48,6 +54,7 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent(new VelocityComponent { Velocity = velocity });
             entity.CreateComponent(new AngularVelocityComponent { AngularSpeed = angularSpeed });
             entity.CreateComponent(new ViewKeyComponent { ViewKey = stateInfo.ViewKey });
+            entity.CreateComponent(new ViewScaleComponent { Scale = Vector3.one * stateInfo.Size });
             return ref entity;
         }
 

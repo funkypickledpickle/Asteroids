@@ -53,6 +53,7 @@ namespace Asteroids.GameplayComponents.Controllers
             _systemsManager.AddSystem<ShipDamageHandlingSystem>();
 
             _systemsManager.AddSystem<AsteroidSpawningSystem>();
+            _systemsManager.AddSystem<AsteroidSplittingSystem>();
             _systemsManager.AddSystem<AsteroidDamageHandlingSystem>();
 
             _systemsManager.AddSystem<MainEngineControllingSystem>();
@@ -66,6 +67,7 @@ namespace Asteroids.GameplayComponents.Controllers
             _systemsManager.AddSystem<BulletCollisionHandlingSystem>();
 
             _systemsManager.AddSystem<ViewManagementSystem>();
+            _systemsManager.AddSystem<ViewScalingSystem>();
 
             _systemsManager.AddSystem<VelocityDumpingSystem>();
             _systemsManager.AddSystem<ForceSystem>();

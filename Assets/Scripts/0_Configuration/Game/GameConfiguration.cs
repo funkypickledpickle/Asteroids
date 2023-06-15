@@ -9,6 +9,10 @@ namespace Asteroids.Configuration.Game
         [SerializeField] private int _maxAsteroidQuantity;
         [SerializeField] private AsteroidGroupConfiguration[] _asteroidGroupConfigurations;
 
+        [SerializeField] private int _ufoSpawnInterval;
+        [SerializeField] private int _maxUFOQuantity;
+        [SerializeField] private UFOConfiguration _ufoConfiguration;
+
         [SerializeField] private PlayerConfiguration _playerConfiguration;
         [SerializeField] private BulletConfiguration _playerBulletConfiguration;
 
@@ -17,6 +21,10 @@ namespace Asteroids.Configuration.Game
         public float AsteroidSpawnInterval => _asteroidSpawnInterval;
         public int MaxAsteroidQuantity => _maxAsteroidQuantity;
         public AsteroidGroupConfiguration[] AsteroidGroupConfigurations => _asteroidGroupConfigurations;
+
+        public int UfoSpawnInterval => _ufoSpawnInterval;
+        public int MaxUfoQuantity => _maxUFOQuantity;
+        public UFOConfiguration UfoConfiguration => _ufoConfiguration;
 
         public PlayerConfiguration PlayerConfiguration => _playerConfiguration;
         public BulletConfiguration BulletConfiguration => _playerBulletConfiguration;

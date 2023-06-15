@@ -1,4 +1,5 @@
 using Asteroids.Configuration.Game;
+using Asteroids.Extensions;
 using Asteroids.GameplayECS.Components;
 using Asteroids.Services.Project;
 using Asteroids.ValueTypeECS.Entities;
@@ -15,12 +16,14 @@ namespace Asteroids.GameplayECS.Factories
         private readonly GameConfiguration _gameConfiguration;
         private readonly BulletConfiguration _bulletConfiguration;
         private readonly PlayerConfiguration _playerConfiguration;
+        private readonly UFOConfiguration _ufoConfiguration;
 
         public EntityFactory(IConfigurationService configurationService)
         {
             _gameConfiguration = configurationService.Get<GameConfiguration>();
             _bulletConfiguration = _gameConfiguration.BulletConfiguration;
             _playerConfiguration = _gameConfiguration.PlayerConfiguration;
+            _ufoConfiguration = _gameConfiguration.UfoConfiguration;
         }
 
         public void CreateGameInfo()
@@ -117,6 +120,25 @@ namespace Asteroids.GameplayECS.Factories
             });
 
             entity.CreateComponent(new ViewKeyComponent { ViewKey = playerConfiguration.ViewKey });
+        }
+
+        public void CreateUFO(Vector3 position)
+        {
+            var ufoConfiguration = _ufoConfiguration;
+            ref var entity = ref _world.CreateEntity();
+            entity.CreateComponent<UFOComponent>();
+            entity.CreateComponent<MainControlComponent>();
+
+            entity.CreateComponent(new MassComponent { Mass = ufoConfiguration.Mass });
+
+            entity.CreateComponent(new MainEngineConfigurationComponent { MaxForce = ufoConfiguration.MaxAcceleration });
+            entity.CreateComponent<MainEngineComponent>();
+
+            entity.CreateComponent<UpdatableForceComponent>();
+            AddFieldComponents(ref entity, position, 0);
+            entity.CreateComponent<VelocityComponent>();
+            entity.CreateComponent(new VelocityLimiterComponent { MaxSpeed = ufoConfiguration.SpeedRange.RandomRange() });
+            entity.CreateComponent(new ViewKeyComponent { ViewKey = ufoConfiguration.ViewKey });
         }
 
         public void CreateUnityCollision(GameObject host, GameObject client)

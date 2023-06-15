@@ -9,6 +9,7 @@ using Asteroids.GameplayECS.Systems.Engine;
 using Asteroids.GameplayECS.Systems.LifeTime;
 using Asteroids.GameplayECS.Systems.PositionSystems;
 using Asteroids.GameplayECS.Systems.Ship;
+using Asteroids.GameplayECS.Systems.UFO;
 using Asteroids.GameplayECS.Systems.ViewSystems;
 using Asteroids.GameplayECS.Systems.Weapon;
 using Asteroids.Services.Project;
@@ -51,6 +52,9 @@ namespace Asteroids.GameplayComponents.Controllers
             _systemsManager.AddSystem<ShipSpawningSystem>();
             _systemsManager.AddSystem<ShipCollisionHandlingSystem>();
             _systemsManager.AddSystem<ShipDamageHandlingSystem>();
+
+            _systemsManager.AddSystem<UFOSpawningSystem>();
+            _systemsManager.AddSystem<UFODamageHandlingSystem>();
 
             _systemsManager.AddSystem<AsteroidSpawningSystem>();
             _systemsManager.AddSystem<AsteroidSplittingSystem>();

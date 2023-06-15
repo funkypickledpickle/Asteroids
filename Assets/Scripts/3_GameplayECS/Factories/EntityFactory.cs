@@ -29,6 +29,28 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent<GameComponent>();
         }
 
+        public void CreateAsteroid(int groupConfigurationIndex, int stateIndex, Vector2 position, float rotationDegrees, Vector2 velocity, float angularSpeed, AsteroidGroupConfiguration.StateInfo stateInfo)
+        {
+            CreateAsteroidInternal(groupConfigurationIndex, stateIndex, position, rotationDegrees, velocity, angularSpeed, stateInfo);
+        }
+
+        private ref Entity CreateAsteroidInternal(int groupConfigurationIndex, int stateIndex, Vector2 position, float rotationDegrees, Vector2 velocity, float angularSpeed, AsteroidGroupConfiguration.StateInfo stateInfo)
+        {
+            ref var entity = ref _world.CreateEntity();
+            entity.CreateComponent(new AsteroidComponent()
+            {
+                GroupConfigurationIndex = groupConfigurationIndex,
+                StateIndex = stateIndex
+            });
+
+            AddFieldComponents(ref entity, position, rotationDegrees);
+
+            entity.CreateComponent(new VelocityComponent { Velocity = velocity });
+            entity.CreateComponent(new AngularVelocityComponent { AngularSpeed = angularSpeed });
+            entity.CreateComponent(new ViewKeyComponent { ViewKey = stateInfo.ViewKey });
+            return ref entity;
+        }
+
         public void CreateBullet(Vector2 position, float rotationDegrees, Vector2 speed)
         {
             var bulletConfiguration = _bulletConfiguration;

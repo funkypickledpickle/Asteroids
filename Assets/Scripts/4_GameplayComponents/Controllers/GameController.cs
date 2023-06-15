@@ -3,6 +3,7 @@ using Asteroids.Configuration.Game;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Factories;
 using Asteroids.GameplayECS.Systems.AngularSystems;
+using Asteroids.GameplayECS.Systems.Asteroid;
 using Asteroids.GameplayECS.Systems.Bullet;
 using Asteroids.GameplayECS.Systems.Engine;
 using Asteroids.GameplayECS.Systems.LifeTime;
@@ -50,6 +51,9 @@ namespace Asteroids.GameplayComponents.Controllers
             _systemsManager.AddSystem<ShipSpawningSystem>();
             _systemsManager.AddSystem<ShipCollisionHandlingSystem>();
             _systemsManager.AddSystem<ShipDamageHandlingSystem>();
+
+            _systemsManager.AddSystem<AsteroidSpawningSystem>();
+            _systemsManager.AddSystem<AsteroidDamageHandlingSystem>();
 
             _systemsManager.AddSystem<MainEngineControllingSystem>();
             _systemsManager.AddSystem<MainEngineRunningSystem>();

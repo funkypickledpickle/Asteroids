@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bf178ffecce94acf858b4c0450885b6, type: 3}
+  m_Name: Group 3
+  m_EditorClassIdentifier: 
+  _asteroidStates:
+  - _asteroidConfiguration: {fileID: 11400000, guid: 2fff1a084045d4e63911b1822ee19bac, type: 2}
+    _size: 1
+    _speedMultiplier: 0
+    _viewKey:
+      _key: 4
+    _quantity: 0
+  - _asteroidConfiguration: {fileID: 11400000, guid: 2fff1a084045d4e63911b1822ee19bac, type: 2}
+    _size: 0.5
+    _speedMultiplier: 1.7
+    _viewKey:
+      _key: 4
+    _quantity: 2
+  - _asteroidConfiguration: {fileID: 11400000, guid: 2fff1a084045d4e63911b1822ee19bac, type: 2}
+    _size: 0.2
+    _speedMultiplier: 1.7
+    _viewKey:
+      _key: 4
+    _quantity: 2
+  _spawnProbabitity: 1

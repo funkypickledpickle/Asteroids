@@ -23,5 +23,6 @@ MonoBehaviour:
   _ufoConfiguration: {fileID: 11400000, guid: 40ae86f8edf8e41f2b8069cabfb294ff, type: 2}
   _playerConfiguration: {fileID: 11400000, guid: e862a165b3ad64978a81c2cfa9d9e38d, type: 2}
   _playerBulletConfiguration: {fileID: 11400000, guid: 4612db967e16045718fff780491a736d, type: 2}
+  _laserConfiguration: {fileID: 11400000, guid: e312ce3f7c6144830acb7a20f35aa9a1, type: 2}
   _targetFramerate: 60
   _worldBoundsPadding: 1

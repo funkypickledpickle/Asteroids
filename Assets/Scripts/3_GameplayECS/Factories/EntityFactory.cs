@@ -18,6 +18,7 @@ namespace Asteroids.GameplayECS.Factories
         private readonly BulletConfiguration _bulletConfiguration;
         private readonly PlayerConfiguration _playerConfiguration;
         private readonly UFOConfiguration _ufoConfiguration;
+        private readonly LaserConfiguration _laserConfiguration;
 
         public EntityFactory(IConfigurationService configurationService)
         {
@@ -25,6 +26,7 @@ namespace Asteroids.GameplayECS.Factories
             _bulletConfiguration = _gameConfiguration.BulletConfiguration;
             _playerConfiguration = _gameConfiguration.PlayerConfiguration;
             _ufoConfiguration = _gameConfiguration.UfoConfiguration;
+            _laserConfiguration = _gameConfiguration.LaserConfiguration;
         }
 
         public void CreateGameInfo()
@@ -81,6 +83,18 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent(new LifeTimeComponent { LifeTime = bulletConfiguration.LifeTime });
         }
 
+        public void CreateLaser(int ownerId, Vector2 positionOffset, float distance)
+        {
+            var laserConfiguration = _laserConfiguration;
+            ref var entity = ref _world.CreateEntity();
+
+            entity.CreateComponent<LaserComponent>();
+            entity.CreateComponent(new AttachedToEntityComponent() { EntityId = ownerId, PositionOffset = positionOffset });
+            entity.CreateComponent(new ViewKeyComponent { ViewKey = laserConfiguration.ViewKey });
+            entity.CreateComponent(new LifeTimeComponent { LifeTime = laserConfiguration.Lifetime });
+            entity.CreateComponent(new ViewScaleComponent { Scale = new Vector3(1, distance, 1) });
+        }
+
         public void CreateShip(Vector3 position, float rotationDegrees)
         {
             ref var entity = ref _world.CreateEntity();
@@ -106,6 +120,17 @@ namespace Asteroids.GameplayECS.Factories
                 }
             });
             entity.CreateComponent<GunControlComponent>();
+            entity.CreateComponent(new LaserGunComponent()
+            {
+                Configuration = new LaserGunConfigurationComponent
+                {
+                    FiringInterval = playerConfiguration.LaserGunFiringInterval,
+                    LaserSpawnPositionOffset = playerConfiguration.LaserSpawnPositionOffset,
+                    Distance = playerConfiguration.LaserDistance,
+                },
+                ChargesCount = playerConfiguration.InitialChargesQuantity,
+            });
+            entity.CreateComponent<LaserGunControlComponent>();
 
             entity.CreateComponent<UpdatableForceComponent>();
             entity.CreateComponent<UpdatableAngularForceComponent>();

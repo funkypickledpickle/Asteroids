@@ -7,6 +7,7 @@ using Asteroids.GameplayECS.Systems.AngularSystems;
 using Asteroids.GameplayECS.Systems.Asteroid;
 using Asteroids.GameplayECS.Systems.Bullet;
 using Asteroids.GameplayECS.Systems.Engine;
+using Asteroids.GameplayECS.Systems.Laser;
 using Asteroids.GameplayECS.Systems.LifeTime;
 using Asteroids.GameplayECS.Systems.PositionSystems;
 using Asteroids.GameplayECS.Systems.Ship;
@@ -73,7 +74,11 @@ namespace Asteroids.GameplayComponents.Controllers
             _systemsManager.AddSystem<GunControllingSystem>();
             _systemsManager.AddSystem<GunShootingSystem>();
 
+            _systemsManager.AddSystem<LaserGunControllingSystem>();
+            _systemsManager.AddSystem<LaserGunShootingSystem>();
+
             _systemsManager.AddSystem<BulletCollisionHandlingSystem>();
+            _systemsManager.AddSystem<LaserCollisionHandlingSystem>();
 
             _systemsManager.AddSystem<ViewManagementSystem>();
             _systemsManager.AddSystem<ViewScalingSystem>();
@@ -97,6 +102,7 @@ namespace Asteroids.GameplayComponents.Controllers
             _systemsManager.AddSystem<TransformRotationUpdateSystem>();
 
             _systemsManager.AddSystem<ViewActivationSystem>();
+            _systemsManager.AddSystem<AttachingToEntityViewSystem>();
 
             _systemsManager.AddSystem<LifeTimeManagementSystem>();
             _systemsManager.AddSystem<TimedDeathExecutionSystem>();

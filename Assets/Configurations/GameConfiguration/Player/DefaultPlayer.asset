@@ -23,5 +23,9 @@ MonoBehaviour:
   _angularSpeedTotalDumpingFactor: 0.0005
   _gunFiringInterval: 0.2
   _bulletSpawnPositionOffset: {x: 0, y: 0.6}
+  _laserGunFiringInterval: 2
+  _laserSpawnPositionOffset: {x: 0, y: 0.4}
+  _initialChargesQuantity: 3
+  _laserDistance: 5
   _viewKey:
     _key: 1

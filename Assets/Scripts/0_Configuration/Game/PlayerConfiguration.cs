@@ -21,6 +21,11 @@ namespace Asteroids.Configuration.Game
         [SerializeField] private float _gunFiringInterval;
         [SerializeField] private Vector2 _bulletSpawnPositionOffset;
 
+        [SerializeField] private float _laserGunFiringInterval;
+        [SerializeField] private Vector2 _laserSpawnPositionOffset;
+        [SerializeField] private int _initialChargesQuantity;
+        [SerializeField] private float _laserDistance;
+
         [SerializeField] private ViewKey _viewKey;
 
         public float Mass => _mass;
@@ -37,6 +42,11 @@ namespace Asteroids.Configuration.Game
 
         public float GunFiringInterval => _gunFiringInterval;
         public Vector2 BulletSpawnPositionOffset => _bulletSpawnPositionOffset;
+
+        public float LaserGunFiringInterval => _laserGunFiringInterval;
+        public Vector2 LaserSpawnPositionOffset => _laserSpawnPositionOffset;
+        public int InitialChargesQuantity => _initialChargesQuantity;
+        public float LaserDistance => _laserDistance;
 
         public ViewKey ViewKey => _viewKey;
     }

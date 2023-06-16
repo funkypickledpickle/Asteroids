@@ -20,6 +20,7 @@ namespace Asteroids.GameplayComponents.Controllers
             _controlledGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
                .RequireComponent<MainControlComponent>()
                .RequireComponent<GunControlComponent>()
+               .RequireComponent<LaserGunControlComponent>()
                .Build();
 
             _gameplayInputCollection = gameplayInputCollection;
@@ -40,9 +41,11 @@ namespace Asteroids.GameplayComponents.Controllers
         {
             if (_controlledGroup.Count != 0)
             {
-                _controlledGroup.GetFirst().GetComponent<MainControlComponent>().Acceleration = _gameplayInputCollection.Gameplay.Acceleration.ReadValue<float>();
-                _controlledGroup.GetFirst().GetComponent<MainControlComponent>().Rotation = -_gameplayInputCollection.Gameplay.Rotation.ReadValue<float>();
+                ref var mainControlComponent = ref _controlledGroup.GetFirst().GetComponent<MainControlComponent>();
+                mainControlComponent.Acceleration = _gameplayInputCollection.Gameplay.Acceleration.ReadValue<float>();
+                mainControlComponent.Rotation = -_gameplayInputCollection.Gameplay.Rotation.ReadValue<float>();
                 _controlledGroup.GetFirst().GetComponent<GunControlComponent>().IsFireRequested = _gameplayInputCollection.Gameplay.Fire.IsPressed();
+                _controlledGroup.GetFirst().GetComponent<LaserGunControlComponent>().IsFireRequested = _gameplayInputCollection.Gameplay.SecondaryFire.IsPressed();
             }
         }
     }

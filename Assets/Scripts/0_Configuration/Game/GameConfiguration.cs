@@ -15,6 +15,7 @@ namespace Asteroids.Configuration.Game
 
         [SerializeField] private PlayerConfiguration _playerConfiguration;
         [SerializeField] private BulletConfiguration _playerBulletConfiguration;
+        [SerializeField] private LaserConfiguration _laserConfiguration;
 
         [SerializeField] private int _targetFramerate;
 
@@ -30,6 +31,7 @@ namespace Asteroids.Configuration.Game
 
         public PlayerConfiguration PlayerConfiguration => _playerConfiguration;
         public BulletConfiguration BulletConfiguration => _playerBulletConfiguration;
+        public LaserConfiguration LaserConfiguration => _laserConfiguration;
 
         public float WorldBoundsPadding => _worldBoundsPadding;
 

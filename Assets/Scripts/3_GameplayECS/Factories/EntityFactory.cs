@@ -127,12 +127,14 @@ namespace Asteroids.GameplayECS.Factories
             var ufoConfiguration = _ufoConfiguration;
             ref var entity = ref _world.CreateEntity();
             entity.CreateComponent<UFOComponent>();
+            entity.CreateComponent<ShipFollowerComponent>();
             entity.CreateComponent<MainControlComponent>();
 
             entity.CreateComponent(new MassComponent { Mass = ufoConfiguration.Mass });
 
             entity.CreateComponent(new MainEngineConfigurationComponent { MaxForce = ufoConfiguration.MaxAcceleration });
             entity.CreateComponent<MainEngineComponent>();
+            entity.CreateComponent<MainEngineMagicRotationComponent>();
 
             entity.CreateComponent<UpdatableForceComponent>();
             AddFieldComponents(ref entity, position, 0);

@@ -34,7 +34,7 @@ namespace Asteroids.GameplayECS.Systems.Engine
 
             ref var rotationComponent = ref entity.GetComponent<RotationComponent>();
             ref var forceComponent = ref entity.GetComponent<UpdatableForceComponent>();
-            var rotationDegrees = rotationComponent.RotationDegrees;
+            var rotationDegrees = entity.HasComponent<MainEngineMagicRotationComponent>() ? entity.GetComponent<MainEngineMagicRotationComponent>().Rotation : rotationComponent.RotationDegrees;
 
             var eulerAngles = Vector3.forward * rotationDegrees;
             var rotation = Quaternion.Euler(eulerAngles);

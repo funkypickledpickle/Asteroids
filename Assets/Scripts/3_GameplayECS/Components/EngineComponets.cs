@@ -4,6 +4,8 @@ namespace Asteroids.GameplayECS.Components
 {
     public struct MainControlComponent : IECSComponent
     {
+        public const float MaxAcceleration = 1;
+
         public float Rotation;
         public float Acceleration;
     }
@@ -17,6 +19,11 @@ namespace Asteroids.GameplayECS.Components
     {
         public bool IsActive => Acceleration != 0;
         public float Acceleration;
+    }
+
+    public struct MainEngineMagicRotationComponent : IECSComponent
+    {
+        public float Rotation;
     }
 
     public struct RotationEngineConfigurationComponent : IECSComponent

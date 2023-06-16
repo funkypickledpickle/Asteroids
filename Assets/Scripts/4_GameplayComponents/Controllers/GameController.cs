@@ -2,6 +2,7 @@ using System;
 using Asteroids.Configuration.Game;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Factories;
+using Asteroids.GameplayECS.Systems.AI;
 using Asteroids.GameplayECS.Systems.AngularSystems;
 using Asteroids.GameplayECS.Systems.Asteroid;
 using Asteroids.GameplayECS.Systems.Bullet;
@@ -60,6 +61,9 @@ namespace Asteroids.GameplayComponents.Controllers
             _systemsManager.AddSystem<AsteroidSplittingSystem>();
             _systemsManager.AddSystem<AsteroidDamageHandlingSystem>();
 
+            _systemsManager.AddSystem<ShipFollowingSystem>();
+
+            _systemsManager.AddSystem<MainEngineMagicRotationControllingSystem>();
             _systemsManager.AddSystem<MainEngineControllingSystem>();
             _systemsManager.AddSystem<MainEngineRunningSystem>();
             _systemsManager.AddSystem<RotationEngineControllingSystem>();

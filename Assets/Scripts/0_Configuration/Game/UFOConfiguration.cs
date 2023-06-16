@@ -10,12 +10,15 @@ namespace Asteroids.Configuration.Game
         [SerializeField] private float _maxAcceleration;
         [SerializeField] private float _mass;
         [SerializeField] private float _maxDistanceFromTarget;
+        [SerializeField] private int _rewardedScore;
         [SerializeField] private ViewKey _viewKey;
 
         public MinMax<float> SpeedRange => _speedRange;
         public float Mass => _mass;
         public float MaxAcceleration => _maxAcceleration;
         public float MaxDistanceFromTarget => _maxDistanceFromTarget;
+
+        public int RewardedScore => _rewardedScore;
 
         public ViewKey ViewKey => _viewKey;
     }

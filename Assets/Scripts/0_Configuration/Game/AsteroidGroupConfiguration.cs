@@ -14,12 +14,15 @@ namespace Asteroids.Configuration.Game
             [SerializeField] private AsteroidConfiguration _asteroidConfiguration;
             [SerializeField] private float _size;
             [SerializeField] private float _speedMultiplier;
+            [SerializeField] private int _rewardedScore;
             [SerializeField] private ViewKey _viewKey;
             [SerializeField] private int _quantity;
 
             public AsteroidConfiguration AsteroidConfiguration => _asteroidConfiguration;
             public float Size => _size;
             public float SpeedMultiplier => _speedMultiplier;
+
+            public int RewardedScore => _rewardedScore;
 
             public ViewKey ViewKey => _viewKey;
             public int Quantity => _quantity;

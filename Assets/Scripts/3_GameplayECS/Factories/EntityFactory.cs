@@ -34,6 +34,7 @@ namespace Asteroids.GameplayECS.Factories
             var gameConfiguration = _gameConfiguration;
             ref var entity = ref _world.CreateEntity();
             entity.CreateComponent<GameComponent>();
+            entity.CreateComponent<ScoreComponent>();
 
             var worldRect = _cameraInfoService.WorldRect;
             var min = worldRect.min - Vector2.one * gameConfiguration.WorldBoundsPadding;
@@ -68,6 +69,7 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent(new AngularVelocityComponent { AngularSpeed = angularSpeed });
             entity.CreateComponent(new ViewKeyComponent { ViewKey = stateInfo.ViewKey });
             entity.CreateComponent(new ViewScaleComponent { Scale = Vector3.one * stateInfo.Size });
+            entity.CreateComponent(new RewardableScoreComponent { Score = stateInfo.RewardedScore });
             return ref entity;
         }
 
@@ -182,12 +184,19 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent<VelocityComponent>();
             entity.CreateComponent(new VelocityLimiterComponent { MaxSpeed = ufoConfiguration.SpeedRange.RandomRange() });
             entity.CreateComponent(new ViewKeyComponent { ViewKey = ufoConfiguration.ViewKey });
+            entity.CreateComponent(new RewardableScoreComponent { Score = ufoConfiguration.RewardedScore });
         }
 
         public void CreateUnityCollision(GameObject host, GameObject client)
         {
             ref var entity = ref _world.CreateEntity();
             entity.CreateComponent(new ViewCollisionComponent { Host = host, Client = client });
+        }
+
+        public void CreateRewardedScoreEntity(int score)
+        {
+            ref var entity = ref _world.CreateEntity();
+            entity.CreateComponent(new ReceivedScoreComponent { Score = score });
         }
 
         private void AddFieldComponents(ref Entity entity, Vector2 position, float rotationDegrees)

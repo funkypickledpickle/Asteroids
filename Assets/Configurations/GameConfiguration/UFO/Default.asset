@@ -18,5 +18,6 @@ MonoBehaviour:
   _maxAcceleration: 2000
   _mass: 2000
   _maxDistanceFromTarget: 12
+  _rewardedScore: 2
   _viewKey:
     _key: 0

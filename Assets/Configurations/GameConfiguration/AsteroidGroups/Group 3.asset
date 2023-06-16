@@ -16,18 +16,21 @@ MonoBehaviour:
   - _asteroidConfiguration: {fileID: 11400000, guid: 2fff1a084045d4e63911b1822ee19bac, type: 2}
     _size: 1
     _speedMultiplier: 0
+    _rewardedScore: 1
     _viewKey:
       _key: 4
     _quantity: 0
   - _asteroidConfiguration: {fileID: 11400000, guid: 2fff1a084045d4e63911b1822ee19bac, type: 2}
     _size: 0.5
     _speedMultiplier: 1.7
+    _rewardedScore: 2
     _viewKey:
       _key: 4
     _quantity: 2
   - _asteroidConfiguration: {fileID: 11400000, guid: 2fff1a084045d4e63911b1822ee19bac, type: 2}
     _size: 0.2
     _speedMultiplier: 1.7
+    _rewardedScore: 3
     _viewKey:
       _key: 4
     _quantity: 2

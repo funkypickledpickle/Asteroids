@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf33fa907b9ba4b229369d646e9acca0, type: 3}
   m_Name: Asteroid 3
   m_EditorClassIdentifier: 
+  _score: 1
   _minMaxdistanceFromTarget:
     _min: 5
     _max: 9

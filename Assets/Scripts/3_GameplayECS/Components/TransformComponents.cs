@@ -12,4 +12,10 @@ namespace Asteroids.GameplayECS.Components
     {
         public float RotationDegrees;
     }
+
+    public struct AttachedToEntityComponent : IECSComponent
+    {
+        public int EntityId;
+        public Vector3 PositionOffset;
+    }
 }

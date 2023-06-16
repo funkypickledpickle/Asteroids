@@ -13,6 +13,7 @@ using Asteroids.GameplayECS.Systems.Ship;
 using Asteroids.GameplayECS.Systems.UFO;
 using Asteroids.GameplayECS.Systems.ViewSystems;
 using Asteroids.GameplayECS.Systems.Weapon;
+using Asteroids.GameplayECS.Systems.World;
 using Asteroids.Services.Project;
 using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
@@ -76,6 +77,8 @@ namespace Asteroids.GameplayComponents.Controllers
 
             _systemsManager.AddSystem<ViewManagementSystem>();
             _systemsManager.AddSystem<ViewScalingSystem>();
+
+            _systemsManager.AddSystem<WorldMirroringSystem>();
 
             _systemsManager.AddSystem<VelocityDumpingSystem>();
             _systemsManager.AddSystem<ForceSystem>();

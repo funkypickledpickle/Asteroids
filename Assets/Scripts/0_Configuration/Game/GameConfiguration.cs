@@ -18,6 +18,8 @@ namespace Asteroids.Configuration.Game
 
         [SerializeField] private int _targetFramerate;
 
+        [SerializeField] private float _worldBoundsPadding;
+
         public float AsteroidSpawnInterval => _asteroidSpawnInterval;
         public int MaxAsteroidQuantity => _maxAsteroidQuantity;
         public AsteroidGroupConfiguration[] AsteroidGroupConfigurations => _asteroidGroupConfigurations;
@@ -28,6 +30,8 @@ namespace Asteroids.Configuration.Game
 
         public PlayerConfiguration PlayerConfiguration => _playerConfiguration;
         public BulletConfiguration BulletConfiguration => _playerBulletConfiguration;
+
+        public float WorldBoundsPadding => _worldBoundsPadding;
 
         public int TargetFramerate => _targetFramerate;
     }

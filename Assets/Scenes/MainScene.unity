@@ -187,6 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _configurationContainer: {fileID: 11400000, guid: ab2371b6634a143cf94985ebd157e8c9, type: 2}
   _viewContainer: {fileID: 399675981}
+  _camera: {fileID: 559959719}
 --- !u!4 &460658905
 Transform:
   m_ObjectHideFlags: 0

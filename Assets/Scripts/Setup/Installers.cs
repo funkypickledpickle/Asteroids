@@ -23,6 +23,7 @@ namespace Asteroids.Common
             Container.BindAsSingle<IConfigurationService, ScriptableObjectConfigurationService>();
             Container.BindAsSingle<IViewConfigurationService, UnityViewConfigurationService>();
             Container.BindAsSingle<IActionSchedulingService, ActionSchedulingService>();
+            Container.BindAsSingle<ICameraInfoService, UnityCameraInfoService>();
         }
     }
 

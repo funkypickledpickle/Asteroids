@@ -12,6 +12,7 @@ namespace Asteroids.GameplayECS.Factories
     public class EntityFactory
     {
         [Inject] private readonly World _world;
+        [Inject] private readonly ICameraInfoService _cameraInfoService;
 
         private readonly GameConfiguration _gameConfiguration;
         private readonly BulletConfiguration _bulletConfiguration;
@@ -28,8 +29,15 @@ namespace Asteroids.GameplayECS.Factories
 
         public void CreateGameInfo()
         {
+            var gameConfiguration = _gameConfiguration;
             ref var entity = ref _world.CreateEntity();
             entity.CreateComponent<GameComponent>();
+
+            var worldRect = _cameraInfoService.WorldRect;
+            var min = worldRect.min - Vector2.one * gameConfiguration.WorldBoundsPadding;
+            var size = worldRect.size + Vector2.one * 2 * gameConfiguration.WorldBoundsPadding;
+            var bounds = new Rect(min, size);
+            entity.CreateComponent(new WorldBoundsComponent { Bounds = bounds });
         }
 
         public void CreateMeteorite(int groupConfigurationIndex, int stateIndex, Vector2 position, float rotationDegrees, Vector3 velocity, float angularSpeed, AsteroidGroupConfiguration.StateInfo stateInfo)

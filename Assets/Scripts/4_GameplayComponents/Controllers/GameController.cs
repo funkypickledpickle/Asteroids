@@ -76,6 +76,7 @@ namespace Asteroids.GameplayComponents.Controllers
 
             _systemsManager.AddSystem<LaserGunControllingSystem>();
             _systemsManager.AddSystem<LaserGunShootingSystem>();
+            _systemsManager.AddSystem<LaserGunAutoChargingSystem>();
 
             _systemsManager.AddSystem<BulletCollisionHandlingSystem>();
             _systemsManager.AddSystem<LaserCollisionHandlingSystem>();

@@ -131,6 +131,14 @@ namespace Asteroids.GameplayECS.Factories
                 ChargesCount = playerConfiguration.InitialChargesQuantity,
             });
             entity.CreateComponent<LaserGunControlComponent>();
+            entity.CreateComponent(new LaserAutoChargingComponent
+            {
+                Configuration = new LaserAutoChargingConfigurationComponent
+                {
+                    Duration = playerConfiguration.LaserChargeLoadingDuration,
+                    MaxChargesQuantity = playerConfiguration.MaxChargesQuantity,
+                }
+            });
 
             entity.CreateComponent<UpdatableForceComponent>();
             entity.CreateComponent<UpdatableAngularForceComponent>();

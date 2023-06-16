@@ -25,7 +25,9 @@ MonoBehaviour:
   _bulletSpawnPositionOffset: {x: 0, y: 0.6}
   _laserGunFiringInterval: 2
   _laserSpawnPositionOffset: {x: 0, y: 0.4}
+  _maxChargesQuantity: 3
   _initialChargesQuantity: 3
+  _laserChargeLoadingDuration: 3
   _laserDistance: 5
   _viewKey:
     _key: 1

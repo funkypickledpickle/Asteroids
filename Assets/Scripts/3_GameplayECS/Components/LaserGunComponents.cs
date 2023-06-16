@@ -22,4 +22,17 @@ namespace Asteroids.GameplayECS.Components
         public bool IsFireRequested;
         public int ChargesCount;
     }
+
+    public struct LaserAutoChargingComponent : IECSComponent
+    {
+        public LaserAutoChargingConfigurationComponent Configuration;
+        public float LastLoadingTime;
+        public bool IsAutoCharging;
+    }
+
+    public struct LaserAutoChargingConfigurationComponent : IECSComponent
+    {
+        public float Duration;
+        public int MaxChargesQuantity;
+    }
 }

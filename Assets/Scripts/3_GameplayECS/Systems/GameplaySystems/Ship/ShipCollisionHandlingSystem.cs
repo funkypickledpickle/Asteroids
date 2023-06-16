@@ -23,7 +23,11 @@ namespace Asteroids.GameplayECS.Systems.Ship
         {
             ref var collisionComponent = ref entity.GetComponent<CollisionComponent>();
             ref var collidedEntity = ref World.GetEntity(collisionComponent.EntityId);
-            entity.CreateComponent(new ReceivedDamageComponent { SourceEntityId = collidedEntity.Id });
+            if (collidedEntity.HasComponent<UFOComponent>() || collidedEntity.HasComponent<AsteroidComponent>())
+            {
+                entity.CreateComponent(new ReceivedDamageComponent { SourceEntityId = collidedEntity.Id });
+            }
+
             entity.RemoveComponent<CollisionComponent>();
             collidedEntity.CreateComponent(new ReceivedDamageComponent { SourceEntityId = entity.Id });
         }

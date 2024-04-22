@@ -1,22 +1,33 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.AngularSystems
 {
-    public class AngularForceResetSystem : AbstractExecutableSystem
+    public class AngularForceResetSystem : IExecutableSystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private EntityGroup _ships;
+
+        public AngularForceResetSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<UpdatableAngularForceComponent>()
-               .Build();
+            _ships = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<UpdatableAngularForceComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
         {
-            EntityGroup.ForEachComponent<UpdatableAngularForceComponent>(Execute);
+            _ships.Dispose();
+            _ships = null;
+        }
+
+        void IExecutableSystem.Execute()
+        {
+            _ships.ForEachComponent<UpdatableAngularForceComponent>(Execute);
         }
 
         private static void Execute(ref Entity entity, ref UpdatableAngularForceComponent forceComponent)

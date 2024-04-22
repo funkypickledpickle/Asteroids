@@ -1,21 +1,31 @@
 using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.AngularSystems
 {
-    public class AngularVelocityLimiterSystem : AbstractExecutableSystem
+    public class AngularVelocityLimiterSystem : IExecutableSystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private EntityGroup EntityGroup;
+
+        public AngularVelocityLimiterSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<AngularVelocityComponent>()
-               .RequireComponent<AngularVelocityLimiterComponent>()
-               .Build();
+            EntityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<AngularVelocityComponent>()
+                .RequireComponent<AngularVelocityLimiterComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
+        {
+            EntityGroup.Dispose();
+            EntityGroup = null;
+        }
+
+        void IExecutableSystem.Execute()
         {
             EntityGroup.ForEachOnlyComponents<AngularVelocityComponent, AngularVelocityLimiterComponent>(Execute);
         }

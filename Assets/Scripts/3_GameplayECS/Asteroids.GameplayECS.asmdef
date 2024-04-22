@@ -1,0 +1,19 @@
+{
+    "name": "Asteroids.GameplayECS",
+    "rootNamespace": "Asteroids.GameplayECS",
+    "references": [
+        "GUID:afd4815bdc18f45e59255ee80f848bde",
+        "GUID:2e41874529d5e41e2b5733363301ebba",
+        "GUID:9601c88c7500c4374b6eb05795239639",
+        "GUID:7f8df19e192be45959e9d69ed770b92a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

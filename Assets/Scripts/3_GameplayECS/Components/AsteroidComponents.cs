@@ -11,4 +11,6 @@ namespace Asteroids.GameplayECS.Components
     public struct MeteoriteComponent : IECSComponent { }
 
     public struct AsteroidSplitComponent : IECSComponent { }
+
+    public struct AsteroidSpawningTimerComponent : IECSComponent { }
 }

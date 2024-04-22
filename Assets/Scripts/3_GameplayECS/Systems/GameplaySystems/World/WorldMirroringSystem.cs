@@ -1,37 +1,52 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.World
 {
-    public class WorldMirroringSystem : AbstractExecutableSystem
+    public class WorldMirroringSystem : IExecutableSystem, IDisposable
     {
-        private EntityGroup _entityGroup;
+        private readonly ValueTypeECS.EntityContainer.World _world;
 
-        protected override EntityGroup CreateContainer()
+        private EntityGroup _entities;
+
+        private EntityGroup _bounds;
+
+        public WorldMirroringSystem(ValueTypeECS.EntityContainer.World world, IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<PositionComponent>()
-               .RequireComponent<VelocityComponent>()
-               .Build();
+            _world = world;
+
+            _entities = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<PositionComponent>()
+                .RequireComponent<VelocityComponent>()
+                .Build();
+
+            _bounds = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<WorldBoundsComponent>()
+                .Build();
         }
 
-        protected override void InitializeInternal()
+        public void Dispose()
         {
-            _entityGroup = InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<WorldBoundsComponent>()
-               .Build();
+            _entities.Dispose();
+            _entities = null;
+
+            _bounds?.Dispose();
+            _bounds = null;
         }
 
-        public override void Execute()
+        void IExecutableSystem.Execute()
         {
-            if (_entityGroup.Count != 0)
+            if (_bounds.Count != 0)
             {
-                ref var bounds = ref _entityGroup.GetFirst().GetComponent<WorldBoundsComponent>().Bounds;
+                ref var bounds = ref _bounds.GetFirst().GetComponent<WorldBoundsComponent>().Bounds;
 
-                foreach (var entityId in EntityGroup)
+                foreach (var entityId in _entities)
                 {
-                    ref var entity = ref World.GetEntity(entityId);
+                    ref var entity = ref _world.GetEntity(entityId);
                     ref var positionComponent = ref entity.GetComponent<PositionComponent>();
                     ref var position = ref positionComponent.Position;
                     if (position.x < bounds.xMin)

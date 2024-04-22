@@ -1,28 +1,27 @@
-using Asteroids.Configuration.Game;
-using Asteroids.Extensions;
+using Asteroids.Configuration;
 using Asteroids.GameplayECS.Components;
-using Asteroids.Services.Project;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityContainer;
 using UnityEngine;
-using Zenject;
 
 namespace Asteroids.GameplayECS.Factories
 {
     public class EntityFactory
     {
-        [Inject] private readonly World _world;
-        [Inject] private readonly ICameraInfoService _cameraInfoService;
-
+        private readonly World _world;
         private readonly GameConfiguration _gameConfiguration;
         private readonly BulletConfiguration _bulletConfiguration;
         private readonly PlayerConfiguration _playerConfiguration;
         private readonly UFOConfiguration _ufoConfiguration;
         private readonly LaserConfiguration _laserConfiguration;
+        private readonly FieldConfiguration _fieldConfiguration;
 
-        public EntityFactory(IConfigurationService configurationService)
+        public EntityFactory(World world, GameConfiguration gameConfiguration, FieldConfiguration fieldConfiguration)
         {
-            _gameConfiguration = configurationService.Get<GameConfiguration>();
+            _world = world;
+            _gameConfiguration = gameConfiguration;
+            _fieldConfiguration = fieldConfiguration;
             _bulletConfiguration = _gameConfiguration.BulletConfiguration;
             _playerConfiguration = _gameConfiguration.PlayerConfiguration;
             _ufoConfiguration = _gameConfiguration.UfoConfiguration;
@@ -36,11 +35,21 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent<GameComponent>();
             entity.CreateComponent<ScoreComponent>();
 
-            var worldRect = _cameraInfoService.WorldRect;
+            var worldRect = _fieldConfiguration.Rect;
             var min = worldRect.min - Vector2.one * gameConfiguration.WorldBoundsPadding;
             var size = worldRect.size + Vector2.one * 2 * gameConfiguration.WorldBoundsPadding;
             var bounds = new Rect(min, size);
             entity.CreateComponent(new WorldBoundsComponent { Bounds = bounds });
+        }
+
+        public void CreateAsteroidSpawningTimer(float duration)
+        {
+            ref var entity = ref _world.CreateEntity();
+            entity.CreateComponent<AsteroidSpawningTimerComponent>();
+            entity.CreateComponent(new LifeTimeComponent()
+            {
+                Duration = duration,
+            });
         }
 
         public void CreateMeteorite(int groupConfigurationIndex, int stateIndex, Vector2 position, float rotationDegrees, Vector3 velocity, float angularSpeed, AsteroidGroupConfiguration.StateInfo stateInfo)
@@ -67,8 +76,7 @@ namespace Asteroids.GameplayECS.Factories
 
             entity.CreateComponent(new VelocityComponent { Velocity = velocity });
             entity.CreateComponent(new AngularVelocityComponent { AngularSpeed = angularSpeed });
-            entity.CreateComponent(new ViewKeyComponent { ViewKey = stateInfo.ViewKey });
-            entity.CreateComponent(new ViewScaleComponent { Scale = Vector3.one * stateInfo.Size });
+            entity.CreateComponent(new ScaleComponent { Scale = Vector3.one * stateInfo.Size });
             entity.CreateComponent(new RewardableScoreComponent { Score = stateInfo.RewardedScore });
             return ref entity;
         }
@@ -81,8 +89,7 @@ namespace Asteroids.GameplayECS.Factories
 
             entity.CreateComponent<BulletComponent>();
             entity.CreateComponent(new VelocityComponent { Velocity = speed });
-            entity.CreateComponent(new ViewKeyComponent { ViewKey = bulletConfiguration.ViewKey });
-            entity.CreateComponent(new LifeTimeComponent { LifeTime = bulletConfiguration.LifeTime });
+            entity.CreateComponent(new LifeTimeComponent { Duration = bulletConfiguration.LifeTime });
         }
 
         public void CreateLaser(int ownerId, Vector2 positionOffset, float distance)
@@ -92,9 +99,8 @@ namespace Asteroids.GameplayECS.Factories
 
             entity.CreateComponent<LaserComponent>();
             entity.CreateComponent(new AttachedToEntityComponent() { EntityId = ownerId, PositionOffset = positionOffset });
-            entity.CreateComponent(new ViewKeyComponent { ViewKey = laserConfiguration.ViewKey });
-            entity.CreateComponent(new LifeTimeComponent { LifeTime = laserConfiguration.Lifetime });
-            entity.CreateComponent(new ViewScaleComponent { Scale = new Vector3(1, distance, 1) });
+            entity.CreateComponent(new LifeTimeComponent { Duration = laserConfiguration.Lifetime });
+            entity.CreateComponent(new ScaleComponent { Scale = new Vector3(1, distance, 1) });
         }
 
         public void CreateShip(Vector3 position, float rotationDegrees)
@@ -161,8 +167,6 @@ namespace Asteroids.GameplayECS.Factories
                 StartFactor = playerConfiguration.AngularSpeedStartDumpingFactor,
                 TotalFactor = playerConfiguration.AngularSpeedTotalDumpingFactor,
             });
-
-            entity.CreateComponent(new ViewKeyComponent { ViewKey = playerConfiguration.ViewKey });
         }
 
         public void CreateUFO(Vector3 position)
@@ -183,14 +187,17 @@ namespace Asteroids.GameplayECS.Factories
             AddFieldComponents(ref entity, position, 0);
             entity.CreateComponent<VelocityComponent>();
             entity.CreateComponent(new VelocityLimiterComponent { MaxSpeed = ufoConfiguration.SpeedRange.RandomRange() });
-            entity.CreateComponent(new ViewKeyComponent { ViewKey = ufoConfiguration.ViewKey });
             entity.CreateComponent(new RewardableScoreComponent { Score = ufoConfiguration.RewardedScore });
         }
 
-        public void CreateUnityCollision(GameObject host, GameObject client)
+        public void CreateUFOSpawningTimer(float duration)
         {
             ref var entity = ref _world.CreateEntity();
-            entity.CreateComponent(new ViewCollisionComponent { Host = host, Client = client });
+            entity.CreateComponent<UFOSpawningTimerComponent>();
+            entity.CreateComponent(new LifeTimeComponent()
+            {
+                Duration = duration,
+            });
         }
 
         public void CreateRewardedScoreEntity(int score)

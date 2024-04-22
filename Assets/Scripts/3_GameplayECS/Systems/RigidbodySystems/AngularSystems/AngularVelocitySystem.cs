@@ -1,24 +1,37 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
-using Asteroids.Services.Project;
+using Asteroids.Services;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 using Zenject;
 
 namespace Asteroids.GameplayECS.Systems.AngularSystems
 {
-    public class AngularVelocitySystem : AbstractExecutableSystem
+    public class AngularVelocitySystem : IExecutableSystem, IDisposable
     {
-        [Inject] private readonly IFrameInfoService _frameInfoService;
+        private readonly IFrameInfoService _frameInfoService;
 
-        protected override EntityGroup CreateContainer()
+        private EntityGroup EntityGroup;
+
+        public AngularVelocitySystem(IFrameInfoService frameInfoService, IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<RotationComponent>()
-               .RequireComponent<AngularVelocityComponent>()
-               .Build();
+            _frameInfoService = frameInfoService;
+
+            EntityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<RotationComponent>()
+                .RequireComponent<AngularVelocityComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
+        {
+            EntityGroup.Dispose();
+            EntityGroup = null;
+        }
+
+        void IExecutableSystem.Execute()
         {
             EntityGroup.ForEachOnlyComponents<RotationComponent, AngularVelocityComponent, float>(Execute, _frameInfoService.DeltaTime);
         }

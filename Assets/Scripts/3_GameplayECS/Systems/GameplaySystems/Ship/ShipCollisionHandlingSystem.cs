@@ -1,28 +1,40 @@
+using System;
 using Asteroids.GameplayECS.Components;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.Ship
 {
-    public class ShipCollisionHandlingSystem : AbstractSystem
+    public class ShipCollisionHandlingSystem : ISystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private readonly ValueTypeECS.EntityContainer.World _world;
+
+        private EntityGroup _crashedShips;
+
+        public ShipCollisionHandlingSystem(ValueTypeECS.EntityContainer.World world, IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<ShipComponent>()
-               .RequireComponent<CollisionComponent>()
-               .Build();
+            _world = world;
+
+            _crashedShips = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<ShipComponent>()
+                .RequireComponent<CollisionComponent>()
+                .Build();
+
+            _crashedShips.EntityAdded += CollisionAddedHandler;
         }
 
-        protected override void InitializeInternal()
+        public void Dispose()
         {
-            EntityGroup.SubscribeToEntityAddedEvent(CollisionAddedHandler);
+            _crashedShips.Dispose();
+            _crashedShips = null;
         }
 
         private void CollisionAddedHandler(ref Entity entity)
         {
             ref var collisionComponent = ref entity.GetComponent<CollisionComponent>();
-            ref var collidedEntity = ref World.GetEntity(collisionComponent.EntityId);
+            ref var collidedEntity = ref _world.GetEntity(collisionComponent.EntityId);
             if (collidedEntity.HasComponent<UFOComponent>() || collidedEntity.HasComponent<AsteroidComponent>())
             {
                 entity.CreateComponent(new ReceivedDamageComponent { SourceEntityId = collidedEntity.Id });

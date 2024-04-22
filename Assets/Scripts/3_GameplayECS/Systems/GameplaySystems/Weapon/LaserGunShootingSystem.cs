@@ -1,38 +1,43 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
 using Asteroids.GameplayECS.Factories;
-using Asteroids.Services.Project;
-using Asteroids.ValueTypeECS.Delegates;
+using Asteroids.Services;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
-using Zenject;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.Weapon
 {
-    public class LaserGunShootingSystem : AbstractExecutableSystem
+    public class LaserGunShootingSystem : IExecutableSystem, IDisposable
     {
-        [Inject] private readonly IFrameInfoService _frameInfoService;
-        [Inject] private readonly EntityFactory _entityFactory;
+        private readonly IFrameInfoService _frameInfoService;
+        private readonly EntityFactory _entityFactory;
 
-        private readonly ActionReferenceValue<Entity, float> _executeAction;
+        private EntityGroup _laserArmedEntities;
 
-        public LaserGunShootingSystem()
+        public LaserGunShootingSystem(IFrameInfoService frameInfoService, EntityFactory entityFactory, IInstanceSpawner instanceSpawner)
         {
-            _executeAction = Execute;
+            _frameInfoService = frameInfoService;
+            _entityFactory = entityFactory;
+
+            _laserArmedEntities = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<LaserGunComponent>()
+                .RequireComponent<RotationComponent>()
+                .RequireComponent<VelocityComponent>()
+                .Build();
         }
 
-        protected override EntityGroup CreateContainer()
+        public void Dispose()
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<LaserGunComponent>()
-               .RequireComponent<RotationComponent>()
-               .RequireComponent<VelocityComponent>()
-               .Build();
+            _laserArmedEntities.Dispose();
+            _laserArmedEntities = null;
         }
 
-        public override void Execute()
+        void IExecutableSystem.Execute()
         {
-            EntityGroup.ForEach(_executeAction, _frameInfoService.StartTime);
+            _laserArmedEntities.ForEach<float>(Execute, _frameInfoService.StartTime);
         }
 
         private void Execute(ref Entity entity, float currentTime)

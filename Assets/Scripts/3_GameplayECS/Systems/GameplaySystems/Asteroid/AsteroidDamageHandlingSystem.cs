@@ -1,28 +1,39 @@
+using System;
 using Asteroids.GameplayECS.Components;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.Asteroid
 {
-    public class AsteroidDamageHandlingSystem : AbstractSystem
+    public class AsteroidDamageHandlingSystem : ISystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private readonly ValueTypeECS.EntityContainer.World _world;
+
+        private EntityGroup _entityGroup;
+
+        public AsteroidDamageHandlingSystem(IInstanceSpawner instanceSpawner, ValueTypeECS.EntityContainer.World world)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<AsteroidComponent>()
-               .RequireComponent<ReceivedDamageComponent>()
-               .Build();
+            _world = world;
+            _entityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<AsteroidComponent>()
+                .RequireComponent<ReceivedDamageComponent>()
+                .Build();
+            _entityGroup.EntityAdded += AsteroidDamagedHandler;
         }
 
-        protected override void InitializeInternal()
+        public void Dispose()
         {
-            EntityGroup.SubscribeToEntityAddedEvent(AsteroidDamagedHandler);
+            _entityGroup.EntityAdded -= AsteroidDamagedHandler;
+            _entityGroup.Dispose();
+            _entityGroup = null;
         }
 
         private void AsteroidDamagedHandler(ref Entity entity)
         {
             entity.CreateComponent<DestroyedComponent>();
-            ref var damageCreator = ref World.GetEntity(entity.GetComponent<ReceivedDamageComponent>().SourceEntityId);
+            ref var damageCreator = ref _world.GetEntity(entity.GetComponent<ReceivedDamageComponent>().SourceEntityId);
             if (!damageCreator.HasComponent<LaserComponent>())
             {
                 entity.CreateComponent<AsteroidSplitComponent>();

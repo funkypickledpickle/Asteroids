@@ -1,75 +1,105 @@
 using System;
-using Asteroids.Configuration.Game;
+using System.Threading;
+using Asteroids.Configuration;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
 using Asteroids.GameplayECS.Factories;
-using Asteroids.Services.Project;
+using Asteroids.Services;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 using UnityEngine;
-using Zenject;
 using Random = UnityEngine.Random;
 
 namespace Asteroids.GameplayECS.Systems.UFO
 {
-    public class UFOSpawningSystem : AbstractSystem
+    public class UFOSpawningSystem : ISystem, IDisposable
     {
         private const float MaxAngle = 360;
 
-        [Inject] private readonly EntityFactory _entityFactory;
-        [Inject] private readonly IActionSchedulingService _actionSchedulingService;
-        [Inject] private readonly IFrameInfoService _frameInfoService;
+        private readonly EntityFactory _entityFactory;
+        private readonly IFrameInfoService _frameInfoService;
+
 
         private readonly GameConfiguration _gameConfiguration;
         private readonly UFOConfiguration _ufoConfiguration;
-        private EntityGroup _ufoGroup;
 
-        public UFOSpawningSystem(IConfigurationService configurationService)
+        private EntityGroup _ships;
+        private EntityGroup _ufo;
+        private EntityGroup _timers;
+
+        public UFOSpawningSystem(EntityFactory entityFactory, IFrameInfoService frameInfoService, GameConfiguration gameConfiguration, IInstanceSpawner instanceSpawner)
         {
-            _gameConfiguration = configurationService.Get<GameConfiguration>();
+            _entityFactory = entityFactory;
+            _frameInfoService = frameInfoService;
+
+            _gameConfiguration = gameConfiguration;
             _ufoConfiguration = _gameConfiguration.UfoConfiguration;
+
+            _ships = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<ShipComponent>()
+                .Build();
+
+            _ufo = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<UFOComponent>()
+                .Build();
+
+            _timers = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<UFOSpawningTimerComponent>()
+                .Build();
+
+            _ships.EntityAdded += HandleShipAdded;
+            _timers.EntityRemoved += HandleTimerEnded;
         }
 
-        protected override EntityGroup CreateContainer()
+        public void Dispose()
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<ShipComponent>()
-               .Build();
+            _ships.EntityAdded -= HandleShipAdded;
+            _ships.Dispose();
+            _ships = null;
+
+            _ufo.Dispose();
+            _ufo = null;
+
+            _timers.EntityRemoved -= HandleTimerEnded;
         }
 
-        protected override void InitializeInternal()
+        private void HandleShipAdded(ref Entity entity)
         {
-            _ufoGroup = InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<UFOComponent>()
-               .Build();
-            EntityGroup.SubscribeToEntityAddedEvent(EntityAdded);
+            TryCreateAndScheduleUFOCreation();
         }
 
-        private void EntityAdded(ref Entity entity)
+        private void HandleTimerEnded(ref Entity referenced)
         {
-            Execute();
+            TryCreateAndScheduleUFOCreation();
         }
 
-        private void Execute()
+        private void TryCreateAndScheduleUFOCreation()
         {
-            TryCreateAlien();
+            TryCreateUFO();
             ScheduleCreation();
         }
 
-        private void TryCreateAlien()
+        private void TryCreateUFO()
         {
-            var quantity = _gameConfiguration.MaxUfoQuantity - _ufoGroup.Count;
+            var quantity = _gameConfiguration.MaxUfoQuantity - _ufo.Count;
             if (quantity > 0)
             {
                 CreateAlienShips(quantity);
             }
         }
 
+        private void ScheduleCreation()
+        {
+            _entityFactory.CreateUFOSpawningTimer(_gameConfiguration.UfoSpawnInterval);
+        }
+
         private void CreateAlienShips(int quantity)
         {
-            if (EntityGroup.Count != 0)
+            if (_ships.Count != 0)
             {
-                ref var entity = ref EntityGroup.GetFirst();
+                ref var entity = ref _ships.GetFirst();
                 for (var i = 0; i < quantity; i++)
                 {
                     var eulerAngles = Vector3.forward * Random.Range(0, MaxAngle);
@@ -80,12 +110,6 @@ namespace Asteroids.GameplayECS.Systems.UFO
                     _entityFactory.CreateUFO(targetPosition);
                 }
             }
-        }
-
-        private void ScheduleCreation()
-        {
-            var targetTime = _frameInfoService.StartTime + _gameConfiguration.UfoSpawnInterval;
-            _actionSchedulingService.Schedule(targetTime, Execute);
         }
     }
 }

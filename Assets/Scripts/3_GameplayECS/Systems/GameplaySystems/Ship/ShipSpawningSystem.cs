@@ -1,30 +1,38 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Factories;
-using Asteroids.Services.Project;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 using UnityEngine;
-using Zenject;
 
 namespace Asteroids.GameplayECS.Systems.Ship
 {
-    public class ShipSpawningSystem : AbstractSystem
+    public class ShipSpawningSystem : ISystem, IDisposable
     {
-        [Inject] private readonly EntityFactory _entityFactory;
+        private readonly EntityFactory _entityFactory;
 
-        protected override EntityGroup CreateContainer()
+        private EntityGroup _gameEntitiesGroup;
+
+        public ShipSpawningSystem(EntityFactory entityFactory, IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<GameComponent>()
-               .Build();
+            _entityFactory = entityFactory;
+
+            _gameEntitiesGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<GameComponent>()
+                .Build();
+            _gameEntitiesGroup.EntityAdded += HandleGameEntityAdded;
         }
 
-        protected override void InitializeInternal()
+        public void Dispose()
         {
-            EntityGroup.SubscribeToEntityAddedEvent(EntityAdded);
+            _gameEntitiesGroup.EntityAdded -= HandleGameEntityAdded;
+            _gameEntitiesGroup.Dispose();
+            _gameEntitiesGroup = null;
         }
 
-        private void EntityAdded(ref Entity entity)
+        private void HandleGameEntityAdded(ref Entity entity)
         {
             _entityFactory.CreateShip(Vector3.zero, 0);
         }

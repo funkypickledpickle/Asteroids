@@ -1,21 +1,32 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 using UnityEngine;
 
 namespace Asteroids.GameplayECS.Systems.PositionSystems
 {
-    public class VelocityLimiterSystem : AbstractExecutableSystem
+    public class VelocityLimiterSystem : IExecutableSystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private EntityGroup EntityGroup;
+
+        public VelocityLimiterSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<VelocityComponent>()
-               .RequireComponent<VelocityLimiterComponent>()
-               .Build();
+            EntityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<VelocityComponent>()
+                .RequireComponent<VelocityLimiterComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
+        {
+            EntityGroup.Dispose();
+            EntityGroup = null;
+        }
+
+        void IExecutableSystem.Execute()
         {
             EntityGroup.ForEachOnlyComponents<VelocityComponent, VelocityLimiterComponent>(Execute);
         }

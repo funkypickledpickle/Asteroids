@@ -1,25 +1,33 @@
+using System;
 using Asteroids.GameplayECS.Components;
-using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.Ship
 {
-    public class ShipDamageHandlingSystem : AbstractSystem
+    public class ShipDamageHandlingSystem : ISystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private EntityGroup _damagedShipsGroup;
+
+        public ShipDamageHandlingSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<ShipComponent>()
-               .RequireComponent<ReceivedDamageComponent>().Build();
+            _damagedShipsGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<ShipComponent>()
+                .RequireComponent<ReceivedDamageComponent>().Build();
+
+            _damagedShipsGroup.EntityAdded += HandleShipDamaged;
         }
 
-        protected override void InitializeInternal()
+        public void Dispose()
         {
-            EntityGroup.SubscribeToEntityAddedEvent(EntityDamagedHandler);
+            _damagedShipsGroup.EntityAdded -= HandleShipDamaged;
+            _damagedShipsGroup.Dispose();
+            _damagedShipsGroup = null;
         }
 
-        private void EntityDamagedHandler(ref Entity entity)
+        private void HandleShipDamaged(ref Entity entity)
         {
             entity.CreateComponent<DestroyedComponent>();
         }

@@ -1,25 +1,34 @@
+using System;
 using Asteroids.GameplayECS.Components;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.UFO
 {
-    public class UFODamageHandlingSystem : AbstractSystem
+    public class UFODamageHandlingSystem : ISystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private EntityGroup EntityGroup;
+
+        public UFODamageHandlingSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<UFOComponent>()
-               .RequireComponent<ReceivedDamageComponent>()
-               .Build();
+            EntityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<UFOComponent>()
+                .RequireComponent<ReceivedDamageComponent>()
+                .Build();
+
+            EntityGroup.EntityAdded += HandleUFODamaged;
         }
 
-        protected override void InitializeInternal()
+        public void Dispose()
         {
-            EntityGroup.SubscribeToEntityAddedEvent(AlienShipDamagedHandler);
+            EntityGroup.EntityAdded -= HandleUFODamaged;
+            EntityGroup.Dispose();
+            EntityGroup = null;
         }
 
-        private void AlienShipDamagedHandler(ref Entity entity)
+        private void HandleUFODamaged(ref Entity entity)
         {
             entity.CreateComponent<DestroyedComponent>();
         }

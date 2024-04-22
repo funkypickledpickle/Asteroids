@@ -1,23 +1,33 @@
 using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.PositionSystems
 {
-    public class VelocityDumpingSystem : AbstractExecutableSystem
+    public class VelocityDumpingSystem : IExecutableSystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private EntityGroup EntityGroup;
+
+        public VelocityDumpingSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<UpdatableForceComponent>()
-               .RequireComponent<VelocityComponent>()
-               .RequireComponent<VelocityDumpComponent>()
-               .Build();
+            EntityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<UpdatableForceComponent>()
+                .RequireComponent<VelocityComponent>()
+                .RequireComponent<VelocityDumpComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
+        {
+            EntityGroup.Dispose();
+            EntityGroup = null;
+        }
+
+        void IExecutableSystem.Execute()
         {
             EntityGroup.ForEachComponents<UpdatableForceComponent, VelocityComponent, VelocityDumpComponent>(Execute);
         }

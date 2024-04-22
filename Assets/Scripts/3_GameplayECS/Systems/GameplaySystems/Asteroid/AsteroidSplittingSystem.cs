@@ -1,42 +1,44 @@
-using Asteroids.Configuration.Game;
-using Asteroids.Extensions;
+using System;
+using Asteroids.Configuration;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Factories;
-using Asteroids.Services.Project;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 using UnityEngine;
-using Zenject;
+using Random = UnityEngine.Random;
 
 namespace Asteroids.GameplayECS.Systems.Asteroid
 {
-    public class AsteroidSplittingSystem : AbstractSystem
+    public class AsteroidSplittingSystem : ISystem, IDisposable
     {
         private const float MaxAngle = 360;
         private const float DirectionDegrees = 180;
 
-        [Inject] private readonly EntityFactory _entityFactory;
-
+        private readonly EntityFactory _entityFactory;
         private readonly GameConfiguration _gameConfiguration;
 
-        public AsteroidSplittingSystem(IConfigurationService configurationService)
+        private readonly EntityGroup _entityGroup;
+
+        public AsteroidSplittingSystem(IInstanceSpawner instanceSpawner, GameConfiguration gameConfiguration, EntityFactory entityFactory)
         {
-            _gameConfiguration = configurationService.Get<GameConfiguration>();
+            _gameConfiguration = gameConfiguration;
+            _entityFactory = entityFactory;
+
+            _entityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<AsteroidComponent>()
+                .RequireComponent<AsteroidSplitComponent>()
+                .RequireComponent<PositionComponent>()
+                .RequireComponent<VelocityComponent>()
+                .Build();
+            _entityGroup.EntityAdded += EntityAddedHandler;
         }
 
-        protected override EntityGroup CreateContainer()
+        public void Dispose()
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<AsteroidComponent>()
-               .RequireComponent<AsteroidSplitComponent>()
-               .RequireComponent<PositionComponent>()
-               .RequireComponent<VelocityComponent>()
-               .Build();
-        }
-
-        protected override void InitializeInternal()
-        {
-            EntityGroup.SubscribeToEntityAddedEvent(EntityAddedHandler);
+            _entityGroup.EntityAdded -= EntityAddedHandler;
+            _entityGroup.Dispose();
         }
 
         private void EntityAddedHandler(ref Entity entity)

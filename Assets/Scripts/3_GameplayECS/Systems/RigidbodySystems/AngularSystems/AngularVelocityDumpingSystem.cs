@@ -1,23 +1,33 @@
 using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.AngularSystems
 {
-    public class AngularVelocityDumpingSystem : AbstractExecutableSystem
+    public class AngularVelocityDumpingSystem : IExecutableSystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private EntityGroup EntityGroup;
+
+        public AngularVelocityDumpingSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<UpdatableAngularForceComponent>()
-               .RequireComponent<AngularVelocityComponent>()
-               .RequireComponent<AngularVelocityDumpComponent>()
-               .Build();
+            EntityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<UpdatableAngularForceComponent>()
+                .RequireComponent<AngularVelocityComponent>()
+                .RequireComponent<AngularVelocityDumpComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
+        {
+            EntityGroup.Dispose();
+            EntityGroup = null;
+        }
+
+        void IExecutableSystem.Execute()
         {
             EntityGroup.ForEachComponents<UpdatableAngularForceComponent, AngularVelocityComponent, AngularVelocityDumpComponent>(Execute);
         }

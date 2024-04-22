@@ -1,25 +1,34 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.Engine
 {
-    public class MainEngineMagicRotationControllingSystem : AbstractExecutableSystem
+    public class MainEngineMagicRotationControllingSystem : IExecutableSystem, IDisposable
     {
-        private readonly ActionReference<Entity, MainControlComponent, MainEngineMagicRotationComponent> _executeActionReference = Execute;
+        private EntityGroup EntityGroup;
 
-        protected override EntityGroup CreateContainer()
+        public MainEngineMagicRotationControllingSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<MainControlComponent>()
-               .RequireComponent<MainEngineMagicRotationComponent>()
-               .Build();
+            EntityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<MainControlComponent>()
+                .RequireComponent<MainEngineMagicRotationComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
         {
-            EntityGroup.ForEachComponents(_executeActionReference);
+            EntityGroup.Dispose();
+            EntityGroup = null;
+        }
+
+        void IExecutableSystem.Execute()
+        {
+            EntityGroup.ForEachComponents<MainControlComponent, MainEngineMagicRotationComponent>(Execute);
         }
 
         private static void Execute(ref Entity entity, ref MainControlComponent mainControlComponent, ref MainEngineMagicRotationComponent mainEngineMagicRotationComponent)

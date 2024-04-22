@@ -1,25 +1,34 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.Weapon
 {
-    public class LaserGunControllingSystem : AbstractExecutableSystem
+    public class LaserGunControllingSystem : IExecutableSystem, IDisposable
     {
-        private readonly ActionReference<Entity, LaserGunControlComponent, LaserGunComponent> _executeActionReference = Execute;
+        private EntityGroup _entityGroup;
 
-        protected override EntityGroup CreateContainer()
+        public LaserGunControllingSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<LaserGunControlComponent>()
-               .RequireComponent<LaserGunComponent>()
-               .Build();
+            _entityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<LaserGunControlComponent>()
+                .RequireComponent<LaserGunComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
         {
-            EntityGroup.ForEachComponents(_executeActionReference);
+            _entityGroup.Dispose();
+            _entityGroup = null;
+        }
+
+        public void Execute()
+        {
+            _entityGroup.ForEachComponents<LaserGunControlComponent, LaserGunComponent>(Execute);
         }
 
         private static void Execute(ref Entity entity, ref LaserGunControlComponent controlComponent, ref LaserGunComponent gunComponent)

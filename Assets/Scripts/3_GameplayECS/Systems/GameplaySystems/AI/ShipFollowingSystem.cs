@@ -1,45 +1,57 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 using UnityEngine;
 
 namespace Asteroids.GameplayECS.Systems.AI
 {
-    public class ShipFollowingSystem : AbstractExecutableSystem
+    public class ShipFollowingSystem : IExecutableSystem, IDisposable
     {
-        private EntityGroup _shipGroup;
+        private EntityGroup _predators;
+        private EntityGroup _ships;
 
-        protected override EntityGroup CreateContainer()
+        public ShipFollowingSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<ShipFollowerComponent>()
-               .RequireComponent<MainControlComponent>()
-               .RequireComponent<PositionComponent>()
-               .Build();
+            _predators = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<ShipFollowerComponent>()
+                .RequireComponent<MainControlComponent>()
+                .RequireComponent<PositionComponent>()
+                .Build();
+
+            _ships = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<ShipComponent>()
+                .Build();
         }
 
-        protected override void InitializeInternal()
+        public void Dispose()
         {
-            _shipGroup = InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<ShipComponent>()
-               .Build();
+            _predators.Dispose();
+            _predators = null;
+
+            _ships.Dispose();
+            _ships = null;
         }
 
-        public override void Execute()
+        void IExecutableSystem.Execute()
         {
-            EntityGroup.ForEachComponents<MainControlComponent, PositionComponent>(Execute);
+            _predators.ForEachComponents<MainControlComponent, PositionComponent>(Execute);
         }
 
         private void Execute(ref Entity entity, ref MainControlComponent mainControlComponent, ref PositionComponent shipPositionComponent)
         {
-            if (_shipGroup.Count != 0)
+            if (_ships.Count == 0)
             {
-                ref var targetPositionComponent = ref _shipGroup.GetFirst().GetComponent<PositionComponent>();
-                var direction = targetPositionComponent.Position - shipPositionComponent.Position;
-                mainControlComponent.Acceleration = MainControlComponent.MaxAcceleration;
-                mainControlComponent.Rotation = Quaternion.LookRotation(Vector3.forward, direction).eulerAngles.z;
+                return;
             }
+
+            ref var targetPositionComponent = ref _ships.GetFirst().GetComponent<PositionComponent>();
+            var direction = targetPositionComponent.Position - shipPositionComponent.Position;
+            mainControlComponent.Acceleration = MainControlComponent.MaxAcceleration;
+            mainControlComponent.Rotation = Quaternion.LookRotation(Vector3.forward, direction).eulerAngles.z;
         }
     }
 }

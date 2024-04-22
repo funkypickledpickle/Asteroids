@@ -1,24 +1,35 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.Engine
 {
-    public class RotationEngineRunningSystem : AbstractExecutableSystem
+    public class RotationEngineRunningSystem : IExecutableSystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private EntityGroup _ships;
+
+        public RotationEngineRunningSystem(IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<RotationEngineConfigurationComponent>()
-               .RequireComponent<RotationEngineComponent>()
-               .RequireComponent<UpdatableAngularForceComponent>()
-               .Build();
+            _ships = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<RotationEngineConfigurationComponent>()
+                .RequireComponent<RotationEngineComponent>()
+                .RequireComponent<UpdatableAngularForceComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
         {
-            EntityGroup.ForEach(Execute);
+            _ships.Dispose();
+            _ships = null;
+        }
+
+        void IExecutableSystem.Execute()
+        {
+            _ships.ForEach(Execute);
         }
 
         private static void Execute(ref Entity entity)

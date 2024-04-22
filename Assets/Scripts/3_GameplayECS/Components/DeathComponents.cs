@@ -4,10 +4,10 @@ namespace Asteroids.GameplayECS.Components
 {
     public struct LifeTimeComponent : IECSComponent
     {
-        public float LifeTime;
+        public float Duration;
     }
 
-    public struct DeathTimeComponent : IECSComponent
+    public struct DestroyTimeComponent : IECSComponent
     {
         public float DeathTime;
     }

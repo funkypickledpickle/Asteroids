@@ -1,32 +1,43 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Factories;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
-using Zenject;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.Bullet
 {
-    public class BulletCollisionHandlingSystem : AbstractSystem
+    public class BulletCollisionHandlingSystem : ISystem, IDisposable
     {
-        [Inject] private readonly EntityFactory _entityFactory;
+        private readonly EntityFactory _entityFactory;
+        private readonly ValueTypeECS.EntityContainer.World _world;
 
-        protected override EntityGroup CreateContainer()
+        private EntityGroup EntityGroup;
+
+        public BulletCollisionHandlingSystem(EntityFactory entityFactory, ValueTypeECS.EntityContainer.World world, IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<BulletComponent>()
-               .RequireComponent<CollisionComponent>()
-               .Build();
+            _entityFactory = entityFactory;
+            _world = world;
+            EntityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<BulletComponent>()
+                .RequireComponent<CollisionComponent>()
+                .Build();
+
+            EntityGroup.EntityAdded += CollisionAddedHandler;
         }
 
-        protected override void InitializeInternal()
+        public void Dispose()
         {
-            EntityGroup.SubscribeToEntityAddedEvent(CollisionAddedHandler);
+            EntityGroup.EntityAdded -= CollisionAddedHandler;
+            EntityGroup.Dispose();
+            EntityGroup = null;
         }
 
         private void CollisionAddedHandler(ref Entity entity)
         {
             ref var collisionComponent = ref entity.GetComponent<CollisionComponent>();
-            ref var collidedEntity = ref World.GetEntity(collisionComponent.EntityId);
+            ref var collidedEntity = ref _world.GetEntity(collisionComponent.EntityId);
             if (collidedEntity.HasComponent<RewardableScoreComponent>())
             {
                 ref var rewardableScoreComponent = ref collidedEntity.GetComponent<RewardableScoreComponent>();

@@ -1,32 +1,45 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
 using Asteroids.GameplayECS.Factories;
-using Asteroids.Services.Project;
-using Asteroids.ValueTypeECS.Delegates;
+using Asteroids.Services;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 using UnityEngine;
 using Zenject;
 
 namespace Asteroids.GameplayECS.Systems.Weapon
 {
-    public class GunShootingSystem : AbstractExecutableSystem
+    public class GunShootingSystem : IExecutableSystem, IDisposable
     {
-        [Inject] private readonly IFrameInfoService _frameInfoService;
-        [Inject] private readonly EntityFactory _entityFactory;
+        private readonly IFrameInfoService _frameInfoService;
+        private readonly EntityFactory _entityFactory;
 
-        protected override EntityGroup CreateContainer()
+        private EntityGroup _armedEntities;
+
+        public GunShootingSystem(IFrameInfoService frameInfoService, EntityFactory entityFactory, IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<RotationComponent>()
-               .RequireComponent<GunComponent>()
-               .RequireComponent<VelocityComponent>()
-               .Build();
+            _frameInfoService = frameInfoService;
+            _entityFactory = entityFactory;
+
+            _armedEntities = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<RotationComponent>()
+                .RequireComponent<GunComponent>()
+                .RequireComponent<VelocityComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
         {
-            EntityGroup.ForEach<float>(Execute, _frameInfoService.StartTime);
+            _armedEntities.Dispose();
+            _armedEntities = null;
+        }
+
+        void IExecutableSystem.Execute()
+        {
+            _armedEntities.ForEach<float>(Execute, _frameInfoService.StartTime);
         }
 
         private void Execute(ref Entity entity, float currentTime)

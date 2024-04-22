@@ -1,28 +1,42 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
-using Asteroids.ValueTypeECS.Delegates;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.LifeTime
 {
-    public class DestroyingSystem : AbstractExecutableSystem
+    public class DestroyingSystem : IExecutableSystem, IDisposable
     {
-        protected override EntityGroup CreateContainer()
+        private readonly ValueTypeECS.EntityContainer.World _world;
+
+        private EntityGroup _destroyedEntities;
+
+        public DestroyingSystem(ValueTypeECS.EntityContainer.World world, IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<DestroyedComponent>()
-               .Build();
+            _world = world;
+
+            _destroyedEntities = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<DestroyedComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
         {
-            EntityGroup.ForEach(Execute);
+            _destroyedEntities.Dispose();
+            _destroyedEntities = null;
+        }
+
+        void IExecutableSystem.Execute()
+        {
+            _destroyedEntities.ForEach(Execute);
         }
 
         private void Execute(ref Entity entity)
         {
-            World.RemoveEntity(entity.Id);
+            _world.RemoveEntity(entity.Id);
         }
     }
 }

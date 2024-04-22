@@ -1,24 +1,36 @@
+using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
-using Asteroids.Services.Project;
+using Asteroids.Services;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.EntityGroup;
-using Zenject;
+using Asteroids.ValueTypeECS.System;
 
 namespace Asteroids.GameplayECS.Systems.Weapon
 {
-    public class LaserGunAutoChargingSystem : AbstractExecutableSystem
+    public class LaserGunAutoChargingSystem : IExecutableSystem, IDisposable
     {
-        [Inject] private readonly IFrameInfoService _frameInfoService;
+        private readonly IFrameInfoService _frameInfoService;
 
-        protected override EntityGroup CreateContainer()
+        private EntityGroup EntityGroup;
+
+        public LaserGunAutoChargingSystem(IFrameInfoService frameInfoService, IInstanceSpawner instanceSpawner)
         {
-            return InstanceSpawner.Instantiate<EntityGroupBuilder>()
-               .RequireComponent<LaserGunComponent>()
-               .RequireComponent<LaserAutoChargingComponent>()
-               .Build();
+            _frameInfoService = frameInfoService;
+
+            EntityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
+                .RequireComponent<LaserGunComponent>()
+                .RequireComponent<LaserAutoChargingComponent>()
+                .Build();
         }
 
-        public override void Execute()
+        public void Dispose()
+        {
+            EntityGroup.Dispose();
+            EntityGroup = null;
+        }
+
+        void IExecutableSystem.Execute()
         {
             EntityGroup.ForEachOnlyComponents<LaserGunComponent, LaserAutoChargingComponent>(Execute);
         }

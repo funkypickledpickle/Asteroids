@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace Asteroids.GameplayComponents.Generated
+namespace Asteroids.UI.Input
 {
     public partial class @NavigationInputCollection : IInputActionCollection2, IDisposable
     {

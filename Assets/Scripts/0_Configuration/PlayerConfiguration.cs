@@ -1,7 +1,6 @@
-using Asteroids.Configuration.Project;
 using UnityEngine;
 
-namespace Asteroids.Configuration.Game
+namespace Asteroids.Configuration
 {
     [CreateAssetMenu(menuName = "Configuration/Player Configuration")]
     public class PlayerConfiguration : ScriptableObject
@@ -28,8 +27,6 @@ namespace Asteroids.Configuration.Game
         [SerializeField] private float _laserChargeLoadingDuration;
         [SerializeField] private float _laserDistance;
 
-        [SerializeField] private ViewKey _viewKey;
-
         public float Mass => _mass;
 
         public float MaxSpeed => _maxSpeed;
@@ -52,7 +49,5 @@ namespace Asteroids.Configuration.Game
 
         public float LaserChargeLoadingDuration => _laserChargeLoadingDuration;
         public float LaserDistance => _laserDistance;
-
-        public ViewKey ViewKey => _viewKey;
     }
 }

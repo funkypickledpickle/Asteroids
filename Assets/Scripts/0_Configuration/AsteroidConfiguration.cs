@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Asteroids.Configuration.Game
+namespace Asteroids.Configuration
 {
     [CreateAssetMenu(menuName = "Configuration/Asteroid Configuration")]
     public class AsteroidConfiguration : ScriptableObject

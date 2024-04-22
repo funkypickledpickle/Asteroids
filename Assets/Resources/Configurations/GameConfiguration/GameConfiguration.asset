@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9be0e682ee25c42378fa2559e0366abd, type: 3}
   m_Name: GameConfiguration
   m_EditorClassIdentifier: 
-  _asteroidSpawnInterval: 1
+  _asteroidSpawnInterval: 3
   _maxAsteroidQuantity: 3
   _asteroidGroupConfigurations:
   - {fileID: 11400000, guid: 4e27a9117bb164c608bcc4a7dfb26528, type: 2}
   - {fileID: 11400000, guid: 97a21de8df6244519a332d3ffb9533dc, type: 2}
   - {fileID: 11400000, guid: 8d057e3003dbb476c8172356b5b0e9d9, type: 2}
-  _ufoSpawnInterval: 1
-  _maxUFOQuantity: 1
+  _ufoSpawnInterval: 10
+  _maxUFOQuantity: 2
   _ufoConfiguration: {fileID: 11400000, guid: 40ae86f8edf8e41f2b8069cabfb294ff, type: 2}
   _playerConfiguration: {fileID: 11400000, guid: e862a165b3ad64978a81c2cfa9d9e38d, type: 2}
   _playerBulletConfiguration: {fileID: 11400000, guid: 4612db967e16045718fff780491a736d, type: 2}

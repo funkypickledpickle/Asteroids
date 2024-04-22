@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Asteroids.Configuration.Project;
 using UnityEngine;
 
-namespace Asteroids.Configuration.Game
+namespace Asteroids.Configuration
 {
     [CreateAssetMenu(menuName = "Configuration/Asteroid Group Configuration")]
     public class AsteroidGroupConfiguration : ScriptableObject
@@ -15,7 +14,6 @@ namespace Asteroids.Configuration.Game
             [SerializeField] private float _size;
             [SerializeField] private float _speedMultiplier;
             [SerializeField] private int _rewardedScore;
-            [SerializeField] private ViewKey _viewKey;
             [SerializeField] private int _quantity;
 
             public AsteroidConfiguration AsteroidConfiguration => _asteroidConfiguration;
@@ -24,7 +22,6 @@ namespace Asteroids.Configuration.Game
 
             public int RewardedScore => _rewardedScore;
 
-            public ViewKey ViewKey => _viewKey;
             public int Quantity => _quantity;
         }
 

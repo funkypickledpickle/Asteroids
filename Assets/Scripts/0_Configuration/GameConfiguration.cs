@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Asteroids.Configuration.Game
+namespace Asteroids.Configuration
 {
     [CreateAssetMenu(menuName = "Configuration/Gameplay Configuration")]
     public class GameConfiguration : ScriptableObject
@@ -36,5 +36,10 @@ namespace Asteroids.Configuration.Game
         public float WorldBoundsPadding => _worldBoundsPadding;
 
         public int TargetFramerate => _targetFramerate;
+    }
+
+    public class FieldConfiguration
+    {
+        public Rect Rect { get; set; }
     }
 }

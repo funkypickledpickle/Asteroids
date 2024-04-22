@@ -10,9 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ce3607162cbe4263b73edd7650dcca6, type: 3}
-  m_Name: Unity Configuration Container
+  m_Name: Container
   m_EditorClassIdentifier: 
-  _configurations:
-  - {fileID: 11400000, guid: b3f8c0f5a49fc473eb2a1e5e44460829, type: 2}
-  - {fileID: 11400000, guid: f5ee9ba877ca240e7ab0a92ed1a13f57, type: 2}
-  - {fileID: 11400000, guid: 7c2d2e3bf1683459bb8ed9227b56650a, type: 2}
+  _viewPathsContainer: {fileID: 11400000, guid: b3f8c0f5a49fc473eb2a1e5e44460829, type: 2}
+  _gameConfiguration: {fileID: 11400000, guid: f5ee9ba877ca240e7ab0a92ed1a13f57, type: 2}
+  _containersConfiguration: {fileID: 11400000, guid: 7c2d2e3bf1683459bb8ed9227b56650a, type: 2}

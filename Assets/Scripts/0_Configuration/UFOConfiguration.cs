@@ -1,7 +1,6 @@
-using Asteroids.Configuration.Project;
 using UnityEngine;
 
-namespace Asteroids.Configuration.Game
+namespace Asteroids.Configuration
 {
     [CreateAssetMenu(menuName = "Configuration/UFO Configuration")]
     public class UFOConfiguration : ScriptableObject
@@ -11,7 +10,6 @@ namespace Asteroids.Configuration.Game
         [SerializeField] private float _mass;
         [SerializeField] private float _maxDistanceFromTarget;
         [SerializeField] private int _rewardedScore;
-        [SerializeField] private ViewKey _viewKey;
 
         public MinMax<float> SpeedRange => _speedRange;
         public float Mass => _mass;
@@ -19,8 +17,6 @@ namespace Asteroids.Configuration.Game
         public float MaxDistanceFromTarget => _maxDistanceFromTarget;
 
         public int RewardedScore => _rewardedScore;
-
-        public ViewKey ViewKey => _viewKey;
     }
 
 }

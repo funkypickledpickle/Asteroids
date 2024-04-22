@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Asteroids.Configuration.Project
+namespace Asteroids.Configuration
 {
     [CreateAssetMenu(menuName = "Configuration/ViewPathsContainer")]
     public class ViewPathsContainer : ScriptableObject

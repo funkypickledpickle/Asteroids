@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Asteroids.Configuration.Game
+namespace Asteroids.Configuration
 {
     [Serializable]
     public struct MinMax<TValue> where TValue : struct

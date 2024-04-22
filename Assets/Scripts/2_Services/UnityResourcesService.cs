@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
+using Asteroids.Configuration.Project;
 using Asteroids.Tools;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Asteroids.Services.Project
+namespace Asteroids.Services
 {
-    public interface IUnityResourcesService
+    public interface IResourcesService
     {
         T GetAsset<T>(string key) where T : Object;
     }
 
-    public class UnityResourcesService : IUnityResourcesService
+    public class ResourcesService : IResourcesService
     {
-        private const string ResourcePath = "Assets/Resources";
         private readonly Dictionary<string, object> _cachedResources = new Dictionary<string, object>();
 
         public T GetAsset<T>(string key) where T : Object
@@ -54,7 +54,7 @@ namespace Asteroids.Services.Project
 
         private static ResourceSource GetResourceSource(string key)
         {
-            var isLocal = key.IndexOf(ResourcePath, StringComparison.Ordinal) == 0;
+            var isLocal = key.IndexOf(ProjectConstants.ResourcePath, StringComparison.Ordinal) == 0;
             if (isLocal)
             {
                 return ResourceSource.Local;
@@ -71,8 +71,8 @@ namespace Asteroids.Services.Project
             {
                 case ResourceSource.Local:
                 {
-                    var index = input.IndexOf(ResourcePath, StringComparison.Ordinal);
-                    return input.Substring(index + ResourcePath.Length + 1);
+                    var index = input.IndexOf(ProjectConstants.ResourcePath, StringComparison.Ordinal);
+                    return input.Substring(index + ProjectConstants.ResourcePath.Length + 1);
                 }
                 default:
                 {

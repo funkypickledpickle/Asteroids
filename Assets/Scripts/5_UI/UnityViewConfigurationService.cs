@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Asteroids.Configuration;
 using Asteroids.Configuration.Project;
 
 namespace Asteroids.Services.Project

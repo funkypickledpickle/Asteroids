@@ -1,0 +1,17 @@
+{
+    "name": "Asteroids.Services",
+    "rootNamespace": "Asteroids.Services",
+    "references": [
+        "GUID:9601c88c7500c4374b6eb05795239639",
+        "GUID:afd4815bdc18f45e59255ee80f848bde"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,4 +1,4 @@
-using Asteroids.Configuration.Project;
+using Asteroids.Configuration;
 using UnityEngine;
 
 namespace Asteroids.Services.Project

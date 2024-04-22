@@ -18,7 +18,11 @@ namespace Asteroids.UI.Behaviours
 
         private void Awake()
         {
-            _unitBehaviour = GetComponent<UnitBehaviour>();
+            if (_unitBehaviour == null)
+            {
+                _unitBehaviour = GetComponent<UnitBehaviour>();
+            }
+
             _unitBehaviour.WillBeVisible += HandleWillBeVisible;
         }
 

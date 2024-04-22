@@ -29,5 +29,10 @@ namespace Asteroids.Tools
         {
             container.Bind(typeof(TFrom1), typeof(TFrom2)).To<TTarget>().AsSingle();
         }
+
+        public static void BindAsSingle<TFrom>(this DiContainer container, Func<TFrom> get)
+        {
+            container.Bind<TFrom>().FromMethod(get).AsSingle();
+        }
     }
 }

@@ -1,5 +1,5 @@
 using System;
-using Asteroids.Configuration.Game;
+using Asteroids.Configuration;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Factories;
 using Asteroids.GameplayECS.Systems.AI;
@@ -10,48 +10,42 @@ using Asteroids.GameplayECS.Systems.Engine;
 using Asteroids.GameplayECS.Systems.Laser;
 using Asteroids.GameplayECS.Systems.LifeTime;
 using Asteroids.GameplayECS.Systems.PositionSystems;
+using Asteroids.GameplayECS.Systems.Score;
 using Asteroids.GameplayECS.Systems.Ship;
 using Asteroids.GameplayECS.Systems.UFO;
-using Asteroids.GameplayECS.Systems.ViewSystems;
 using Asteroids.GameplayECS.Systems.Weapon;
 using Asteroids.GameplayECS.Systems.World;
-using Asteroids.Services.Project;
+using Asteroids.Services;
 using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityContainer;
 using Asteroids.ValueTypeECS.EntityGroup;
 using Asteroids.ValueTypeECS.System;
-using Zenject;
 using UnityApplication = UnityEngine.Application;
 
-namespace Asteroids.GameplayComponents.Controllers
+namespace Asteroids.Gameplay.Controllers
 {
     public class GameController
     {
-        public event EventHandler PlayerDestroyed;
+        private readonly SystemsManager _systemsManager;
+        private readonly EntityFactory _entityFactory;
+        private readonly IExecutionService _executionService;
+        private readonly World _world;
 
-        [Inject] private readonly SystemsManager _systemsManager;
-        [Inject] private readonly EntityFactory _entityFactory;
-        [Inject] private readonly IUnityExecutionService _executionService;
-        [Inject] private readonly IUnitySceneService _sceneService;
-        [Inject] private readonly World _world;
-
-        private readonly EntityGroup _playerGroup;
-        private readonly Action _executeAction;
-
-        public GameController(IConfigurationService configurationService, IInstanceSpawner spawner)
+        public GameController(SystemsManager systemsManager, EntityFactory entityFactory, IExecutionService executionService, World world, GameConfiguration gameConfiguration, IInstanceSpawner spawner)
         {
-            var gameConfiguration = configurationService.Get<GameConfiguration>();
+            _systemsManager = systemsManager;
+            _entityFactory = entityFactory;
+            _executionService = executionService;
+            _world = world;
+
             UnityApplication.targetFrameRate = gameConfiguration.TargetFramerate;
-
-            _playerGroup = spawner.Instantiate<EntityGroupBuilder>().RequireComponent<PlayerComponent>().Build();
-            _playerGroup.SubscribeToEntityRemovedEvent(PlayerDestroyedHandler);
-
-            _executeAction = Execute;
         }
 
         public void Initialize()
         {
+            _systemsManager.AddSystem<ScoreCollectingSystem>();
+
             _systemsManager.AddSystem<ShipSpawningSystem>();
             _systemsManager.AddSystem<ShipCollisionHandlingSystem>();
             _systemsManager.AddSystem<ShipDamageHandlingSystem>();
@@ -81,9 +75,6 @@ namespace Asteroids.GameplayComponents.Controllers
             _systemsManager.AddSystem<BulletCollisionHandlingSystem>();
             _systemsManager.AddSystem<LaserCollisionHandlingSystem>();
 
-            _systemsManager.AddSystem<ViewManagementSystem>();
-            _systemsManager.AddSystem<ViewScalingSystem>();
-
             _systemsManager.AddSystem<WorldMirroringSystem>();
 
             _systemsManager.AddSystem<VelocityDumpingSystem>();
@@ -98,52 +89,42 @@ namespace Asteroids.GameplayComponents.Controllers
             _systemsManager.AddSystem<AngularVelocityLimiterSystem>();
             _systemsManager.AddSystem<AngularForceResetSystem>();
 
-            _systemsManager.AddSystem<ViewCollisionHandlingSystem>();
-            _systemsManager.AddSystem<TransformPositionUpdateSystem>();
-            _systemsManager.AddSystem<TransformRotationUpdateSystem>();
-
-            _systemsManager.AddSystem<ViewActivationSystem>();
-            _systemsManager.AddSystem<AttachingToEntityViewSystem>();
-
-            _systemsManager.AddSystem<LifeTimeManagementSystem>();
-            _systemsManager.AddSystem<TimedDeathExecutionSystem>();
+            _systemsManager.AddSystem<LifeTimeSystem>();
             _systemsManager.AddSystem<DestroyingSystem>();
-
-            _systemsManager.Initialize();
         }
 
         public void StartGame()
         {
             _entityFactory.CreateGameInfo();
 
-            _executionService.SubscribeToUpdate(_executeAction);
-            _executionService.UnPauseUpdate();
+            _executionService.FrameStarted += HandleFrameStarted;
+            _executionService.ResumeExecution();
         }
 
         public void PauseGame()
         {
-            _executionService.PauseUpdate();
+            _executionService.PauseExecution();
         }
 
         public void UnpauseGame()
         {
-            _executionService.UnPauseUpdate();
+            _executionService.ResumeExecution();
         }
 
         public void EndGame()
         {
-            _executionService.UnsubscribeFromUpdate(_executeAction);
-            _executionService.PauseUpdate();
+            _executionService.FrameStarted -= HandleFrameStarted;
+            _executionService.PauseExecution();
         }
 
-        private void Execute()
+        public void Reset()
+        {
+            _world.Clear();
+        }
+
+        private void HandleFrameStarted()
         {
             _systemsManager.Execute();
-        }
-
-        private void PlayerDestroyedHandler(ref Entity referenced)
-        {
-            PlayerDestroyed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

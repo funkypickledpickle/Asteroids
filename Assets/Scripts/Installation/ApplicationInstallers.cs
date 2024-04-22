@@ -27,10 +27,16 @@ namespace Asteroids.Installation
         {
             var resourcesService = Container.Resolve<IResourcesService>();
             var configurationContainer = resourcesService.GetAsset<UnityConfigurationContainer>(ConfigurationsContainerPath);
+            var gameWorld = Container.Resolve<IGameWorld>();
 
             Container.BindAsSingle<ViewPathsContainer>(() => configurationContainer.ViewPathsContainer);
             Container.BindAsSingle<GameConfiguration>((() => configurationContainer.GameConfiguration));
             Container.BindAsSingle<ContainersConfiguration>(() => configurationContainer.ContainersConfiguration);
+
+            Container.BindAsSingle<FieldConfiguration>(() => new FieldConfiguration()
+            {
+                Rect = gameWorld.WorldRect,
+            });
         }
     }
 

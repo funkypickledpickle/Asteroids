@@ -8,7 +8,7 @@ namespace Asteroids.ValueTypeECS.System
 {
     public class SystemsManager
     {
-        [Inject] private readonly IDiContainerWrapper _instanceSpawner;
+        [Inject] private readonly IInstanceSpawner _instanceSpawner;
 
         private readonly List<ISystem> _systems = new List<ISystem>();
         private readonly List<IExecutableSystem> _executableSystems = new List<IExecutableSystem>();

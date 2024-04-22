@@ -7,8 +7,9 @@ namespace Asteroids.Tools
 {
     public enum LogCategory
     {
-        Common,
+        Loader,
         Resources,
+        Configuration,
         ECS,
     }
 
@@ -66,7 +67,7 @@ namespace Asteroids.Tools
         public static readonly Dictionary<LogCategory, Dictionary<LogType, LogOutput>> OutputSettings = new Dictionary<LogCategory, Dictionary<LogType, LogOutput>>()
         {
             {
-                LogCategory.Common, new Dictionary<LogType, LogOutput>()
+                LogCategory.Resources, new Dictionary<LogType, LogOutput>()
                 {
                     { LogType.Assertion, DefaultAssertionLogOutput },
                     { LogType.Debug, DefaultDebugLogOutput },
@@ -75,7 +76,16 @@ namespace Asteroids.Tools
                 }
             },
             {
-                LogCategory.Resources, new Dictionary<LogType, LogOutput>()
+                LogCategory.Loader, new Dictionary<LogType, LogOutput>()
+                {
+                    { LogType.Assertion, DefaultAssertionLogOutput },
+                    { LogType.Debug, DefaultDebugLogOutput },
+                    { LogType.Warning, DefaultWarningLogOutput },
+                    { LogType.Error, DefaultErrorLogOutput },
+                }
+            },
+            {
+                LogCategory.Configuration, new Dictionary<LogType, LogOutput>()
                 {
                     { LogType.Assertion, DefaultAssertionLogOutput },
                     { LogType.Debug, DefaultDebugLogOutput },
@@ -91,7 +101,7 @@ namespace Asteroids.Tools
                     { LogType.Warning, DefaultWarningLogOutput },
                     { LogType.Error, DefaultErrorLogOutput },
                 }
-            }
+            },
         };
 
         public static void Log(this object invoker, LogCategory logCategory, string data)

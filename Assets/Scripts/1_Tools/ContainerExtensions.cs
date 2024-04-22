@@ -1,7 +1,7 @@
 using System;
 using Zenject;
 
-namespace Asteroids.Extensions
+namespace Asteroids.Tools
 {
     public static class ContainerExtensions
     {

@@ -1,0 +1,16 @@
+{
+    "name": "Asteroids.Tools.Assembly",
+    "rootNamespace": "Asteroids.Tools",
+    "references": [
+        "GUID:9601c88c7500c4374b6eb05795239639"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

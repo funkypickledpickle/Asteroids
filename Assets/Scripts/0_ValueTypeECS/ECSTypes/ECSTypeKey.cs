@@ -10,6 +10,36 @@ namespace Asteroids.ValueTypeECS.ECSTypes
         {
             Key = key;
         }
+
+        public static bool operator ==(ECSTypeKey a, ECSTypeKey b)
+        {
+            return a.Key == b.Key;
+        }
+
+        public static bool operator !=(ECSTypeKey a, ECSTypeKey b)
+        {
+            return a.Key != b.Key;
+        }
+
+        public override int GetHashCode()
+        {
+            return Key.GetHashCode();
+        }
+
+        public bool Equals(ECSTypeKey other)
+        {
+            return Key == other.Key;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ECSTypeKey other && Equals(other);
+        }
+
+        public override string ToString()
+        {
+            return $"TypeKey({Key})";
+        }
     }
 
     public class ECSTypeKeyEqualityComparer : IEqualityComparer<ECSTypeKey>

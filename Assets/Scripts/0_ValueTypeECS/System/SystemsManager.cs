@@ -23,14 +23,6 @@ namespace Asteroids.ValueTypeECS.System
             }
         }
 
-        public void Initialize()
-        {
-            foreach (var system in _systems.OfType<IInitializableSystem>())
-            {
-                system.Initialize();
-            }
-        }
-
         public void Execute()
         {
             foreach (var system in _executableSystems)

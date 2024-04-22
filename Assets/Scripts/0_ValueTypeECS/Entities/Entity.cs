@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Asteroids.ValueTypeECS.Components;
 using Asteroids.ValueTypeECS.Delegates;
 using Asteroids.ValueTypeECS.ECSTypes;
+using Debug = UnityEngine.Debug;
 
 namespace Asteroids.ValueTypeECS.Entities
 {
@@ -29,9 +32,13 @@ namespace Asteroids.ValueTypeECS.Entities
         private Dictionary<ECSTypeKey, ComponentKey> _components;
         private ActionReferenceValue<Entity, ComponentKey> _componentCreated;
         private ActionReferenceValue<Entity, ComponentKey> _componentRemoved;
+
         public readonly int Id;
 
-        public Entity(int id, IComponentsContainer componentsContainer, Dictionary<ECSTypeKey, ComponentKey> components, ActionReferenceValue<Entity, ComponentKey> componentCreated, ActionReferenceValue<Entity, ComponentKey> componentRemoved)
+        public Entity(int id, IComponentsContainer componentsContainer,
+            Dictionary<ECSTypeKey, ComponentKey> components,
+            ActionReferenceValue<Entity, ComponentKey> componentCreated,
+            ActionReferenceValue<Entity, ComponentKey> componentRemoved)
         {
             Id = id;
             _componentsContainer = componentsContainer;
@@ -54,10 +61,11 @@ namespace Asteroids.ValueTypeECS.Entities
             }
 
             var typeKey = ECSTypeService.GetType<TComponent>();
-            ref var component = ref _componentsContainer.CreateComponent<TComponent>(out var index);
-            var componentKey = new ComponentKey(index, typeKey);
+            ref var component = ref _componentsContainer.CreateComponent<TComponent>(out var id);
+            var componentKey = new ComponentKey(id, typeKey);
             _components.Add(typeKey, componentKey);
             component = source;
+            LogEntityComponents($"<color=\"green\">CreateComponent{typeof(TComponent)}: id #{id}</color>");
             _componentCreated(ref this, componentKey);
         }
 
@@ -81,6 +89,7 @@ namespace Asteroids.ValueTypeECS.Entities
         {
             var typeKey = ECSTypeService.GetType<TComponent>();
             RemoveComponent(typeKey);
+            LogEntityComponents($"<color=\"red\">RemoveComponent{typeof(TComponent)}</color>");
         }
 
         public void RemoveComponent(ECSTypeKey typeKey)
@@ -100,15 +109,9 @@ namespace Asteroids.ValueTypeECS.Entities
         public void Destroy()
         {
             var keysCollection = _components.Keys;
-            ECSTypeKey typeKey = default;
             while (keysCollection.Count > 0)
             {
-                foreach (var value in keysCollection)
-                {
-                    typeKey = value;
-                    break;
-                }
-
+                var typeKey = keysCollection.First();
                 RemoveComponent(typeKey);
             }
         }
@@ -116,6 +119,13 @@ namespace Asteroids.ValueTypeECS.Entities
         public void Reset()
         {
             _components.Clear();
+        }
+
+        [Conditional("LOG_ENTITY_COMPONENTS")]
+        private void LogEntityComponents(string actionName)
+        {
+            string components = $"\n Components: {string.Join(",", _components.Select(c => $"{{{c.Value.Index} : {ECSTypeService.GetSystemType(c.Key)}}}"))}";
+            Debug.Log($"Entity id #{Id}: " + actionName + components);
         }
     }
 }

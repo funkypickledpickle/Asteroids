@@ -7,23 +7,30 @@ namespace Asteroids.ValueTypeECS.DataContainers
     public struct ValueContainer<TValue> where TValue : struct
     {
         public readonly int Index;
-        public bool Initialized;
+        public bool IsInitialized { get; private set; }
         public TValue Value;
 
         public ValueContainer(int index)
         {
             Index = index;
             Value = default;
-            Initialized = false;
+            IsInitialized = false;
+        }
+
+        public void Initialize(TValue value)
+        {
+            IsInitialized = true;
+            Value = value;
         }
     }
 
     public interface ISegmentedList
     {
-        int? MaxReservedIndex { get; }
-        bool IsEmpty { get; }
-        bool IsIndexReserved(int index);
-        void Free(int index);
+        public int? MaxReservedIndex { get; }
+        public bool IsEmpty { get; }
+        public bool IsIndexReserved(int index);
+        public void Free(int index);
+        public void Clear();
     }
 
     public sealed class UnorderedSegmentedList<TValue> : ISegmentedList where TValue : struct
@@ -39,9 +46,10 @@ namespace Asteroids.ValueTypeECS.DataContainers
         private List<Array> _arrayList = new List<Array>();
         private List<int> _freeIndices = new List<int>();
 
-        public int? MaxReservedIndex { get; private set; }
+        private int? _maxReservedIndex;
+        int? ISegmentedList.MaxReservedIndex => _maxReservedIndex;
 
-        public bool IsEmpty => !MaxReservedIndex.HasValue;
+        public bool IsEmpty => !_maxReservedIndex.HasValue;
 
         public UnorderedSegmentedList(int arraySize)
         {
@@ -49,9 +57,9 @@ namespace Asteroids.ValueTypeECS.DataContainers
             CreateArray();
         }
 
-        public bool IsIndexReserved(int index)
+        bool ISegmentedList.IsIndexReserved(int index)
         {
-            if (IsEmpty || index < 0 || index > MaxReservedIndex)
+            if (IsEmpty || index < 0 || index > _maxReservedIndex)
             {
                 return false;
             }
@@ -70,12 +78,12 @@ namespace Asteroids.ValueTypeECS.DataContainers
         public ref ValueContainer<TValue> Reserve()
         {
             var isUnusedItemAvailable = _freeIndices.Count != 0;
-            var targetIndex = isUnusedItemAvailable ? _freeIndices.First() : (MaxReservedIndex ?? -1) + 1;
+            var targetIndex = isUnusedItemAvailable ? _freeIndices.First() : (_maxReservedIndex ?? -1) + 1;
             var indices = CalculateIndices(targetIndex);
             var array = TryGetOrCreateArray(indices.arrayIndex);
             if (!isUnusedItemAvailable)
             {
-                MaxReservedIndex = targetIndex;
+                _maxReservedIndex = targetIndex;
             }
             else
             {
@@ -97,18 +105,18 @@ namespace Asteroids.ValueTypeECS.DataContainers
         public void Free(int index)
         {
             AssertIndexReserved(index);
-            if (index == MaxReservedIndex)
+            if (index == _maxReservedIndex)
             {
-                MaxReservedIndex--;
-                while (MaxReservedIndex >= 0 && GetValueContainer(MaxReservedIndex.Value).Reserved == false)
+                _maxReservedIndex--;
+                while (_maxReservedIndex >= 0 && GetValueContainer(_maxReservedIndex.Value).Reserved == false)
                 {
-                    _freeIndices.Remove(MaxReservedIndex.Value);
-                    MaxReservedIndex--;
+                    _freeIndices.Remove(_maxReservedIndex.Value);
+                    _maxReservedIndex--;
                 }
 
-                if (MaxReservedIndex == -1)
+                if (_maxReservedIndex == -1)
                 {
-                    MaxReservedIndex = null;
+                    _maxReservedIndex = null;
                 }
             }
             else
@@ -116,6 +124,12 @@ namespace Asteroids.ValueTypeECS.DataContainers
                 _freeIndices.Add(index);
                 GetValueContainer(index).Reserved = false;
             }
+        }
+
+        public void Clear()
+        {
+            _maxReservedIndex = null;
+            _freeIndices.Clear();
         }
 
         private ref ItemContainer<ValueContainer<TValue>> GetValueContainer(int index)
@@ -127,7 +141,7 @@ namespace Asteroids.ValueTypeECS.DataContainers
 
         private void AssertIndexReserved(int index)
         {
-            if (IsEmpty || index < 0 || index > MaxReservedIndex)
+            if (IsEmpty || index < 0 || index > _maxReservedIndex)
             {
                 throw new IndexOutOfRangeException();
             }

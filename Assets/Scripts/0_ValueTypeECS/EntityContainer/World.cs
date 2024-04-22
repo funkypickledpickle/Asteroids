@@ -1,76 +1,46 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Asteroids.Configuration.Game;
-using Asteroids.Tools;
+using Asteroids.Configuration;
 using Asteroids.ValueTypeECS.Components;
 using Asteroids.ValueTypeECS.DataContainers;
+using Asteroids.ValueTypeECS.Delegates;
 using Asteroids.ValueTypeECS.ECSTypes;
 using Asteroids.ValueTypeECS.Entities;
 
 namespace Asteroids.ValueTypeECS.EntityContainer
 {
-    public interface IEntityObserver
+    public class World : IEnumerable<int>
     {
-        void EntityCreated(ref Entity entity);
-        void EntityRemoved(ref Entity entity);
-    }
-
-    public interface IComponentObserver
-    {
-        void ComponentCreated(ref Entity entity, ComponentKey key);
-        void ComponentRemoved(ref Entity entity, ComponentKey key);
-    }
-
-    public class World
-    {
-        private class EntityCollection : IEnumerable<int>
-        {
-            private UnorderedSegmentedList<Entity> _entities;
-
-            public EntityCollection(UnorderedSegmentedList<Entity> entities)
-            {
-                _entities = entities;
-            }
-
-            public IEnumerator<int> GetEnumerator()
-            {
-                foreach (var index in _entities)
-                {
-                    yield return index;
-                }
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-        }
+        public event Action WillClear;
 
         private readonly UnorderedSegmentedList<Entity> _entities;
         private readonly IComponentsContainer _componentsContainer;
 
-        private readonly List<IEntityObserver> _observers = new List<IEntityObserver>();
-        private readonly List<IComponentObserver> _entityObserver = new List<IComponentObserver>();
+        public event ActionReference<Entity> EntityCreated;
+        public event ActionReference<Entity> EntityRemoved;
 
-        public World(WorldConfiguration worldConfiguration, IComponentsContainer componentsContainer)
+        public event ActionReferenceValue<Entity, ComponentKey> ComponentCreated;
+        public event ActionReferenceValue<Entity, ComponentKey> ComponentRemoved;
+
+        public World(ContainersConfiguration configuration, IComponentsContainer componentsContainer)
         {
             _componentsContainer = componentsContainer;
-            _entities = new UnorderedSegmentedList<Entity>(worldConfiguration.ArraySizeForEntitySegmentedList);
+            _entities = new UnorderedSegmentedList<Entity>(configuration.ArraySizeForEntitySegmentedList);
             _componentsContainer = componentsContainer;
         }
 
         public ref Entity CreateEntity()
         {
             ref var container = ref _entities.Reserve();
-            if (!container.Initialized)
+            if (!container.IsInitialized)
             {
-                container.Value = new Entity(container.Index, _componentsContainer, new Dictionary<ECSTypeKey, ComponentKey>(new ECSTypeKeyEqualityComparer()), ComponentCreatedHandler, ComponentRemovedHandler);
-                container.Initialized = true;
+                container.Initialize(new Entity(container.Index, _componentsContainer,
+                    new Dictionary<ECSTypeKey, ComponentKey>(new ECSTypeKeyEqualityComparer()),
+                    HandleComponentCreated, HandleComponentRemoved));
             }
 
-            RaiseEntityCreated(ref container.Value);
+            EntityCreated?.Invoke(ref container.Value);
             return ref container.Value;
         }
 
@@ -83,80 +53,49 @@ namespace Asteroids.ValueTypeECS.EntityContainer
         {
             ref var entity = ref _entities.GetReservedValue(id).Value;
             entity.Destroy();
-            RaiseEntityRemoved(ref _entities.GetReservedValue(id).Value);
+            EntityRemoved?.Invoke(ref _entities.GetReservedValue(id).Value);
             _entities.Free(id);
         }
 
-        private void RaiseEntityCreated(ref Entity entity)
+        public void Clear()
         {
-            LogEvent(entity.Id, $"EntityCreated");
-            foreach (var observer in _observers)
+            WillClear?.Invoke();
+
+            foreach (var index in this)
             {
-                observer.EntityCreated(ref entity);
+                GetEntity(index).Reset();
+            }
+
+            _entities.Clear();
+            _componentsContainer.Reset();
+        }
+
+        public SegmentedListEnumerator GetEnumerator()
+        {
+            return _entities.GetEnumerator();
+        }
+
+        IEnumerator<int> IEnumerable<int>.GetEnumerator()
+        {
+            foreach (var index in _entities)
+            {
+                yield return index;
             }
         }
 
-        private void RaiseEntityRemoved(ref Entity entity)
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            LogEvent(entity.Id, $"EntityRemoved");
-            foreach (var observer in _observers)
-            {
-                observer.EntityRemoved(ref entity);
-            }
+            return (this as IEnumerable<int>).GetEnumerator();
         }
 
-        private void RaiseComponentCreated(ref Entity entity, ComponentKey key)
+        private void HandleComponentCreated(ref Entity entity, ComponentKey key)
         {
-            LogEvent(entity.Id, $"ComponentCreated: {key}");
-            foreach (var observer in _entityObserver)
-            {
-                observer.ComponentCreated(ref entity, key);
-            }
+            ComponentCreated?.Invoke(ref entity, key);
         }
 
-        private void RaiseComponentRemoved(ref Entity entity, ComponentKey key)
+        private void HandleComponentRemoved(ref Entity entity, ComponentKey key)
         {
-            LogEvent(entity.Id, $"ComponentRemoved: {key}");
-            foreach (var observer in _entityObserver)
-            {
-                observer.ComponentRemoved(ref entity, key);
-            }
-        }
-
-        public void Subscribe(IEntityObserver observer)
-        {
-            _observers.Add(observer);
-        }
-
-        public void Unsubscribe(IEntityObserver observer)
-        {
-            _observers.Remove(observer);
-        }
-
-        public void Subscribe(IComponentObserver observer)
-        {
-            _entityObserver.Add(observer);
-        }
-
-        public void Unsubscribe(IComponentObserver observer)
-        {
-            _entityObserver.Remove(observer);
-        }
-
-        private void ComponentCreatedHandler(ref Entity entity, ComponentKey key)
-        {
-            RaiseComponentCreated(ref entity, key);
-        }
-
-        private void ComponentRemovedHandler(ref Entity entity, ComponentKey key)
-        {
-            RaiseComponentRemoved(ref entity, key);
-        }
-
-        [Conditional("LOG_ECS_EVENTS")]
-        private void LogEvent(int id, string message)
-        {
-            this.Log(LogCategory.ECS, $"Entity {id} Action: {message}");
+            ComponentRemoved?.Invoke(ref entity, key);
         }
     }
 }

@@ -1,55 +1,65 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Asteroids.ValueTypeECS.Delegates;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityContainer;
+using UnityEngine.Pool;
 
 namespace Asteroids.ValueTypeECS.EntityGroup
 {
-    public class EntityGroup : IComponentObserver, IEntityObserver
+    public class EntityGroup : IDisposable
     {
         public readonly World World;
         private readonly FunctionReference<Entity, bool> _entityCondition;
 
-        private ActionReference<Entity> _entityAddedObservers;
-        private ActionReference<Entity> _entityRemovedObservers;
+        public event ActionReference<Entity> EntityAdded;
+        public event ActionReference<Entity> EntityRemoved;
 
         private List<int> _ids;
         public int Count => _ids.Count;
-
-        private int _enumeratorIndex;
 
         public IReadOnlyList<int> IdsList => _ids;
 
         public EntityGroup(World world, FunctionReference<Entity, bool> entityCondition)
         {
+            _handleActiveEnumeratorDisposed = HandleActiveEnumeratorDisposed;
+
             World = world;
             _entityCondition = entityCondition;
+
             _ids = new List<int>();
+            foreach (int entityIndex in world)
+            {
+                ref var entity = ref world.GetEntity(entityIndex);
+                if (entityCondition(ref entity))
+                {
+                    _ids.Add(entity.Id);
+                }
+            }
 
-            World.Subscribe((IComponentObserver)this);
-            World.Subscribe((IEntityObserver)this);
+            world.WillClear += WorldWillClearHandler;
+            world.EntityCreated += HandleEntityCreated;
+            world.EntityRemoved += HandleEntityRemoved;
+            world.ComponentCreated += HandleComponentCreated;
+            world.ComponentRemoved += HandleComponentRemoved;
         }
 
-        public void SubscribeToEntityAddedEvent(ActionReference<Entity> entityAddedActionReference)
+        public void Dispose()
         {
-            _entityAddedObservers += entityAddedActionReference;
+            var world = World;
+            world.WillClear -= WorldWillClearHandler;
+            world.EntityCreated -= HandleEntityCreated;
+            world.EntityRemoved -= HandleEntityRemoved;
+            world.ComponentCreated -= HandleComponentCreated;
+            world.ComponentRemoved -= HandleComponentRemoved;
+
+            _ids = null;
         }
 
-        public void UnsubscribeFromEntityAddedEvent(ActionReference<Entity> entityAddedActionReference)
+        private void WorldWillClearHandler()
         {
-            _entityAddedObservers -= entityAddedActionReference;
-        }
-
-        public void SubscribeToEntityRemovedEvent(ActionReference<Entity> entityRemovedActionReference)
-        {
-            _entityRemovedObservers += entityRemovedActionReference;
-        }
-
-        public void UnsubscribeFromEntityRemovedEvent(ActionReference<Entity> entityRemovedActionReference)
-        {
-            _entityRemovedObservers -= entityRemovedActionReference;
+            _ids.Clear();
         }
 
         private void EntityUpdatedHandler(ref Entity entity)
@@ -68,17 +78,7 @@ namespace Asteroids.ValueTypeECS.EntityGroup
             }
         }
 
-        void IComponentObserver.ComponentCreated(ref Entity entity, ComponentKey key)
-        {
-            EntityUpdatedHandler(ref entity);
-        }
-
-        void IComponentObserver.ComponentRemoved(ref Entity entity, ComponentKey key)
-        {
-            EntityUpdatedHandler(ref entity);
-        }
-
-        void IEntityObserver.EntityCreated(ref Entity entity)
+        private void HandleEntityCreated(ref Entity entity)
         {
             if (_entityCondition(ref entity))
             {
@@ -86,7 +86,7 @@ namespace Asteroids.ValueTypeECS.EntityGroup
             }
         }
 
-        void IEntityObserver.EntityRemoved(ref Entity entity)
+        private void HandleEntityRemoved(ref Entity entity)
         {
             var index = _ids.IndexOf(entity.Id);
             if (index != -1)
@@ -95,54 +95,103 @@ namespace Asteroids.ValueTypeECS.EntityGroup
             }
         }
 
-        public EntityGroup GetEnumerator()
+        private void HandleComponentCreated(ref Entity entity, ComponentKey key)
         {
-            Reset();
-            return this;
+            EntityUpdatedHandler(ref entity);
+        }
+
+        private void HandleComponentRemoved(ref Entity entity, ComponentKey key)
+        {
+            EntityUpdatedHandler(ref entity);
+        }
+
+        private readonly List<EntityGroupEnumerator> _activeEnumerators = new List<EntityGroupEnumerator>();
+        private readonly Action<EntityGroupEnumerator> _handleActiveEnumeratorDisposed;
+
+        public IEnumerator<int> GetEnumerator()
+        {
+            var enumerator = EntityGroupEnumerator.GetEnumerator(this, _handleActiveEnumeratorDisposed);
+            return enumerator;
+        }
+
+        private void HandleActiveEnumeratorDisposed(EntityGroupEnumerator entityGroupEnumerator)
+        {
+            _activeEnumerators.Remove(entityGroupEnumerator);
         }
 
         private void AddEntity(ref Entity entity)
         {
             _ids.Add(entity.Id);
-            RaiseEntityCreatedEvent(ref entity);
+            EntityAdded?.Invoke(ref entity);
         }
 
         private void RemoveEntity(int index, ref Entity entity)
         {
-            if (index >= _enumeratorIndex)
+            foreach (var entityGroupEnumerator in _activeEnumerators)
             {
-                _enumeratorIndex--;
+                entityGroupEnumerator.HandleItemRemoved(index);
             }
 
             _ids.RemoveAt(index);
-            RaiseEntityRemovedEvent(ref entity);
+            EntityRemoved?.Invoke(ref entity);
         }
 
-        private void RaiseEntityCreatedEvent(ref Entity entity)
+        public class EntityGroupEnumerator : IEnumerator<int>, IDisposable
         {
-            _entityAddedObservers?.Invoke(ref entity);
-        }
+            private static IObjectPool<EntityGroupEnumerator> _enumeratorsPool =
+                new ObjectPool<EntityGroupEnumerator>(() => new EntityGroupEnumerator(),
+                    actionOnDestroy: entityGroupEnumerator => entityGroupEnumerator.Dispose());
 
-        private void RaiseEntityRemovedEvent(ref Entity entity)
-        {
-            _entityRemovedObservers?.Invoke(ref entity);
-        }
+            private EntityGroup _entityGroup;
+            private Action<EntityGroupEnumerator> _disposed;
+            private int _enumeratorIndex;
 
-        public bool MoveNext()
-        {
-            if (++_enumeratorIndex >= _ids.Count)
+            private EntityGroupEnumerator()
             {
-                return false;
             }
 
-            return true;
-        }
+            public static EntityGroupEnumerator GetEnumerator(EntityGroup group, Action<EntityGroupEnumerator> disposed)
+            {
+                var enumerator = _enumeratorsPool.Get();
+                enumerator._entityGroup = group;
+                enumerator._disposed = disposed;
+                return enumerator;
+            }
 
-        public void Reset()
-        {
-            _enumeratorIndex = -1;
-        }
+            public bool MoveNext()
+            {
+                if (++_enumeratorIndex >= _entityGroup._ids.Count)
+                {
+                    return false;
+                }
 
-        public int Current => _ids[_enumeratorIndex];
+                return true;
+            }
+
+            public void Reset()
+            {
+                _enumeratorIndex = -1;
+            }
+
+            public int Current => _entityGroup._ids[_enumeratorIndex];
+
+            object IEnumerator.Current => Current;
+
+            public void HandleItemRemoved(int index)
+            {
+                if (index >= _enumeratorIndex)
+                {
+                    _enumeratorIndex--;
+                }
+            }
+
+            public void Dispose()
+            {
+                Reset();
+                _enumeratorsPool.Release(this);
+                _disposed?.Invoke(this);
+                _disposed = null;
+            }
+        }
     }
 }

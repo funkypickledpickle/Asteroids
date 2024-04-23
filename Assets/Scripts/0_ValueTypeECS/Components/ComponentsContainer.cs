@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Asteroids.Configuration;
 using Asteroids.ValueTypeECS.DataContainers;
 using Asteroids.ValueTypeECS.ECSTypes;
-using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Asteroids.ValueTypeECS.Components
 {
@@ -78,7 +79,8 @@ namespace Asteroids.ValueTypeECS.Components
             return _componentsCollection[typeKey];
         }
 
-        public void Log(string text)
+        [Conditional("LOG_ENTITY_COMPONENTS")]
+        private void Log(string text)
         {
             Debug.Log(text);
         }

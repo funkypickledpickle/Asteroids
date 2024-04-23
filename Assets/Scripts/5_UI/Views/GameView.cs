@@ -3,7 +3,6 @@ using Asteroids.Installation;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
 using Asteroids.Services;
-using Asteroids.Services.Project;
 using Asteroids.Tools;
 using Asteroids.UnsafeTools;
 using Asteroids.ValueTypeECS.EntityGroup;
@@ -83,22 +82,6 @@ namespace Asteroids.UI.Views
             var timerValue = isLaserReady ? 0 : laserReadyTime - _frameInfoService.StartTime;
             _rechargeTimerText.UpdateContent(timerValue);
             _rechargeTimerLabel.SetText(_rechargeTimerText.ToString());
-        }
-
-        [ContextMenu("Test")]
-        public void Test()
-        {
-            var playerGroup = _instanceSpawner.Instantiate<EntityGroupBuilder>()
-                .RequireComponent<PlayerComponent>()
-                .RequireComponent<PositionComponent>()
-                .RequireComponent<RotationComponent>()
-                .RequireComponent<VelocityComponent>()
-                .RequireComponent<LaserGunComponent>()
-                .RequireComponent<LaserAutoChargingComponent>()
-                .Build();
-
-            var first = playerGroup.GetFirst();
-            playerGroup.Dispose();
         }
     }
 }

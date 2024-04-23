@@ -25,12 +25,18 @@ using UnityApplication = UnityEngine.Application;
 
 namespace Asteroids.Gameplay.Controllers
 {
-    public class GameController
+    public class GameController : IDisposable
     {
+        public event EventHandler PlayerDestroyed;
+
         private readonly SystemsManager _systemsManager;
         private readonly EntityFactory _entityFactory;
         private readonly IExecutionService _executionService;
         private readonly World _world;
+
+        private readonly Action _executeAction;
+
+        private EntityGroup _playerGroup;
 
         public GameController(SystemsManager systemsManager, EntityFactory entityFactory, IExecutionService executionService, World world, GameConfiguration gameConfiguration, IInstanceSpawner spawner)
         {
@@ -40,6 +46,18 @@ namespace Asteroids.Gameplay.Controllers
             _world = world;
 
             UnityApplication.targetFrameRate = gameConfiguration.TargetFramerate;
+
+            _playerGroup = spawner.Instantiate<EntityGroupBuilder>().RequireComponent<PlayerComponent>().Build();
+            _playerGroup.EntityRemoved += PlayerDestroyedHandler;
+
+            _executeAction = HandleFrameStarted;
+        }
+
+        public void Dispose()
+        {
+            _playerGroup.EntityRemoved -= PlayerDestroyedHandler;
+            _playerGroup.Dispose();
+            _playerGroup = null;
         }
 
         public void Initialize()
@@ -125,6 +143,11 @@ namespace Asteroids.Gameplay.Controllers
         private void HandleFrameStarted()
         {
             _systemsManager.Execute();
+        }
+
+        private void PlayerDestroyedHandler(ref Entity referenced)
+        {
+            PlayerDestroyed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

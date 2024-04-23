@@ -1,5 +1,6 @@
 using Asteroids.Configuration;
 using Asteroids.Gameplay.Controllers;
+using Asteroids.Gameplay.States;
 using Asteroids.GameplayECS.Factories;
 using Asteroids.Services;
 using Asteroids.Tools;
@@ -56,6 +57,20 @@ namespace Asteroids.Installation
         public override void InstallBindings()
         {
             Container.BindAsSingle<GameController>();
+        }
+    }
+
+    public class GameStatesInstaller : Installer
+    {
+        public override void InstallBindings()
+        {
+            Container.BindAsSingle<IStateContext, StateContext>();
+            Container.BindAsSingle<InitializationState>();
+            Container.BindAsSingle<MenuState>();
+            Container.BindAsSingle<StartGameState>();
+            Container.BindAsSingle<GameState>();
+            Container.BindAsSingle<PauseState>();
+            Container.BindAsSingle<EndGameState>();
         }
     }
 }

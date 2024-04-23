@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 11464978}
   - component: {fileID: 11464977}
   - component: {fileID: 11464982}
-  - component: {fileID: 11464983}
+  - component: {fileID: 11464980}
   - component: {fileID: 11464979}
   m_Layer: 5
   m_Name: PauseButton
@@ -215,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06780b414a43243b185ec965cb34f02f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11464982
+--- !u!114 &11464980
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -224,19 +224,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 11464974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dcc7c6c5d72b46ef961d2a3f5ceaa22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &11464983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 11464974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 460dc1f931f5426c97f2950519df017e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -272,7 +260,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11464979}
-        m_TargetAssemblyTypeName: Asteroids.UI.Views.StateSwitchBehaviour, Assembly-CSharp
+        m_TargetAssemblyTypeName: Asteroids.UI.StateSwitchBehaviour, Assembly-CSharp
         m_MethodName: OnPauseStateRequested
         m_Mode: 1
         m_Arguments:
@@ -283,6 +271,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _isCancelButtonEnabled: 1
+--- !u!114 &11464982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 11464974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcc7c6c5d72b46ef961d2a3f5ceaa22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &47251716
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +296,7 @@ GameObject:
   - component: {fileID: 47251720}
   - component: {fileID: 47251719}
   - component: {fileID: 47251723}
-  - component: {fileID: 47251724}
+  - component: {fileID: 47251722}
   - component: {fileID: 47251721}
   m_Layer: 5
   m_Name: PlayButton
@@ -375,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06780b414a43243b185ec965cb34f02f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &47251723
+--- !u!114 &47251722
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -384,19 +385,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 47251716}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dcc7c6c5d72b46ef961d2a3f5ceaa22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &47251724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 47251716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 460dc1f931f5426c97f2950519df017e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -432,7 +421,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 47251721}
-        m_TargetAssemblyTypeName: Asteroids.UI.Views.StateSwitchBehaviour, Assembly-CSharp
+        m_TargetAssemblyTypeName: Asteroids.UI.StateSwitchBehaviour, Assembly-CSharp
         m_MethodName: OnStartGameStateRequested
         m_Mode: 1
         m_Arguments:
@@ -443,6 +432,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _isCancelButtonEnabled: 0
+--- !u!114 &47251723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47251716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcc7c6c5d72b46ef961d2a3f5ceaa22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &110204725
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,10 +1096,10 @@ RectTransform:
   m_Father: {fileID: 888057571}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 129.54, y: -99.1725}
+  m_SizeDelta: {x: 259.08, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &323843709
 MonoBehaviour:
@@ -1364,10 +1366,10 @@ RectTransform:
   m_Father: {fileID: 888057571}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 129.54, y: -154.86082}
+  m_SizeDelta: {x: 259.08, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &371133599
 MonoBehaviour:
@@ -1571,10 +1573,10 @@ RectTransform:
   m_Father: {fileID: 1009781440}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 97.105, y: -154.86082}
+  m_SizeDelta: {x: 194.21, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &399763679
 MonoBehaviour:
@@ -1750,10 +1752,10 @@ RectTransform:
   m_Father: {fileID: 888057571}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 129.54, y: -210.54915}
+  m_SizeDelta: {x: 259.08, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &552004952
 MonoBehaviour:
@@ -1885,10 +1887,10 @@ RectTransform:
   m_Father: {fileID: 1871841255}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 133.34, y: -35.66417}
+  m_SizeDelta: {x: 266.68, y: 71.32833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &554987899
 MonoBehaviour:
@@ -2020,10 +2022,10 @@ RectTransform:
   m_Father: {fileID: 1009781440}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 97.105, y: -321.9258}
+  m_SizeDelta: {x: 194.21, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &559692470
 MonoBehaviour:
@@ -2133,6 +2135,7 @@ GameObject:
   - component: {fileID: 559959720}
   - component: {fileID: 559959719}
   - component: {fileID: 559959718}
+  - component: {fileID: 559959722}
   - component: {fileID: 559959721}
   m_Layer: 0
   m_Name: Camera
@@ -2219,6 +2222,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 836866842c4604fe788f7ab01e679cf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &559959722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559959717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3cc405add772488bb6a3932a9397917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &578645132
 GameObject:
   m_ObjectHideFlags: 0
@@ -2252,10 +2267,10 @@ RectTransform:
   m_Father: {fileID: 1871841255}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 133.34, y: -266.2375}
+  m_SizeDelta: {x: 266.68, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &578645134
 MonoBehaviour:
@@ -2387,10 +2402,10 @@ RectTransform:
   m_Father: {fileID: 888057571}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 129.54, y: -35.66417}
+  m_SizeDelta: {x: 259.08, y: 71.32833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &603290521
 MonoBehaviour:
@@ -2868,10 +2883,10 @@ RectTransform:
   m_Father: {fileID: 1871841255}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 133.34, y: -210.54915}
+  m_SizeDelta: {x: 266.68, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &719098521
 MonoBehaviour:
@@ -3213,10 +3228,10 @@ RectTransform:
   m_Father: {fileID: 888057571}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 129.54, y: -266.2375}
+  m_SizeDelta: {x: 259.08, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &875599620
 MonoBehaviour:
@@ -3330,7 +3345,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &879152068
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4481,10 +4496,10 @@ RectTransform:
   m_Father: {fileID: 1009781440}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 97.105, y: -99.1725}
+  m_SizeDelta: {x: 194.21, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1461381387
 MonoBehaviour:
@@ -4730,7 +4745,7 @@ GameObject:
   - component: {fileID: 1508758304}
   - component: {fileID: 1508758303}
   - component: {fileID: 1508758308}
-  - component: {fileID: 1508758309}
+  - component: {fileID: 1508758305}
   - component: {fileID: 1508758307}
   m_Layer: 5
   m_Name: MenuButton
@@ -4798,7 +4813,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1508758300}
   m_CullTransparentMesh: 1
---- !u!114 &1508758307
+--- !u!114 &1508758305
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4807,31 +4822,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1508758300}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06780b414a43243b185ec965cb34f02f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1508758308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508758300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dcc7c6c5d72b46ef961d2a3f5ceaa22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1508758309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508758300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 460dc1f931f5426c97f2950519df017e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -4867,7 +4858,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1508758307}
-        m_TargetAssemblyTypeName: Asteroids.UI.Views.StateSwitchBehaviour, Assembly-CSharp
+        m_TargetAssemblyTypeName: Asteroids.UI.StateSwitchBehaviour, Assembly-CSharp
         m_MethodName: OnMenuStateRequested
         m_Mode: 1
         m_Arguments:
@@ -4878,6 +4869,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _isCancelButtonEnabled: 0
+--- !u!114 &1508758307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508758300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06780b414a43243b185ec965cb34f02f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1508758308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508758300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcc7c6c5d72b46ef961d2a3f5ceaa22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1526408966
 GameObject:
   m_ObjectHideFlags: 0
@@ -4911,10 +4927,10 @@ RectTransform:
   m_Father: {fileID: 1871841255}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 133.34, y: -321.9258}
+  m_SizeDelta: {x: 266.68, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1526408968
 MonoBehaviour:
@@ -5181,10 +5197,10 @@ RectTransform:
   m_Father: {fileID: 888057571}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 129.54, y: -321.9258}
+  m_SizeDelta: {x: 259.08, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1588293532
 MonoBehaviour:
@@ -5354,10 +5370,10 @@ RectTransform:
   m_Father: {fileID: 1009781440}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 97.105, y: -35.66417}
+  m_SizeDelta: {x: 194.21, y: 71.32833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1596647387
 MonoBehaviour:
@@ -5837,10 +5853,10 @@ RectTransform:
   m_Father: {fileID: 1871841255}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 133.34, y: -99.1725}
+  m_SizeDelta: {x: 266.68, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1749318131
 MonoBehaviour:
@@ -5972,10 +5988,10 @@ RectTransform:
   m_Father: {fileID: 1009781440}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 97.105, y: -210.54915}
+  m_SizeDelta: {x: 194.21, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1753317150
 MonoBehaviour:
@@ -6242,10 +6258,10 @@ RectTransform:
   m_Father: {fileID: 1009781440}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 97.105, y: -266.2375}
+  m_SizeDelta: {x: 194.21, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1780241569
 MonoBehaviour:
@@ -6377,10 +6393,10 @@ RectTransform:
   m_Father: {fileID: 1871841255}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 133.34, y: -154.86082}
+  m_SizeDelta: {x: 266.68, y: 55.68833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1803858066
 MonoBehaviour:
@@ -6491,7 +6507,7 @@ GameObject:
   - component: {fileID: 1806640405}
   - component: {fileID: 1806640404}
   - component: {fileID: 1806640409}
-  - component: {fileID: 1806640410}
+  - component: {fileID: 1806640407}
   - component: {fileID: 1806640406}
   m_Layer: 5
   m_Name: PlayButton
@@ -6571,7 +6587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06780b414a43243b185ec965cb34f02f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1806640409
+--- !u!114 &1806640407
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6580,19 +6596,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1806640401}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dcc7c6c5d72b46ef961d2a3f5ceaa22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1806640410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1806640401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 460dc1f931f5426c97f2950519df017e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -6628,7 +6632,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1806640406}
-        m_TargetAssemblyTypeName: Asteroids.UI.Views.StateSwitchBehaviour, Assembly-CSharp
+        m_TargetAssemblyTypeName: Asteroids.UI.StateSwitchBehaviour, Assembly-CSharp
         m_MethodName: OnGameStateRequested
         m_Mode: 1
         m_Arguments:
@@ -6639,6 +6643,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _isCancelButtonEnabled: 1
+--- !u!114 &1806640409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806640401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcc7c6c5d72b46ef961d2a3f5ceaa22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1871841254
 GameObject:
   m_ObjectHideFlags: 0

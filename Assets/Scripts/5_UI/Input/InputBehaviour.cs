@@ -1,3 +1,4 @@
+using Asteroids.Gameplay.States;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
 using Asteroids.Installation;
@@ -13,6 +14,7 @@ namespace Asteroids.UI.Input
     {
         [Inject] private readonly IInstanceSpawner _instanceSpawner;
         [Inject] private readonly GameplayInputCollection _gameplayInputCollection;
+        [Inject] private readonly IStateContext _stateContext;
 
         private EntityGroup _controlledGroup;
 
@@ -25,6 +27,9 @@ namespace Asteroids.UI.Input
                 .Build();
 
             _gameplayInputCollection.Enable();
+
+            _stateContext.StateChanged += HandleStateChanged;
+            HandleStateChanged();
         }
 
         private void OnDestroy()
@@ -33,6 +38,13 @@ namespace Asteroids.UI.Input
             _controlledGroup = null;
 
             _gameplayInputCollection.Disable();
+
+            _stateContext.StateChanged -= HandleStateChanged;
+        }
+
+        private void HandleStateChanged()
+        {
+            enabled = _stateContext.CurrentState is GameState;
         }
 
         private void Update()

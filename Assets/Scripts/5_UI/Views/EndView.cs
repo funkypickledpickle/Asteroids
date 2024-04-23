@@ -3,6 +3,7 @@ using Asteroids.Installation;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
 using Asteroids.Tools;
+using Asteroids.UnsafeTools;
 using Asteroids.ValueTypeECS.EntityGroup;
 using TMPro;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace Asteroids.UI.Views
         [Inject] private readonly IStateContext _stateContext;
         [Inject] private readonly IInstanceSpawner _instanceSpawner;
 
+        private IntegerMutableStringPresenter _scoreText = new IntegerMutableStringPresenter(NumericFormats.G4);
         private EntityGroup _scoreGroup;
 
         private void Awake()
@@ -40,7 +42,8 @@ namespace Asteroids.UI.Views
         private void TrySetup()
         {
             ref var scoreComponent = ref _scoreGroup.GetFirst().GetComponent<ScoreComponent>();
-            _scoreLabel.SetText(scoreComponent.Score.ToString());
+            _scoreText.UpdateContent(scoreComponent.Score);
+            _scoreLabel.SetText(_scoreText.ToString());
         }
     }
 }

@@ -3,7 +3,9 @@ using Asteroids.Installation;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
 using Asteroids.Services;
+using Asteroids.Services.Project;
 using Asteroids.Tools;
+using Asteroids.UnsafeTools;
 using Asteroids.ValueTypeECS.EntityGroup;
 using TMPro;
 using UnityEngine;
@@ -26,6 +28,12 @@ namespace Asteroids.UI.Views
         [Inject] private readonly IFrameInfoService _frameInfoService;
 
         private EntityGroup _playerGroup;
+
+        private Vector2MutableStringPresenter _positionText = new Vector2MutableStringPresenter(NumericFormats.G4);
+        private SingleMutableStringPresenter _rotationText = new SingleMutableStringPresenter(NumericFormats.G4);
+        private SingleMutableStringPresenter _velocityText = new SingleMutableStringPresenter(NumericFormats.G4);
+        private IntegerMutableStringPresenter _chargesCountText = new IntegerMutableStringPresenter(NumericFormats.G4);
+        private SingleMutableStringPresenter _rechargeTimerText = new SingleMutableStringPresenter(NumericFormats.G4);
 
         private void Awake()
         {
@@ -58,15 +66,23 @@ namespace Asteroids.UI.Views
             ref var velocityComponent = ref playerEntity.GetComponent<VelocityComponent>();
             ref var laserGunComponent = ref playerEntity.GetComponent<LaserGunComponent>();
 
-            _positionLabel.SetText(positionComponent.Position.ToString());
-            _rotationLabel.SetText(rotationComponent.RotationDegrees.ToString());
-            _velocityLabel.SetText((velocityComponent.Velocity * _frameInfoService.DeltaTime).magnitude.ToString());
-            _chargesCountLabel.SetText(laserGunComponent.ChargesCount.ToString());
+            _positionText.UpdateContent(positionComponent.Position);
+            _positionLabel.SetText(_positionText.ToString());
+
+            _rotationText.UpdateContent(rotationComponent.RotationDegrees);
+            _rotationLabel.SetText(_rotationText.ToString());
+
+            _velocityText.UpdateContent((velocityComponent.Velocity * _frameInfoService.DeltaTime).magnitude);
+            _velocityLabel.SetText(_velocityText.ToString());
+
+            _chargesCountText.UpdateContent(laserGunComponent.ChargesCount);
+            _chargesCountLabel.SetText(_chargesCountText.ToString());
 
             var laserReadyTime = laserGunComponent.LastFireTime + laserGunComponent.Configuration.FiringInterval;
             var isLaserReady = laserReadyTime < _frameInfoService.StartTime;
             var timerValue = isLaserReady ? 0 : laserReadyTime - _frameInfoService.StartTime;
-            _rechargeTimerLabel.SetText(timerValue.ToString());
+            _rechargeTimerText.UpdateContent(timerValue);
+            _rechargeTimerLabel.SetText(_rechargeTimerText.ToString());
         }
 
         [ContextMenu("Test")]

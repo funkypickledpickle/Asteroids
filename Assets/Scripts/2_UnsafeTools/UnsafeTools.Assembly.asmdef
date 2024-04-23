@@ -1,0 +1,17 @@
+{
+    "name": "Asteroids.UnsafeTools.Assembly",
+    "rootNamespace": "Asteroids.UnsafeTools",
+    "references": [
+        "GUID:afd4815bdc18f45e59255ee80f848bde",
+        "GUID:9601c88c7500c4374b6eb05795239639"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

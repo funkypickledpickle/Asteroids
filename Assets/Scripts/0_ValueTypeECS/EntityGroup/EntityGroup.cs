@@ -28,7 +28,13 @@ namespace Asteroids.ValueTypeECS.EntityGroup
             World = world;
             _entityCondition = entityCondition;
 
-            _ids = new List<int>();
+            _ids = ListPool<int>.Get();
+            int idsMinCapacity = world.ContainersConfiguration.EntityGroupIdsMinCapacity;
+            if (_ids.Capacity < idsMinCapacity)
+            {
+                _ids.Capacity = idsMinCapacity;
+            }
+
             foreach (int entityIndex in world)
             {
                 ref var entity = ref world.GetEntity(entityIndex);
@@ -54,6 +60,7 @@ namespace Asteroids.ValueTypeECS.EntityGroup
             world.ComponentCreated -= HandleComponentCreated;
             world.ComponentRemoved -= HandleComponentRemoved;
 
+            ListPool<int>.Release(_ids);
             _ids = null;
         }
 

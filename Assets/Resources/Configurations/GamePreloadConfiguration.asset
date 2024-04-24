@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98b4682ee66784ec59ebea5d03d8c021, type: 3}
-  m_Name: ContainersConfiguration
+  m_Script: {fileID: 11500000, guid: 39e2bfc65fdb74bb7b7bceeb40716acb, type: 3}
+  m_Name: GamePreloadConfiguration
   m_EditorClassIdentifier: 
-  _arraySizeForEntitySegmentedList: 40
-  _arraySizeForComponentsSegmentedList: 40
-  _componentsDictionarySizeInEntity: 16
-  _entityGroupIdsMinCapacity: 32
+  _entitiesWarmupQuantity: 40

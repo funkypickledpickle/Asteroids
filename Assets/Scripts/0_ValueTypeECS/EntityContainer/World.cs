@@ -7,6 +7,7 @@ using Asteroids.ValueTypeECS.DataContainers;
 using Asteroids.ValueTypeECS.Delegates;
 using Asteroids.ValueTypeECS.ECSTypes;
 using Asteroids.ValueTypeECS.Entities;
+using UnityEngine.Pool;
 
 namespace Asteroids.ValueTypeECS.EntityContainer
 {
@@ -14,20 +15,59 @@ namespace Asteroids.ValueTypeECS.EntityContainer
     {
         public event Action WillClear;
 
-        private readonly UnorderedSegmentedList<Entity> _entities;
-        private readonly IComponentsContainer _componentsContainer;
-
         public event ActionReference<Entity> EntityCreated;
         public event ActionReference<Entity> EntityRemoved;
 
         public event ActionReferenceValue<Entity, ComponentKey> ComponentCreated;
         public event ActionReferenceValue<Entity, ComponentKey> ComponentRemoved;
 
-        public World(ContainersConfiguration configuration, IComponentsContainer componentsContainer)
+        private readonly ActionReferenceValue<Entity, ComponentKey> _handleComponentCreated;
+        private readonly ActionReferenceValue<Entity, ComponentKey> _handleComponentRemoved;
+        private readonly ECSTypeKeyEqualityComparer _typeKeyEqualityComparer = new ECSTypeKeyEqualityComparer();
+
+        private readonly GamePreloadConfiguration _preloadConfiguration;
+        private readonly IComponentsContainer _componentsContainer;
+
+        private readonly UnorderedSegmentedList<Entity> _entities;
+
+        public readonly ContainersConfiguration ContainersConfiguration;
+
+        public World(ContainersConfiguration containersConfiguration, GamePreloadConfiguration preloadConfiguration, IComponentsContainer componentsContainer)
         {
+            _handleComponentCreated = HandleComponentCreated;
+            _handleComponentRemoved = HandleComponentRemoved;
+
+            ContainersConfiguration = containersConfiguration;
+            _preloadConfiguration = preloadConfiguration;
             _componentsContainer = componentsContainer;
-            _entities = new UnorderedSegmentedList<Entity>(configuration.ArraySizeForEntitySegmentedList);
+
+            _entities = new UnorderedSegmentedList<Entity>(containersConfiguration.ArraySizeForEntitySegmentedList);
             _componentsContainer = componentsContainer;
+        }
+
+        public void TryPreload()
+        {
+            List<int> ids = ListPool<int>.Get();
+            for (int i = 0; i < _preloadConfiguration.PreloadedEntitiesQuantity; i++)
+            {
+                ref var container = ref _entities.Reserve();
+                if (!container.IsInitialized)
+                {
+                    container.Initialize(new Entity(container.Index, _componentsContainer,
+                        new Dictionary<ECSTypeKey, ComponentKey>(ContainersConfiguration.ComponentsDictionarySizeInEntity, _typeKeyEqualityComparer),
+                        _handleComponentCreated, _handleComponentRemoved));
+                }
+
+                ids.Add(container.Index);
+            }
+
+            foreach (int id in ids)
+            {
+                _entities.Free(id);
+            }
+
+            ids.Clear();
+            ListPool<int>.Release(ids);
         }
 
         public ref Entity CreateEntity()
@@ -36,8 +76,8 @@ namespace Asteroids.ValueTypeECS.EntityContainer
             if (!container.IsInitialized)
             {
                 container.Initialize(new Entity(container.Index, _componentsContainer,
-                    new Dictionary<ECSTypeKey, ComponentKey>(new ECSTypeKeyEqualityComparer()),
-                    HandleComponentCreated, HandleComponentRemoved));
+                    new Dictionary<ECSTypeKey, ComponentKey>(ContainersConfiguration.ComponentsDictionarySizeInEntity, _typeKeyEqualityComparer),
+                    _handleComponentCreated, _handleComponentRemoved));
             }
 
             EntityCreated?.Invoke(ref container.Value);

@@ -62,6 +62,8 @@ namespace Asteroids.Gameplay.Controllers
 
         public void Initialize()
         {
+            _world.TryPreload();
+
             _systemsManager.AddSystem<ScoreCollectingSystem>();
 
             _systemsManager.AddSystem<ShipSpawningSystem>();

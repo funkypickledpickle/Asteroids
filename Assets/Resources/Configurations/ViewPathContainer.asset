@@ -12,11 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0219e900f1d40749b2b9fa9ed7a449, type: 3}
   m_Name: ViewPathContainer
   m_EditorClassIdentifier: 
-  _paths:
-  - Assets/Resources/Prefabs/UFO
-  - Assets/Resources/Prefabs/SpaceShip
-  - Assets/Resources/Prefabs/Meteorite_1
-  - Assets/Resources/Prefabs/Meteorite_2
-  - Assets/Resources/Prefabs/Meteorite_3
-  - Assets/Resources/Prefabs/Bullet
-  - Assets/Resources/Prefabs/Laser
+  _configurations:
+  - <Path>k__BackingField: Assets/Resources/Prefabs/UFO
+    <WarmupQuantity>k__BackingField: 2
+  - <Path>k__BackingField: Assets/Resources/Prefabs/SpaceShip
+    <WarmupQuantity>k__BackingField: 1
+  - <Path>k__BackingField: Assets/Resources/Prefabs/Meteorite_1
+    <WarmupQuantity>k__BackingField: 16
+  - <Path>k__BackingField: Assets/Resources/Prefabs/Meteorite_2
+    <WarmupQuantity>k__BackingField: 16
+  - <Path>k__BackingField: Assets/Resources/Prefabs/Meteorite_3
+    <WarmupQuantity>k__BackingField: 16
+  - <Path>k__BackingField: Assets/Resources/Prefabs/Bullet
+    <WarmupQuantity>k__BackingField: 10
+  - <Path>k__BackingField: Assets/Resources/Prefabs/Laser
+    <WarmupQuantity>k__BackingField: 1

@@ -57,6 +57,11 @@ namespace Asteroids.UI.Behaviours
             _world.WillClear += HandleWorldWillClear;
         }
 
+        private void Start()
+        {
+            _entityViewService.Preload();
+        }
+
         private void OnDestroy()
         {
             _playerGroup.EntityAdded -= HandlePlayerAdded;

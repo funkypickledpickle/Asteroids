@@ -33,6 +33,7 @@ namespace Asteroids.Installation
             Container.BindAsSingle<ViewPathsContainer>(() => configurationContainer.ViewPathsContainer);
             Container.BindAsSingle<GameConfiguration>((() => configurationContainer.GameConfiguration));
             Container.BindAsSingle<ContainersConfiguration>(() => configurationContainer.ContainersConfiguration);
+            Container.BindAsSingle<GamePreloadConfiguration>(() => configurationContainer.PreloadConfiguration);
 
             Container.BindAsSingle<FieldConfiguration>(() => new FieldConfiguration()
             {

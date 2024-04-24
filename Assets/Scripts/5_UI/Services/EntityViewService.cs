@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Asteroids.Configuration;
-using Asteroids.Configuration.Project;
+using Asteroids.Services.Project;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -8,6 +8,7 @@ namespace Asteroids.Services.EntityView
 {
     public interface IEntityViewService
     {
+        void Preload();
         GameObject Get(ViewKey viewKey);
         void Release(ViewKey viewKey, GameObject view);
     }
@@ -15,12 +16,35 @@ namespace Asteroids.Services.EntityView
     public class EntityViewService : IEntityViewService
     {
         private readonly UnitFactory _unitFactory;
+        private readonly IViewConfigurationService _viewConfigurationService;
 
         private Dictionary<ViewKey, IObjectPool<GameObject>> _memoryPools = new Dictionary<ViewKey, IObjectPool<GameObject>>(new ViewKeyComparer());
 
-        public EntityViewService(UnitFactory unitFactory)
+        public EntityViewService(UnitFactory unitFactory, IViewConfigurationService viewConfigurationService)
         {
             _unitFactory = unitFactory;
+            _viewConfigurationService = viewConfigurationService;
+        }
+
+        public void Preload()
+        {
+            List<GameObject> createdGameObjects = new List<GameObject>();
+            var configuration = _viewConfigurationService.GetPreloadConfiguration();
+            foreach (ViewPreloadConfiguration preloadConfiguration in configuration)
+            {
+                IObjectPool<GameObject> pool = GetMemoryPool(preloadConfiguration.Key);
+
+                for (int i = 0; i < preloadConfiguration.PreloadedObjectsQuantity; i++)
+                {
+                    createdGameObjects.Add(pool.Get());
+                }
+                for (int i = 0; i < createdGameObjects.Count; i++)
+                {
+                    pool.Release(createdGameObjects[i]);
+                }
+
+                createdGameObjects.Clear();
+            }
         }
 
         public GameObject Get(ViewKey viewKey)

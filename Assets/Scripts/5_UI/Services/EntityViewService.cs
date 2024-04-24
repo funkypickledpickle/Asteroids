@@ -37,12 +37,17 @@ namespace Asteroids.Services.EntityView
         {
             if (!_memoryPools.TryGetValue(viewKey, out var memoryPool))
             {
-                memoryPool = new ObjectPool<GameObject>(() => _unitFactory.Create(viewKey),
-                    gameObject => gameObject.SetActive(false), gameObject => gameObject.SetActive(false));
+                memoryPool = CreateMemoryPool(viewKey);
                 _memoryPools.Add(viewKey, memoryPool);
             }
 
             return memoryPool;
+        }
+
+        private IObjectPool<GameObject> CreateMemoryPool(ViewKey viewKey)
+        {
+            return new ObjectPool<GameObject>(() => _unitFactory.Create(viewKey),
+                gameObject => gameObject.SetActive(false), gameObject => gameObject.SetActive(false));
         }
     }
 

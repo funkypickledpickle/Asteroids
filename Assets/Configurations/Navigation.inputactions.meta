@@ -9,6 +9,6 @@ ScriptedImporter:
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 8404be70184654265930450def6a9037, type: 3}
   generateWrapperCode: 1
-  wrapperCodePath: Assets/Scripts/4_GameplayComponents/Generated/NavigationInputCollection.cs
+  wrapperCodePath: Assets/Scripts/UI/Input/NavigationInputCollection.cs
   wrapperClassName: NavigationInputCollection
-  wrapperCodeNamespace: Asteroids.GameplayComponents.Generated
+  wrapperCodeNamespace: Asteroids.UI.Input

@@ -95,6 +95,7 @@ namespace Asteroids.Gameplay.Controllers
             _systemsManager.AddSystem<BulletCollisionHandlingSystem>();
             _systemsManager.AddSystem<LaserCollisionHandlingSystem>();
 
+            _systemsManager.AddSystem<WorldMirroringAfterBoundsEntrySystem>();
             _systemsManager.AddSystem<WorldMirroringSystem>();
 
             _systemsManager.AddSystem<VelocityDumpingSystem>();

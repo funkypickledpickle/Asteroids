@@ -77,6 +77,7 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent(new VelocityComponent { Velocity = velocity });
             entity.CreateComponent(new AngularVelocityComponent { AngularSpeed = angularSpeed });
             entity.CreateComponent(new ScaleComponent { Scale = Vector3.one * stateInfo.Size });
+            entity.CreateComponent<WorldMirroringAfterWorldBoundsEntryComponent>();
             entity.CreateComponent(new RewardableScoreComponent { Score = stateInfo.RewardedScore });
             return ref entity;
         }
@@ -90,6 +91,7 @@ namespace Asteroids.GameplayECS.Factories
             entity.CreateComponent<BulletComponent>();
             entity.CreateComponent(new VelocityComponent { Velocity = speed });
             entity.CreateComponent(new LifeTimeComponent { Duration = bulletConfiguration.LifeTime });
+            entity.CreateComponent<WorldMirroringComponent>();
         }
 
         public void CreateLaser(int ownerId, Vector2 positionOffset, float distance)
@@ -167,6 +169,8 @@ namespace Asteroids.GameplayECS.Factories
                 StartFactor = playerConfiguration.AngularSpeedStartDumpingFactor,
                 TotalFactor = playerConfiguration.AngularSpeedTotalDumpingFactor,
             });
+
+            entity.CreateComponent<WorldMirroringComponent>();
         }
 
         public void CreateUFO(Vector3 position)

@@ -10,6 +10,8 @@ namespace Asteroids.GameplayECS.Systems.AngularSystems
 {
     public class AngularForceResetSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<Entity, UpdatableAngularForceComponent> _executeActionReference = Execute;
+
         private EntityGroup _ships;
 
         public AngularForceResetSystem(IInstanceSpawner instanceSpawner)
@@ -27,7 +29,7 @@ namespace Asteroids.GameplayECS.Systems.AngularSystems
 
         void IExecutableSystem.Execute()
         {
-            _ships.ForEachComponent<UpdatableAngularForceComponent>(Execute);
+            _ships.ForEachComponent(_executeActionReference);
         }
 
         private static void Execute(ref Entity entity, ref UpdatableAngularForceComponent forceComponent)

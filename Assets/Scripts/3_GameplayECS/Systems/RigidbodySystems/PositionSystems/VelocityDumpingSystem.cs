@@ -10,6 +10,8 @@ namespace Asteroids.GameplayECS.Systems.PositionSystems
 {
     public class VelocityDumpingSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<Entity, UpdatableForceComponent, VelocityComponent, VelocityDumpComponent> _executeActionReference = Execute;
+
         private EntityGroup EntityGroup;
 
         public VelocityDumpingSystem(IInstanceSpawner instanceSpawner)
@@ -29,7 +31,7 @@ namespace Asteroids.GameplayECS.Systems.PositionSystems
 
         void IExecutableSystem.Execute()
         {
-            EntityGroup.ForEachComponents<UpdatableForceComponent, VelocityComponent, VelocityDumpComponent>(Execute);
+            EntityGroup.ForEachComponents<UpdatableForceComponent, VelocityComponent, VelocityDumpComponent>(_executeActionReference);
         }
 
         private static void Execute(ref Entity entity, ref UpdatableForceComponent forceComponent, ref VelocityComponent velocityComponent, ref VelocityDumpComponent velocityDumpComponent)

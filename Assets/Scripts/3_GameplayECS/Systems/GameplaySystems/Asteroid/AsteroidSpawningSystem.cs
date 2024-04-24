@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Asteroids.Configuration;
-using Asteroids.Extensions;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
 using Asteroids.GameplayECS.Factories;

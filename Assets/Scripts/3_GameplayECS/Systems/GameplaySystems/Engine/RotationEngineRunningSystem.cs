@@ -2,6 +2,7 @@ using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
 using Asteroids.Tools;
+using Asteroids.ValueTypeECS.Delegates;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
 using Asteroids.ValueTypeECS.System;
@@ -10,6 +11,8 @@ namespace Asteroids.GameplayECS.Systems.Engine
 {
     public class RotationEngineRunningSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<Entity> _executeActionReference = Execute;
+
         private EntityGroup _ships;
 
         public RotationEngineRunningSystem(IInstanceSpawner instanceSpawner)
@@ -29,7 +32,7 @@ namespace Asteroids.GameplayECS.Systems.Engine
 
         void IExecutableSystem.Execute()
         {
-            _ships.ForEach(Execute);
+            _ships.ForEach(_executeActionReference);
         }
 
         private static void Execute(ref Entity entity)

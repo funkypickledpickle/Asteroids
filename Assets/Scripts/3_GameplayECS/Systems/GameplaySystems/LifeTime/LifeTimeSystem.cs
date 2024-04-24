@@ -11,6 +11,8 @@ namespace Asteroids.GameplayECS.Systems.LifeTime
 {
     public class LifeTimeSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReferenceValue<Entity, DestroyTimeComponent, float> _executeAction = Execute;
+
         private readonly IFrameInfoService _frameInfoService;
 
         private EntityGroup _createdEntities;
@@ -46,7 +48,7 @@ namespace Asteroids.GameplayECS.Systems.LifeTime
 
         void IExecutableSystem.Execute()
         {
-            _initializedEntities.ForEachComponent<DestroyTimeComponent, float>(Execute, _frameInfoService.StartTime);
+            _initializedEntities.ForEachComponent(_executeAction, _frameInfoService.StartTime);
         }
 
         private static void Execute(ref Entity entity, ref DestroyTimeComponent destroyTimeComponent, float frameStartTime)

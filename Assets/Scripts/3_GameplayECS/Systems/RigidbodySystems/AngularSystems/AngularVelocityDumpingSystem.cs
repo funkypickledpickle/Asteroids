@@ -10,6 +10,8 @@ namespace Asteroids.GameplayECS.Systems.AngularSystems
 {
     public class AngularVelocityDumpingSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<Entity, UpdatableAngularForceComponent, AngularVelocityComponent, AngularVelocityDumpComponent> _executeActionReference = Execute;
+
         private EntityGroup EntityGroup;
 
         public AngularVelocityDumpingSystem(IInstanceSpawner instanceSpawner)
@@ -29,7 +31,7 @@ namespace Asteroids.GameplayECS.Systems.AngularSystems
 
         void IExecutableSystem.Execute()
         {
-            EntityGroup.ForEachComponents<UpdatableAngularForceComponent, AngularVelocityComponent, AngularVelocityDumpComponent>(Execute);
+            EntityGroup.ForEachComponents(_executeActionReference);
         }
 
         private static void Execute(ref Entity entity, ref UpdatableAngularForceComponent forceComponent, ref AngularVelocityComponent angularVelocityComponent, ref AngularVelocityDumpComponent angularVelocityDumpComponent)

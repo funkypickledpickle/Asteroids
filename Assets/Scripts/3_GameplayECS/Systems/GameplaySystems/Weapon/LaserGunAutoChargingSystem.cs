@@ -10,12 +10,16 @@ namespace Asteroids.GameplayECS.Systems.Weapon
 {
     public class LaserGunAutoChargingSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<LaserGunComponent, LaserAutoChargingComponent> _executeActionReference;
+
         private readonly IFrameInfoService _frameInfoService;
 
         private EntityGroup EntityGroup;
 
         public LaserGunAutoChargingSystem(IFrameInfoService frameInfoService, IInstanceSpawner instanceSpawner)
         {
+            _executeActionReference = Execute;
+
             _frameInfoService = frameInfoService;
 
             EntityGroup = instanceSpawner.Instantiate<EntityGroupBuilder>()
@@ -32,7 +36,7 @@ namespace Asteroids.GameplayECS.Systems.Weapon
 
         void IExecutableSystem.Execute()
         {
-            EntityGroup.ForEachOnlyComponents<LaserGunComponent, LaserAutoChargingComponent>(Execute);
+            EntityGroup.ForEachOnlyComponents(_executeActionReference);
         }
 
         private void Execute(ref LaserGunComponent laserGunComponent, ref LaserAutoChargingComponent laserAutoChargingComponent)

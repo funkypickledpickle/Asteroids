@@ -4,6 +4,7 @@ using Asteroids.GameplayECS.Extensions;
 using Asteroids.GameplayECS.Factories;
 using Asteroids.Services;
 using Asteroids.Tools;
+using Asteroids.ValueTypeECS.Delegates;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
 using Asteroids.ValueTypeECS.System;
@@ -17,8 +18,12 @@ namespace Asteroids.GameplayECS.Systems.Weapon
 
         private EntityGroup _laserArmedEntities;
 
+        private readonly ActionReferenceValue<Entity, float> _executeAction;
+
         public LaserGunShootingSystem(IFrameInfoService frameInfoService, EntityFactory entityFactory, IInstanceSpawner instanceSpawner)
         {
+            _executeAction = Execute;
+
             _frameInfoService = frameInfoService;
             _entityFactory = entityFactory;
 
@@ -37,7 +42,7 @@ namespace Asteroids.GameplayECS.Systems.Weapon
 
         void IExecutableSystem.Execute()
         {
-            _laserArmedEntities.ForEach<float>(Execute, _frameInfoService.StartTime);
+            _laserArmedEntities.ForEach(_executeAction, _frameInfoService.StartTime);
         }
 
         private void Execute(ref Entity entity, float currentTime)

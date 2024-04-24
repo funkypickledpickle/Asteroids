@@ -11,11 +11,15 @@ namespace Asteroids.GameplayECS.Systems.AI
 {
     public class ShipFollowingSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<Entity, MainControlComponent, PositionComponent> _executeActionReference;
+
         private EntityGroup _predators;
         private EntityGroup _ships;
 
         public ShipFollowingSystem(IInstanceSpawner instanceSpawner)
         {
+            _executeActionReference = Execute;
+
             _predators = instanceSpawner.Instantiate<EntityGroupBuilder>()
                 .RequireComponent<ShipFollowerComponent>()
                 .RequireComponent<MainControlComponent>()
@@ -38,7 +42,7 @@ namespace Asteroids.GameplayECS.Systems.AI
 
         void IExecutableSystem.Execute()
         {
-            _predators.ForEachComponents<MainControlComponent, PositionComponent>(Execute);
+            _predators.ForEachComponents(_executeActionReference);
         }
 
         private void Execute(ref Entity entity, ref MainControlComponent mainControlComponent, ref PositionComponent shipPositionComponent)

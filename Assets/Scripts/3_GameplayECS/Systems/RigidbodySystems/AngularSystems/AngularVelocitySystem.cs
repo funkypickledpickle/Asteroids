@@ -5,12 +5,13 @@ using Asteroids.Services;
 using Asteroids.Tools;
 using Asteroids.ValueTypeECS.EntityGroup;
 using Asteroids.ValueTypeECS.System;
-using Zenject;
 
 namespace Asteroids.GameplayECS.Systems.AngularSystems
 {
     public class AngularVelocitySystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReferenceValue<RotationComponent, AngularVelocityComponent, float> _executeAction = Execute;
+
         private readonly IFrameInfoService _frameInfoService;
 
         private EntityGroup EntityGroup;
@@ -33,7 +34,7 @@ namespace Asteroids.GameplayECS.Systems.AngularSystems
 
         void IExecutableSystem.Execute()
         {
-            EntityGroup.ForEachOnlyComponents<RotationComponent, AngularVelocityComponent, float>(Execute, _frameInfoService.DeltaTime);
+            EntityGroup.ForEachOnlyComponents(_executeAction, _frameInfoService.DeltaTime);
         }
 
         private static void Execute(ref RotationComponent rotationComponent, ref AngularVelocityComponent angularVelocityComponent, float deltaTime)

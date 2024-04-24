@@ -9,6 +9,8 @@ namespace Asteroids.GameplayECS.Systems.AngularSystems
 {
     public class AngularVelocityLimiterSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<AngularVelocityComponent, AngularVelocityLimiterComponent> _executeActionReference = Execute;
+
         private EntityGroup EntityGroup;
 
         public AngularVelocityLimiterSystem(IInstanceSpawner instanceSpawner)
@@ -27,7 +29,7 @@ namespace Asteroids.GameplayECS.Systems.AngularSystems
 
         void IExecutableSystem.Execute()
         {
-            EntityGroup.ForEachOnlyComponents<AngularVelocityComponent, AngularVelocityLimiterComponent>(Execute);
+            EntityGroup.ForEachOnlyComponents(_executeActionReference);
         }
 
         private static void Execute(ref AngularVelocityComponent angularVelocityComponent, ref AngularVelocityLimiterComponent angularVelocityLimiterComponent)

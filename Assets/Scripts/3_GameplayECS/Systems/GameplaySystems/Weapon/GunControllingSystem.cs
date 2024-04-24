@@ -10,6 +10,8 @@ namespace Asteroids.GameplayECS.Systems.Weapon
 {
     public class GunControllingSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<Entity, GunControlComponent, GunComponent> _executeActionReference = Execute;
+
         private EntityGroup _armedShips;
 
         public GunControllingSystem(IInstanceSpawner instanceSpawner)
@@ -28,7 +30,7 @@ namespace Asteroids.GameplayECS.Systems.Weapon
 
         void IExecutableSystem.Execute()
         {
-            _armedShips.ForEachComponents<GunControlComponent, GunComponent>(Execute);
+            _armedShips.ForEachComponents(_executeActionReference);
         }
 
         private static void Execute(ref Entity entity, ref GunControlComponent gunControlComponent, ref GunComponent gunComponent)

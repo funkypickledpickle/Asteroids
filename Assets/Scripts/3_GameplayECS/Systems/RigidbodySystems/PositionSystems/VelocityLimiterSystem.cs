@@ -10,6 +10,8 @@ namespace Asteroids.GameplayECS.Systems.PositionSystems
 {
     public class VelocityLimiterSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<VelocityComponent, VelocityLimiterComponent> _executeActionReference = Execute;
+
         private EntityGroup EntityGroup;
 
         public VelocityLimiterSystem(IInstanceSpawner instanceSpawner)
@@ -28,7 +30,7 @@ namespace Asteroids.GameplayECS.Systems.PositionSystems
 
         void IExecutableSystem.Execute()
         {
-            EntityGroup.ForEachOnlyComponents<VelocityComponent, VelocityLimiterComponent>(Execute);
+            EntityGroup.ForEachOnlyComponents(_executeActionReference);
         }
 
         private static void Execute(ref VelocityComponent velocityComponent, ref VelocityLimiterComponent velocityLimiterComponent)

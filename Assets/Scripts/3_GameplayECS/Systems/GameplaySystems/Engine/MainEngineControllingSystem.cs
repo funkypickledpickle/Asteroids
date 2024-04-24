@@ -10,6 +10,8 @@ namespace Asteroids.GameplayECS.Systems.Engine
 {
     public class MainEngineControllingSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<Entity, MainControlComponent, MainEngineComponent> _executeActionReference = Execute;
+
         private EntityGroup _ships;
 
         public MainEngineControllingSystem(IInstanceSpawner instanceSpawner)
@@ -28,7 +30,7 @@ namespace Asteroids.GameplayECS.Systems.Engine
 
         void IExecutableSystem.Execute()
         {
-            _ships.ForEachComponents<MainControlComponent, MainEngineComponent>(Execute);
+            _ships.ForEachComponents(_executeActionReference);
         }
 
         private static void Execute(ref Entity entity, ref MainControlComponent mainControlComponent, ref MainEngineComponent mainEngineComponent)

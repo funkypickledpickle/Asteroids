@@ -11,6 +11,8 @@ namespace Asteroids.GameplayECS.Systems.PositionSystems
 {
     public class ForceResetSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<Entity, UpdatableForceComponent> _executeActionReference = Execute;
+
         private EntityGroup EntityGroup;
 
         public ForceResetSystem(IInstanceSpawner instanceSpawner)
@@ -28,7 +30,7 @@ namespace Asteroids.GameplayECS.Systems.PositionSystems
 
         void IExecutableSystem.Execute()
         {
-            EntityGroup.ForEachComponent<UpdatableForceComponent>(Execute);
+            EntityGroup.ForEachComponent<UpdatableForceComponent>(_executeActionReference);
         }
 
         private static void Execute(ref Entity entity, ref UpdatableForceComponent forceComponent)

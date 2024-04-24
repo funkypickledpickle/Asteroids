@@ -10,6 +10,8 @@ namespace Asteroids.GameplayECS.Systems.Engine
 {
     public class MainEngineMagicRotationControllingSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReference<Entity, MainControlComponent, MainEngineMagicRotationComponent> _executeActionReference = Execute;
+
         private EntityGroup EntityGroup;
 
         public MainEngineMagicRotationControllingSystem(IInstanceSpawner instanceSpawner)
@@ -28,7 +30,7 @@ namespace Asteroids.GameplayECS.Systems.Engine
 
         void IExecutableSystem.Execute()
         {
-            EntityGroup.ForEachComponents<MainControlComponent, MainEngineMagicRotationComponent>(Execute);
+            EntityGroup.ForEachComponents(_executeActionReference);
         }
 
         private static void Execute(ref Entity entity, ref MainControlComponent mainControlComponent, ref MainEngineMagicRotationComponent mainEngineMagicRotationComponent)

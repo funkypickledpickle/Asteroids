@@ -4,6 +4,7 @@ using Asteroids.GameplayECS.Extensions;
 using Asteroids.GameplayECS.Factories;
 using Asteroids.Services;
 using Asteroids.Tools;
+using Asteroids.ValueTypeECS.Delegates;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
 using Asteroids.ValueTypeECS.System;
@@ -14,6 +15,8 @@ namespace Asteroids.GameplayECS.Systems.Weapon
 {
     public class GunShootingSystem : IExecutableSystem, IDisposable
     {
+        private readonly ActionReferenceValue<Entity, float> _executeAction;
+
         private readonly IFrameInfoService _frameInfoService;
         private readonly EntityFactory _entityFactory;
 
@@ -29,6 +32,8 @@ namespace Asteroids.GameplayECS.Systems.Weapon
                 .RequireComponent<GunComponent>()
                 .RequireComponent<VelocityComponent>()
                 .Build();
+
+            _executeAction = Execute;
         }
 
         public void Dispose()
@@ -39,7 +44,7 @@ namespace Asteroids.GameplayECS.Systems.Weapon
 
         void IExecutableSystem.Execute()
         {
-            _armedEntities.ForEach<float>(Execute, _frameInfoService.StartTime);
+            _armedEntities.ForEach(_executeAction, _frameInfoService.StartTime);
         }
 
         private void Execute(ref Entity entity, float currentTime)

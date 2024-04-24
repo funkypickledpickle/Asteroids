@@ -96,7 +96,7 @@ namespace Asteroids.UI.Views
             _rotationText.UpdateContent(rotationComponent.RotationDegrees);
             _rotationLabel.SetText(_rotationText.ToString());
 
-            _velocityText.UpdateContent((velocityComponent.Velocity * _frameInfoService.DeltaTime).magnitude);
+            _velocityText.UpdateContent((velocityComponent.Velocity).magnitude);
             _velocityLabel.SetText(_velocityText.ToString());
 
             _chargesCountText.UpdateContent(laserGunComponent.ChargesCount);

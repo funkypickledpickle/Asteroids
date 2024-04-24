@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Components;
 using Asteroids.ValueTypeECS.Delegates;
 using Asteroids.ValueTypeECS.ECSTypes;
@@ -111,8 +112,7 @@ namespace Asteroids.ValueTypeECS.Entities
             var keysCollection = _components.Keys;
             while (keysCollection.Count > 0)
             {
-                var typeKey = keysCollection.First();
-                RemoveComponent(typeKey);
+                RemoveComponent(keysCollection.First());
             }
         }
 

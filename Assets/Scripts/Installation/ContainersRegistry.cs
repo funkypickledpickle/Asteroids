@@ -14,7 +14,7 @@ namespace Asteroids.Installation
 
         public static DiContainer GetContainer(string id)
         {
-            if (_containers.TryGetValue(id, out var container))
+            if (_containers.TryGetValue(id, out DiContainer container))
             {
                 return container;
             }

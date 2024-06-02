@@ -45,7 +45,7 @@ namespace Asteroids.UI.Views
 
         private void HandleStateChanged()
         {
-            _ui.TryGetValue(_gameStateContext.CurrentState?.GetType(), out var targetUI);
+            _ui.TryGetValue(_gameStateContext.CurrentState?.GetType(), out GameObject targetUI);
             SwitchToUI(targetUI);
         }
 

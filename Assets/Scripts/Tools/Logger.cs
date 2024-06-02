@@ -153,7 +153,7 @@ namespace Asteroids.Tools
 
         private static void LogData(object invoker, LogType logType, LogCategory logCategory, string data)
         {
-            var message = FormatMessage(invoker, logCategory, data);
+            string message = FormatMessage(invoker, logCategory, data);
 
             if (OutputSettings[logCategory][logType].HasFlag(LogOutput.Console))
             {
@@ -212,8 +212,8 @@ namespace Asteroids.Tools
 
         private static string FormatMessage(object invoker, LogCategory logCategory, string message)
         {
-            var typeFullName = invoker.GetType().FullName;
-            var invokerComponent = invoker as Component;
+            string typeFullName = invoker.GetType().FullName;
+            Component invokerComponent = invoker as Component;
 
             string componentName = null;
             if ((object) invokerComponent != null)

@@ -2,6 +2,7 @@ using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.Services;
 using Asteroids.Tools;
+using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
 using Asteroids.ValueTypeECS.System;
 
@@ -32,12 +33,12 @@ namespace Asteroids.GameplayECS.Systems.PositionSystems
 
         public void Execute()
         {
-            var deltaTime = _frameInfoService.DeltaTime;
-            foreach (var entityId in _entityGroup)
+            float deltaTime = _frameInfoService.DeltaTime;
+            foreach (int entityId in _entityGroup)
             {
-                ref var entity = ref _world.GetEntity(entityId);
-                ref var positionComponent = ref entity.GetComponent<PositionComponent>();
-                ref var velocityComponent = ref entity.GetComponent<VelocityComponent>();
+                ref Entity entity = ref _world.GetEntity(entityId);
+                ref PositionComponent positionComponent = ref entity.GetComponent<PositionComponent>();
+                ref VelocityComponent velocityComponent = ref entity.GetComponent<VelocityComponent>();
                 positionComponent.Position += velocityComponent.Velocity * deltaTime;
             }
         }

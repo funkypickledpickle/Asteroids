@@ -19,7 +19,7 @@ namespace Asteroids.Installation
 
         private void Awake()
         {
-            var container = new DiContainer();
+            DiContainer container = new DiContainer();
             container.BindAsSingleFromInstance<IGameWorld>(_gameCamera);
             container.BindAsSingleFromInstance(executionService, typeof(IExecutionService), typeof(IFrameInfoService));
 
@@ -36,7 +36,7 @@ namespace Asteroids.Installation
 
             ContainersRegistry.AddContainer(Containers.SceneContainerId, container);
 
-            var gameStateContext = container.Resolve<IStateContext>();
+            IStateContext gameStateContext = container.Resolve<IStateContext>();
             gameStateContext.SwitchState<InitializationState>();
         }
 

@@ -37,7 +37,7 @@ namespace Asteroids.ValueTypeECS.EntityGroup
 
             foreach (int entityIndex in world)
             {
-                ref var entity = ref world.GetEntity(entityIndex);
+                ref Entity entity = ref world.GetEntity(entityIndex);
                 if (entityCondition(ref entity))
                 {
                     _ids.Add(entity.Id);
@@ -53,7 +53,7 @@ namespace Asteroids.ValueTypeECS.EntityGroup
 
         public void Dispose()
         {
-            var world = World;
+            World world = World;
             world.WillClear -= WorldWillClearHandler;
             world.EntityCreated -= HandleEntityCreated;
             world.EntityRemoved -= HandleEntityRemoved;
@@ -71,9 +71,9 @@ namespace Asteroids.ValueTypeECS.EntityGroup
 
         private void EntityUpdatedHandler(ref Entity entity)
         {
-            var indexOfEntity = _ids.IndexOf(entity.Id);
-            var hasEntity = indexOfEntity != -1;
-            var isConditionCompleted = _entityCondition(ref entity);
+            int indexOfEntity = _ids.IndexOf(entity.Id);
+            bool hasEntity = indexOfEntity != -1;
+            bool isConditionCompleted = _entityCondition(ref entity);
 
             if (isConditionCompleted && !hasEntity)
             {
@@ -95,7 +95,7 @@ namespace Asteroids.ValueTypeECS.EntityGroup
 
         private void HandleEntityRemoved(ref Entity entity)
         {
-            var index = _ids.IndexOf(entity.Id);
+            int index = _ids.IndexOf(entity.Id);
             if (index != -1)
             {
                 RemoveEntity(index, ref entity);
@@ -117,7 +117,7 @@ namespace Asteroids.ValueTypeECS.EntityGroup
 
         public IEnumerator<int> GetEnumerator()
         {
-            var enumerator = EntityGroupEnumerator.GetEnumerator(this, _handleActiveEnumeratorDisposed);
+            EntityGroupEnumerator enumerator = EntityGroupEnumerator.GetEnumerator(this, _handleActiveEnumeratorDisposed);
             return enumerator;
         }
 
@@ -134,7 +134,7 @@ namespace Asteroids.ValueTypeECS.EntityGroup
 
         private void RemoveEntity(int index, ref Entity entity)
         {
-            foreach (var entityGroupEnumerator in _activeEnumerators)
+            foreach (EntityGroupEnumerator entityGroupEnumerator in _activeEnumerators)
             {
                 entityGroupEnumerator.HandleItemRemoved(index);
             }
@@ -159,7 +159,7 @@ namespace Asteroids.ValueTypeECS.EntityGroup
 
             public static EntityGroupEnumerator GetEnumerator(EntityGroup group, Action<EntityGroupEnumerator> disposed)
             {
-                var enumerator = _enumeratorsPool.Get();
+                EntityGroupEnumerator enumerator = _enumeratorsPool.Get();
                 enumerator._entityGroup = group;
                 enumerator._disposed = disposed;
                 return enumerator;

@@ -5,6 +5,7 @@ using Asteroids.Tools;
 using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
 using Asteroids.ValueTypeECS.System;
+using UnityEngine;
 
 namespace Asteroids.GameplayECS.Systems.PositionSystems
 {
@@ -36,8 +37,8 @@ namespace Asteroids.GameplayECS.Systems.PositionSystems
 
         private static void Execute(ref Entity entity, ref UpdatableForceComponent forceComponent, ref VelocityComponent velocityComponent, ref VelocityDumpComponent velocityDumpComponent)
         {
-            var velocity = velocityComponent.Velocity;
-            var velocitySquareMagnitude = (float)Math.Pow(velocity.magnitude * velocityDumpComponent.StartFactor, 2);
+            Vector2 velocity = velocityComponent.Velocity;
+            float velocitySquareMagnitude = (float)Math.Pow(velocity.magnitude * velocityDumpComponent.StartFactor, 2);
             forceComponent.Force = forceComponent.Force - velocity.normalized * velocitySquareMagnitude * velocityDumpComponent.TotalFactor;
         }
     }

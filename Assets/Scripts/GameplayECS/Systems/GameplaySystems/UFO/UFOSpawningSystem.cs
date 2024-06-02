@@ -83,7 +83,7 @@ namespace Asteroids.GameplayECS.Systems.UFO
 
         private void TryCreateUFO()
         {
-            var quantity = _gameConfiguration.MaxUfoQuantity - _ufo.Count;
+            int quantity = _gameConfiguration.MaxUfoQuantity - _ufo.Count;
             if (quantity > 0)
             {
                 CreateAlienShips(quantity);
@@ -99,13 +99,13 @@ namespace Asteroids.GameplayECS.Systems.UFO
         {
             if (_ships.Count != 0)
             {
-                ref var entity = ref _ships.GetFirst();
-                for (var i = 0; i < quantity; i++)
+                ref Entity entity = ref _ships.GetFirst();
+                for (int i = 0; i < quantity; i++)
                 {
-                    var eulerAngles = Vector3.forward * Random.Range(0, MaxAngle);
-                    var rotation = Quaternion.Euler(eulerAngles);
-                    var direction = rotation * Vector3.up;
-                    var offset = direction * _ufoConfiguration.MaxDistanceFromTarget;
+                    Vector3 eulerAngles = Vector3.forward * Random.Range(0, MaxAngle);
+                    Quaternion rotation = Quaternion.Euler(eulerAngles);
+                    Vector3 direction = rotation * Vector3.up;
+                    Vector3 offset = direction * _ufoConfiguration.MaxDistanceFromTarget;
                     Vector3 targetPosition = entity.GetComponent<PositionComponent>().Position + (Vector2)offset;
                     _entityFactory.CreateUFO(targetPosition);
                 }

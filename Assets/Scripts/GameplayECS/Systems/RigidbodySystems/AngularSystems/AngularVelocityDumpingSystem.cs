@@ -36,9 +36,9 @@ namespace Asteroids.GameplayECS.Systems.AngularSystems
 
         private static void Execute(ref Entity entity, ref UpdatableAngularForceComponent forceComponent, ref AngularVelocityComponent angularVelocityComponent, ref AngularVelocityDumpComponent angularVelocityDumpComponent)
         {
-            var speed = angularVelocityComponent.AngularSpeed;
-            var speedSquare = (float)Math.Pow(speed * angularVelocityDumpComponent.StartFactor, 2);
-            var sign = speed > 0 ? 1 : -1;
+            float speed = angularVelocityComponent.AngularSpeed;
+            float speedSquare = (float)Math.Pow(speed * angularVelocityDumpComponent.StartFactor, 2);
+            int sign = speed > 0 ? 1 : -1;
             forceComponent.AngularForce = forceComponent.AngularForce - sign * speedSquare * angularVelocityDumpComponent.TotalFactor;
         }
     }

@@ -125,22 +125,22 @@ namespace Asteroids.UI.Behaviours
 
         private void AddEntity(ref Entity entity, ViewKey viewKey)
         {
-            var gameObject = _entityViewService.Get(viewKey);
-            var entityId = entity.Id;
+            GameObject gameObject = _entityViewService.Get(viewKey);
+            int entityId = entity.Id;
             _views.Add(entityId, (viewKey, gameObject));
             Keys.Add(gameObject, entityId);
 
             if (entity.HasComponent<AttachedToEntityComponent>())
             {
-                ref var attachedToEntityComponent = ref entity.GetComponent<AttachedToEntityComponent>();
-                ref var parentEntity = ref _world.GetEntity(attachedToEntityComponent.EntityId);
-                var viewTransform = gameObject.transform;
+                ref AttachedToEntityComponent attachedToEntityComponent = ref entity.GetComponent<AttachedToEntityComponent>();
+                ref Entity parentEntity = ref _world.GetEntity(attachedToEntityComponent.EntityId);
+                Transform viewTransform = gameObject.transform;
                 viewTransform.SetParent(_views[parentEntity.Id].Item2.transform);
                 viewTransform.localPosition = attachedToEntityComponent.PositionOffset;
                 viewTransform.localRotation = Quaternion.identity;
             }
 
-            var unitId = gameObject.GetComponent<UnitBehaviour>();
+            UnitBehaviour unitId = gameObject.GetComponent<UnitBehaviour>();
             if (unitId == null)
             {
                 Debug.LogError($"GameObject {gameObject} with ViewKey {viewKey} missing {typeof(UnitBehaviour)} component");
@@ -154,8 +154,8 @@ namespace Asteroids.UI.Behaviours
 
         private void HandleEntityRemoved(ref Entity entity)
         {
-            var entityId = entity.Id;
-            var view = _views[entityId];
+            int entityId = entity.Id;
+            (ViewKey, GameObject) view = _views[entityId];
             _entityViewService.Release(view.Item1, view.Item2);
             _views.Remove(entityId);
             Keys.Remove(view.Item2);
@@ -163,7 +163,7 @@ namespace Asteroids.UI.Behaviours
 
         private void HandleWorldWillClear()
         {
-            foreach (var kv in _views)
+            foreach (KeyValuePair<int, (ViewKey, GameObject)> kv in _views)
             {
                 _entityViewService.Release(kv.Value.Item1, kv.Value.Item2);
             }

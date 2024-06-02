@@ -29,7 +29,7 @@ namespace Asteroids.Services.EntityView
         public void Preload()
         {
             List<GameObject> createdGameObjects = new List<GameObject>();
-            var configuration = _viewConfigurationService.GetPreloadConfiguration();
+            IEnumerable<ViewPreloadConfiguration> configuration = _viewConfigurationService.GetPreloadConfiguration();
             foreach (ViewPreloadConfiguration preloadConfiguration in configuration)
             {
                 IObjectPool<GameObject> pool = GetMemoryPool(preloadConfiguration.Key);
@@ -59,7 +59,7 @@ namespace Asteroids.Services.EntityView
 
         private IObjectPool<GameObject> GetMemoryPool(ViewKey viewKey)
         {
-            if (!_memoryPools.TryGetValue(viewKey, out var memoryPool))
+            if (!_memoryPools.TryGetValue(viewKey, out IObjectPool<GameObject> memoryPool))
             {
                 memoryPool = CreateMemoryPool(viewKey);
                 _memoryPools.Add(viewKey, memoryPool);

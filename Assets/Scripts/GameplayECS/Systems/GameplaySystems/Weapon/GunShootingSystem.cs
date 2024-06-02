@@ -49,22 +49,22 @@ namespace Asteroids.GameplayECS.Systems.Weapon
 
         private void Execute(ref Entity entity, float currentTime)
         {
-            ref var gunComponent = ref entity.GetComponent<GunComponent>();
-            ref var configuration = ref gunComponent.Configuration;
+            ref GunComponent gunComponent = ref entity.GetComponent<GunComponent>();
+            ref GunConfigurationComponent configuration = ref gunComponent.Configuration;
 
             if (gunComponent.IsFireRequested && gunComponent.LastFireTime + configuration.FiringInterval < currentTime)
             {
-                ref var positionComponent = ref entity.GetComponent<PositionComponent>();
-                ref var rotationComponent = ref entity.GetComponent<RotationComponent>();
-                ref var velocityComponent = ref entity.GetComponent<VelocityComponent>();
+                ref PositionComponent positionComponent = ref entity.GetComponent<PositionComponent>();
+                ref RotationComponent rotationComponent = ref entity.GetComponent<RotationComponent>();
+                ref VelocityComponent velocityComponent = ref entity.GetComponent<VelocityComponent>();
 
                 gunComponent.LastFireTime = currentTime;
 
-                var eulerAngles = Vector3.forward * rotationComponent.RotationDegrees;
-                var rotation = Quaternion.Euler(eulerAngles);
-                var direction = (rotation * Vector3.up).normalized;
+                Vector3 eulerAngles = Vector3.forward * rotationComponent.RotationDegrees;
+                Quaternion rotation = Quaternion.Euler(eulerAngles);
+                Vector3 direction = (rotation * Vector3.up).normalized;
                 Vector2 bulletPosition = positionComponent.Position + (Vector2)(rotation * configuration.BulletSpawnPositionOffset);
-                var bulletVelocity = (Vector2)(direction * configuration.BulletSpeed) + velocityComponent.Velocity;
+                Vector2 bulletVelocity = (Vector2)(direction * configuration.BulletSpeed) + velocityComponent.Velocity;
                 _entityFactory.CreateBullet(bulletPosition, rotationComponent.RotationDegrees, bulletVelocity);
             }
         }

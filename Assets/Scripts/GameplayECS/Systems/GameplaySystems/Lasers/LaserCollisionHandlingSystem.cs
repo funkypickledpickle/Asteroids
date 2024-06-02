@@ -38,11 +38,11 @@ namespace Asteroids.GameplayECS.Systems.Laser
 
         private void CollisionAddedHandler(ref Entity entity)
         {
-            var collisionComponent = entity.GetComponent<CollisionComponent>();
-            ref var collidedEntity = ref _world.GetEntity(collisionComponent.EntityId);
+            CollisionComponent collisionComponent = entity.GetComponent<CollisionComponent>();
+            ref Entity collidedEntity = ref _world.GetEntity(collisionComponent.EntityId);
             if (collidedEntity.HasComponent<RewardableScoreComponent>())
             {
-                ref var rewardableScoreComponent = ref collidedEntity.GetComponent<RewardableScoreComponent>();
+                ref RewardableScoreComponent rewardableScoreComponent = ref collidedEntity.GetComponent<RewardableScoreComponent>();
                 _entityFactory.CreateRewardedScoreEntity(rewardableScoreComponent.Score);
             }
 

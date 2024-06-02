@@ -37,14 +37,14 @@ namespace Asteroids.GameplayECS.Systems.Engine
 
         private static void Execute(ref Entity entity)
         {
-            ref var rotationEngineConfigurationComponent = ref entity.GetComponent<RotationEngineConfigurationComponent>();
-            ref var rotationEngineComponent = ref entity.GetComponent<RotationEngineComponent>();
+            ref RotationEngineConfigurationComponent rotationEngineConfigurationComponent = ref entity.GetComponent<RotationEngineConfigurationComponent>();
+            ref RotationEngineComponent rotationEngineComponent = ref entity.GetComponent<RotationEngineComponent>();
             if (!rotationEngineComponent.IsActive)
             {
                 return;
             }
 
-            ref var angularForceComponent = ref entity.GetComponent<UpdatableAngularForceComponent>();
+            ref UpdatableAngularForceComponent angularForceComponent = ref entity.GetComponent<UpdatableAngularForceComponent>();
             angularForceComponent.AngularForce += rotationEngineComponent.Rotation * rotationEngineConfigurationComponent.MaxAngularForce;
         }
     }

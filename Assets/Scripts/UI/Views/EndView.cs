@@ -41,7 +41,7 @@ namespace Asteroids.UI.Views
 
         private void TrySetup()
         {
-            ref var scoreComponent = ref _scoreGroup.GetFirst().GetComponent<ScoreComponent>();
+            ref ScoreComponent scoreComponent = ref _scoreGroup.GetFirst().GetComponent<ScoreComponent>();
             _scoreText.UpdateContent(scoreComponent.Score);
             _scoreLabel.SetText(_scoreText.ToString());
         }

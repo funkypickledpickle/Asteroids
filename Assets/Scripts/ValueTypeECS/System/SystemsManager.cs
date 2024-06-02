@@ -15,7 +15,7 @@ namespace Asteroids.ValueTypeECS.System
 
         public void AddSystem<TSystem>() where TSystem : class, ISystem
         {
-            var system = _instanceSpawner.Instantiate<TSystem>();
+            TSystem system = _instanceSpawner.Instantiate<TSystem>();
             _systems.Add(system);
             if (system is IExecutableSystem executableSystem)
             {
@@ -25,7 +25,7 @@ namespace Asteroids.ValueTypeECS.System
 
         public void Execute()
         {
-            foreach (var system in _executableSystems)
+            foreach (IExecutableSystem system in _executableSystems)
             {
                 system.Execute();
             }

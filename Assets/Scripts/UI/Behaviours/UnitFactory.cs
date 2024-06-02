@@ -19,8 +19,8 @@ namespace Asteroids.Services.EntityView
 
         public GameObject Create(ViewKey viewKey)
         {
-            var assetPath = _viewConfigurationService.GetPath(viewKey);
-            var instance = Object.Instantiate(_resourcesService.GetAsset<GameObject>(assetPath), _entityViewContainer);
+            string assetPath = _viewConfigurationService.GetPath(viewKey);
+            GameObject instance = Object.Instantiate(_resourcesService.GetAsset<GameObject>(assetPath), _entityViewContainer);
             instance.SetActive(false);
             return instance;
         }

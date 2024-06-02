@@ -47,8 +47,8 @@ namespace Asteroids.GameplayECS.Systems.Weapon
 
         private void Execute(ref Entity entity, float currentTime)
         {
-            ref var gunComponent = ref entity.GetComponent<LaserGunComponent>();
-            ref var configuration = ref gunComponent.Configuration;
+            ref LaserGunComponent gunComponent = ref entity.GetComponent<LaserGunComponent>();
+            ref LaserGunConfigurationComponent configuration = ref gunComponent.Configuration;
 
             if (gunComponent.IsFireRequested && gunComponent.LastFireTime + configuration.FiringInterval < currentTime && gunComponent.ChargesCount != 0)
             {

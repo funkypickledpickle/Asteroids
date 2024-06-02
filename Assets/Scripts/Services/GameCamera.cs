@@ -9,13 +9,13 @@ namespace Asteroids.Services
         {
             get
             {
-                var camera = GetComponent<Camera>();
-                var screenRect = camera.pixelRect;
-                var worldMin = camera.ScreenToWorldPoint(screenRect.min);
-                var worldMax = camera.ScreenToWorldPoint(screenRect.max);
-                var center = (worldMax + worldMin) / 2;
-                var size = worldMax - worldMin;
-                var worldRect = new Rect(center - size / 2, size);
+                Camera camera = GetComponent<Camera>();
+                Rect screenRect = camera.pixelRect;
+                Vector3 worldMin = camera.ScreenToWorldPoint(screenRect.min);
+                Vector3 worldMax = camera.ScreenToWorldPoint(screenRect.max);
+                Vector3 center = (worldMax + worldMin) / 2;
+                Vector3 size = worldMax - worldMin;
+                Rect worldRect = new Rect(center - size / 2, size);
                 return worldRect;
             }
         }

@@ -64,8 +64,8 @@ namespace Asteroids.ValueTypeECS.DataContainers
                 return false;
             }
 
-            var indices = CalculateIndices(index);
-            var array = GetArray(indices.arrayIndex);
+            (int arrayIndex, int localItemIndex) indices = CalculateIndices(index);
+            ItemContainer<ValueContainer<TValue>>[] array = GetArray(indices.arrayIndex);
             return array[indices.localItemIndex].Reserved;
         }
 
@@ -77,10 +77,10 @@ namespace Asteroids.ValueTypeECS.DataContainers
 
         public ref ValueContainer<TValue> Reserve()
         {
-            var isUnusedItemAvailable = _freeIndices.Count != 0;
-            var targetIndex = isUnusedItemAvailable ? _freeIndices.First() : (_maxReservedIndex ?? -1) + 1;
-            var indices = CalculateIndices(targetIndex);
-            var array = TryGetOrCreateArray(indices.arrayIndex);
+            bool isUnusedItemAvailable = _freeIndices.Count != 0;
+            int targetIndex = isUnusedItemAvailable ? _freeIndices.First() : (_maxReservedIndex ?? -1) + 1;
+            (int arrayIndex, int localItemIndex) indices = CalculateIndices(targetIndex);
+            ItemContainer<ValueContainer<TValue>>[] array = TryGetOrCreateArray(indices.arrayIndex);
             if (!isUnusedItemAvailable)
             {
                 _maxReservedIndex = targetIndex;
@@ -90,7 +90,7 @@ namespace Asteroids.ValueTypeECS.DataContainers
                 _freeIndices.Remove(targetIndex);
             }
 
-            ref var itemContainer = ref array[indices.localItemIndex];
+            ref ItemContainer<ValueContainer<TValue>> itemContainer = ref array[indices.localItemIndex];
             if (!itemContainer.Initialized)
             {
                 itemContainer.Value = new ValueContainer<TValue>(targetIndex);
@@ -134,8 +134,8 @@ namespace Asteroids.ValueTypeECS.DataContainers
 
         private ref ItemContainer<ValueContainer<TValue>> GetValueContainer(int index)
         {
-            var indices = CalculateIndices(index);
-            var array = GetArray(indices.arrayIndex);
+            (int arrayIndex, int localItemIndex) indices = CalculateIndices(index);
+            ItemContainer<ValueContainer<TValue>>[] array = GetArray(indices.arrayIndex);
             return ref array[indices.localItemIndex];
         }
 
@@ -146,8 +146,8 @@ namespace Asteroids.ValueTypeECS.DataContainers
                 throw new IndexOutOfRangeException();
             }
 
-            var indices = CalculateIndices(index);
-            var array = GetArray(indices.arrayIndex);
+            (int arrayIndex, int localItemIndex) indices = CalculateIndices(index);
+            ItemContainer<ValueContainer<TValue>>[] array = GetArray(indices.arrayIndex);
             if (!array[indices.localItemIndex].Initialized || !array[indices.localItemIndex].Reserved)
             {
                 throw new ArgumentException("The index is not used and it may has incorrect data");
@@ -166,7 +166,7 @@ namespace Asteroids.ValueTypeECS.DataContainers
 
         private ItemContainer<ValueContainer<TValue>>[] CreateArray()
         {
-            var array = new ItemContainer<ValueContainer<TValue>>[_arraySize];
+            ItemContainer<ValueContainer<TValue>>[] array = new ItemContainer<ValueContainer<TValue>>[_arraySize];
             _arrayList.Add(array);
             return array;
         }

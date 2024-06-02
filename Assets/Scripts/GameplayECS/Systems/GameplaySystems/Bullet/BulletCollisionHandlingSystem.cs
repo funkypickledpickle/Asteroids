@@ -36,11 +36,11 @@ namespace Asteroids.GameplayECS.Systems.Bullet
 
         private void CollisionAddedHandler(ref Entity entity)
         {
-            ref var collisionComponent = ref entity.GetComponent<CollisionComponent>();
-            ref var collidedEntity = ref _world.GetEntity(collisionComponent.EntityId);
+            ref CollisionComponent collisionComponent = ref entity.GetComponent<CollisionComponent>();
+            ref Entity collidedEntity = ref _world.GetEntity(collisionComponent.EntityId);
             if (collidedEntity.HasComponent<RewardableScoreComponent>())
             {
-                ref var rewardableScoreComponent = ref collidedEntity.GetComponent<RewardableScoreComponent>();
+                ref RewardableScoreComponent rewardableScoreComponent = ref collidedEntity.GetComponent<RewardableScoreComponent>();
                 _entityFactory.CreateRewardedScoreEntity(rewardableScoreComponent.Score);
             }
 

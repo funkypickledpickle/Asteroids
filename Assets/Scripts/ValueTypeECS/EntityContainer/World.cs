@@ -50,7 +50,7 @@ namespace Asteroids.ValueTypeECS.EntityContainer
             List<int> ids = ListPool<int>.Get();
             for (int i = 0; i < _preloadConfiguration.PreloadedEntitiesQuantity; i++)
             {
-                ref var container = ref _entities.Reserve();
+                ref ValueContainer<Entity> container = ref _entities.Reserve();
                 if (!container.IsInitialized)
                 {
                     container.Initialize(new Entity(container.Index, _componentsContainer,
@@ -72,7 +72,7 @@ namespace Asteroids.ValueTypeECS.EntityContainer
 
         public ref Entity CreateEntity()
         {
-            ref var container = ref _entities.Reserve();
+            ref ValueContainer<Entity> container = ref _entities.Reserve();
             if (!container.IsInitialized)
             {
                 container.Initialize(new Entity(container.Index, _componentsContainer,
@@ -91,7 +91,7 @@ namespace Asteroids.ValueTypeECS.EntityContainer
 
         public void RemoveEntity(int id)
         {
-            ref var entity = ref _entities.GetReservedValue(id).Value;
+            ref Entity entity = ref _entities.GetReservedValue(id).Value;
             entity.Destroy();
             EntityRemoved?.Invoke(ref _entities.GetReservedValue(id).Value);
             _entities.Free(id);
@@ -101,7 +101,7 @@ namespace Asteroids.ValueTypeECS.EntityContainer
         {
             WillClear?.Invoke();
 
-            foreach (var index in this)
+            foreach (int index in this)
             {
                 GetEntity(index).Reset();
             }
@@ -117,7 +117,7 @@ namespace Asteroids.ValueTypeECS.EntityContainer
 
         IEnumerator<int> IEnumerable<int>.GetEnumerator()
         {
-            foreach (var index in _entities)
+            foreach (int index in _entities)
             {
                 yield return index;
             }

@@ -2,8 +2,10 @@ using System;
 using Asteroids.GameplayECS.Components;
 using Asteroids.GameplayECS.Extensions;
 using Asteroids.Tools;
+using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityGroup;
 using Asteroids.ValueTypeECS.System;
+using UnityEngine;
 
 namespace Asteroids.GameplayECS.Systems.World
 {
@@ -43,13 +45,13 @@ namespace Asteroids.GameplayECS.Systems.World
         {
             if (_bounds.Count != 0)
             {
-                ref var bounds = ref _bounds.GetFirst().GetComponent<WorldBoundsComponent>().Bounds;
+                ref Rect bounds = ref _bounds.GetFirst().GetComponent<WorldBoundsComponent>().Bounds;
 
-                foreach (var entityId in _entities)
+                foreach (int entityId in _entities)
                 {
-                    ref var entity = ref _world.GetEntity(entityId);
-                    ref var positionComponent = ref entity.GetComponent<PositionComponent>();
-                    ref var position = ref positionComponent.Position;
+                    ref Entity entity = ref _world.GetEntity(entityId);
+                    ref PositionComponent positionComponent = ref entity.GetComponent<PositionComponent>();
+                    ref Vector2 position = ref positionComponent.Position;
                     if (position.x < bounds.xMin)
                     {
                         position.x += bounds.size.x;

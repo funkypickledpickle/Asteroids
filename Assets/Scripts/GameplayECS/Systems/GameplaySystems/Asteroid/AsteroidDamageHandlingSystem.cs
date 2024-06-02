@@ -33,7 +33,7 @@ namespace Asteroids.GameplayECS.Systems.Asteroid
         private void AsteroidDamagedHandler(ref Entity entity)
         {
             entity.CreateComponent<DestroyedComponent>();
-            ref var damageCreator = ref _world.GetEntity(entity.GetComponent<ReceivedDamageComponent>().SourceEntityId);
+            ref Entity damageCreator = ref _world.GetEntity(entity.GetComponent<ReceivedDamageComponent>().SourceEntityId);
             if (!damageCreator.HasComponent<LaserComponent>())
             {
                 entity.CreateComponent<AsteroidSplitComponent>();

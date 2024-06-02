@@ -33,8 +33,8 @@ namespace Asteroids.GameplayECS.Systems.Ship
 
         private void CollisionAddedHandler(ref Entity entity)
         {
-            ref var collisionComponent = ref entity.GetComponent<CollisionComponent>();
-            ref var collidedEntity = ref _world.GetEntity(collisionComponent.EntityId);
+            ref CollisionComponent collisionComponent = ref entity.GetComponent<CollisionComponent>();
+            ref Entity collidedEntity = ref _world.GetEntity(collisionComponent.EntityId);
             if (collidedEntity.HasComponent<UFOComponent>() || collidedEntity.HasComponent<AsteroidComponent>())
             {
                 entity.CreateComponent(new ReceivedDamageComponent { SourceEntityId = collidedEntity.Id });

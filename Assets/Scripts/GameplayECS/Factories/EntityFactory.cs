@@ -30,21 +30,21 @@ namespace Asteroids.GameplayECS.Factories
 
         public void CreateGameInfo()
         {
-            var gameConfiguration = _gameConfiguration;
-            ref var entity = ref _world.CreateEntity();
+            GameConfiguration gameConfiguration = _gameConfiguration;
+            ref Entity entity = ref _world.CreateEntity();
             entity.CreateComponent<GameComponent>();
             entity.CreateComponent<ScoreComponent>();
 
-            var worldRect = _fieldConfiguration.Rect;
-            var min = worldRect.min - Vector2.one * gameConfiguration.WorldBoundsPadding;
-            var size = worldRect.size + Vector2.one * 2 * gameConfiguration.WorldBoundsPadding;
-            var bounds = new Rect(min, size);
+            Rect worldRect = _fieldConfiguration.Rect;
+            Vector2 min = worldRect.min - Vector2.one * gameConfiguration.WorldBoundsPadding;
+            Vector2 size = worldRect.size + Vector2.one * 2 * gameConfiguration.WorldBoundsPadding;
+            Rect bounds = new Rect(min, size);
             entity.CreateComponent(new WorldBoundsComponent { Bounds = bounds });
         }
 
         public void CreateAsteroidSpawningTimer(float duration)
         {
-            ref var entity = ref _world.CreateEntity();
+            ref Entity entity = ref _world.CreateEntity();
             entity.CreateComponent<AsteroidSpawningTimerComponent>();
             entity.CreateComponent(new LifeTimeComponent()
             {
@@ -54,7 +54,7 @@ namespace Asteroids.GameplayECS.Factories
 
         public void CreateMeteorite(int groupConfigurationIndex, int stateIndex, Vector2 position, float rotationDegrees, Vector3 velocity, float angularSpeed, AsteroidGroupConfiguration.StateInfo stateInfo)
         {
-            ref var entity = ref CreateAsteroidInternal(groupConfigurationIndex, stateIndex, position, rotationDegrees, velocity, angularSpeed, stateInfo);
+            ref Entity entity = ref CreateAsteroidInternal(groupConfigurationIndex, stateIndex, position, rotationDegrees, velocity, angularSpeed, stateInfo);
             entity.CreateComponent<MeteoriteComponent>();
         }
 
@@ -65,7 +65,7 @@ namespace Asteroids.GameplayECS.Factories
 
         private ref Entity CreateAsteroidInternal(int groupConfigurationIndex, int stateIndex, Vector2 position, float rotationDegrees, Vector2 velocity, float angularSpeed, AsteroidGroupConfiguration.StateInfo stateInfo)
         {
-            ref var entity = ref _world.CreateEntity();
+            ref Entity entity = ref _world.CreateEntity();
             entity.CreateComponent(new AsteroidComponent()
             {
                 GroupConfigurationIndex = groupConfigurationIndex,
@@ -84,8 +84,8 @@ namespace Asteroids.GameplayECS.Factories
 
         public void CreateBullet(Vector2 position, float rotationDegrees, Vector2 speed)
         {
-            var bulletConfiguration = _bulletConfiguration;
-            ref var entity = ref _world.CreateEntity();
+            BulletConfiguration bulletConfiguration = _bulletConfiguration;
+            ref Entity entity = ref _world.CreateEntity();
             AddFieldComponents(ref entity, position, rotationDegrees);
 
             entity.CreateComponent<BulletComponent>();
@@ -96,8 +96,8 @@ namespace Asteroids.GameplayECS.Factories
 
         public void CreateLaser(int ownerId, Vector2 positionOffset, float distance)
         {
-            var laserConfiguration = _laserConfiguration;
-            ref var entity = ref _world.CreateEntity();
+            LaserConfiguration laserConfiguration = _laserConfiguration;
+            ref Entity entity = ref _world.CreateEntity();
 
             entity.CreateComponent<LaserComponent>();
             entity.CreateComponent(new AttachedToEntityComponent() { EntityId = ownerId, PositionOffset = positionOffset });
@@ -107,8 +107,8 @@ namespace Asteroids.GameplayECS.Factories
 
         public void CreateShip(Vector3 position, float rotationDegrees)
         {
-            ref var entity = ref _world.CreateEntity();
-            var playerConfiguration = _playerConfiguration;
+            ref Entity entity = ref _world.CreateEntity();
+            PlayerConfiguration playerConfiguration = _playerConfiguration;
             AddFieldComponents(ref entity, position, rotationDegrees);
 
             entity.CreateComponent<PlayerComponent>();
@@ -175,8 +175,8 @@ namespace Asteroids.GameplayECS.Factories
 
         public void CreateUFO(Vector3 position)
         {
-            var ufoConfiguration = _ufoConfiguration;
-            ref var entity = ref _world.CreateEntity();
+            UFOConfiguration ufoConfiguration = _ufoConfiguration;
+            ref Entity entity = ref _world.CreateEntity();
             entity.CreateComponent<UFOComponent>();
             entity.CreateComponent<ShipFollowerComponent>();
             entity.CreateComponent<MainControlComponent>();
@@ -196,7 +196,7 @@ namespace Asteroids.GameplayECS.Factories
 
         public void CreateUFOSpawningTimer(float duration)
         {
-            ref var entity = ref _world.CreateEntity();
+            ref Entity entity = ref _world.CreateEntity();
             entity.CreateComponent<UFOSpawningTimerComponent>();
             entity.CreateComponent(new LifeTimeComponent()
             {
@@ -206,7 +206,7 @@ namespace Asteroids.GameplayECS.Factories
 
         public void CreateRewardedScoreEntity(int score)
         {
-            ref var entity = ref _world.CreateEntity();
+            ref Entity entity = ref _world.CreateEntity();
             entity.CreateComponent(new ReceivedScoreComponent { Score = score });
         }
 

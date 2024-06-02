@@ -42,7 +42,7 @@ namespace Asteroids.GameplayECS.Systems.LifeTime
 
         private void HandleLifeTimeComponentAdded(ref Entity entity)
         {
-            var lifeTime = entity.GetComponent<LifeTimeComponent>().Duration;
+            float lifeTime = entity.GetComponent<LifeTimeComponent>().Duration;
             entity.CreateComponent(new DestroyTimeComponent { DeathTime = lifeTime + _frameInfoService.StartTime});
         }
 

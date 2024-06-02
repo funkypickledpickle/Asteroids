@@ -26,9 +26,9 @@ namespace Asteroids.Installation
 
         public override void InstallBindings()
         {
-            var resourcesService = Container.Resolve<IResourcesService>();
-            var configurationContainer = resourcesService.GetAsset<UnityConfigurationContainer>(ConfigurationsContainerPath);
-            var gameWorld = Container.Resolve<IGameWorld>();
+            IResourcesService resourcesService = Container.Resolve<IResourcesService>();
+            UnityConfigurationContainer configurationContainer = resourcesService.GetAsset<UnityConfigurationContainer>(ConfigurationsContainerPath);
+            IGameWorld gameWorld = Container.Resolve<IGameWorld>();
 
             Container.BindAsSingle<ViewPathsContainer>(() => configurationContainer.ViewPathsContainer);
             Container.BindAsSingle<GameConfiguration>((() => configurationContainer.GameConfiguration));

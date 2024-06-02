@@ -51,7 +51,7 @@ namespace Asteroids.UI.Input
         {
             if (_controlledGroup.Count != 0)
             {
-                ref var mainControlComponent = ref _controlledGroup.GetFirst().GetComponent<MainControlComponent>();
+                ref MainControlComponent mainControlComponent = ref _controlledGroup.GetFirst().GetComponent<MainControlComponent>();
                 mainControlComponent.Acceleration = _gameplayInputCollection.Gameplay.Acceleration.ReadValue<float>();
                 mainControlComponent.Rotation = -_gameplayInputCollection.Gameplay.Rotation.ReadValue<float>();
                 _controlledGroup.GetFirst().GetComponent<GunControlComponent>().IsFireRequested = _gameplayInputCollection.Gameplay.Fire.IsPressed();

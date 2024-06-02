@@ -28,7 +28,7 @@ namespace Asteroids.UnsafeTools
             {
                 fixed (char* targetStringPointer = _targetString)
                 {
-                    for (var i = 0; i < Content.Length; i++)
+                    for (int i = 0; i < Content.Length; i++)
                     {
                         targetStringPointer[i] = Content[i];
                     }

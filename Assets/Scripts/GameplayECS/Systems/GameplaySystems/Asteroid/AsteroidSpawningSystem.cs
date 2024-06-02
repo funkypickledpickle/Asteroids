@@ -86,7 +86,7 @@ namespace Asteroids.GameplayECS.Systems.Asteroid
 
         private void TryCreateAsteroids()
         {
-            var quantity = _gameConfiguration.MaxAsteroidQuantity - _asteroids.Count;
+            int quantity = _gameConfiguration.MaxAsteroidQuantity - _asteroids.Count;
             if (quantity > 0)
             {
                 CreateAsteroids(quantity);
@@ -105,32 +105,32 @@ namespace Asteroids.GameplayECS.Systems.Asteroid
                 return;
             }
 
-            ref var shipEntity = ref _ships.GetFirst();
-            for (var i = 0; i < quantity; i++)
+            ref Entity shipEntity = ref _ships.GetFirst();
+            for (int i = 0; i < quantity; i++)
             {
-                ref var positionComponent = ref shipEntity.GetComponent<PositionComponent>();
+                ref PositionComponent positionComponent = ref shipEntity.GetComponent<PositionComponent>();
 
                 while (_asteroids.Count < _gameConfiguration.MaxAsteroidQuantity)
                 {
-                    var groupConfigurationIndex = GetRandomAsteroidIndex();
-                    var groupConfiguration = _gameConfiguration.AsteroidGroupConfigurations[groupConfigurationIndex];
-                    var stateIndex = 0;
-                    var asteroidStateInfo = groupConfiguration.AsteroidStates[stateIndex];
-                    var asteroidConfiguration = asteroidStateInfo.AsteroidConfiguration;
+                    int groupConfigurationIndex = GetRandomAsteroidIndex();
+                    AsteroidGroupConfiguration groupConfiguration = _gameConfiguration.AsteroidGroupConfigurations[groupConfigurationIndex];
+                    int stateIndex = 0;
+                    AsteroidGroupConfiguration.StateInfo asteroidStateInfo = groupConfiguration.AsteroidStates[stateIndex];
+                    AsteroidConfiguration asteroidConfiguration = asteroidStateInfo.AsteroidConfiguration;
 
-                    var rotation = Quaternion.Euler(0, 0, Random.Range(0, MaxAngle));
-                    var direction = (rotation * Vector3.up).normalized;
+                    Quaternion rotation = Quaternion.Euler(0, 0, Random.Range(0, MaxAngle));
+                    Vector3 direction = (rotation * Vector3.up).normalized;
                     Vector2 offset = direction * asteroidConfiguration.MinMaxDistanceFromTarget.RandomRange();
 
-                    var targetPosition = positionComponent.Position + offset;
+                    Vector2 targetPosition = positionComponent.Position + offset;
                     Vector3 directionToTarget = (positionComponent.Position - targetPosition).normalized;
-                    var targetOffsetAngle = asteroidConfiguration.MinMaxDiversionFromTargetDegrees.RandomRange() * RandomExtensions.RandomSign();
-                    var directionOffset = Quaternion.Euler(0, 0, targetOffsetAngle);
-                    var targetVelocityDirection = directionOffset * directionToTarget;
-                    var targetVelocity = targetVelocityDirection * asteroidConfiguration.MinMaxVelocity.RandomRange();
+                    float targetOffsetAngle = asteroidConfiguration.MinMaxDiversionFromTargetDegrees.RandomRange() * RandomExtensions.RandomSign();
+                    Quaternion directionOffset = Quaternion.Euler(0, 0, targetOffsetAngle);
+                    Vector3 targetVelocityDirection = directionOffset * directionToTarget;
+                    Vector3 targetVelocity = targetVelocityDirection * asteroidConfiguration.MinMaxVelocity.RandomRange();
 
-                    var targetRotationDegrees = Random.Range(0, MaxAngle);
-                    var targetAngularSpeed = asteroidConfiguration.MinMaxAngularSpeedDegrees.RandomRange();
+                    float targetRotationDegrees = Random.Range(0, MaxAngle);
+                    float targetAngularSpeed = asteroidConfiguration.MinMaxAngularSpeedDegrees.RandomRange();
                     _entityFactory.CreateAsteroid(groupConfigurationIndex, stateIndex, targetPosition, targetRotationDegrees, targetVelocity, targetAngularSpeed, asteroidStateInfo);
                 }
             }
@@ -138,9 +138,9 @@ namespace Asteroids.GameplayECS.Systems.Asteroid
 
         private int GetRandomAsteroidIndex()
         {
-            var totalProbability = 0f;
-            var targetProbability = Random.Range(0, _asteroidSpawnProbabilitiesSum);
-            for (var i = 0; i < _asteroidSpawnProbabilitiesCached.Length; i++)
+            float totalProbability = 0f;
+            float targetProbability = Random.Range(0, _asteroidSpawnProbabilitiesSum);
+            for (int i = 0; i < _asteroidSpawnProbabilitiesCached.Length; i++)
             {
                 totalProbability += _asteroidSpawnProbabilitiesCached[i];
                 if (targetProbability < totalProbability)

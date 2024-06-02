@@ -28,8 +28,8 @@ namespace Asteroids.ValueTypeECS.Components
 
         public ref TComponent CreateComponent<TComponent>(out int id) where TComponent : struct, IECSComponent
         {
-            var list = GetList<TComponent>();
-            ref var valueContainer = ref list.Reserve();
+            UnorderedSegmentedList<TComponent> list = GetList<TComponent>();
+            ref ValueContainer<TComponent> valueContainer = ref list.Reserve();
             id = valueContainer.Index;
             Log($"<color=\"green\">CreateComponent {typeof(TComponent)} with id {id}</color>");
             return ref valueContainer.Value;
@@ -37,13 +37,13 @@ namespace Asteroids.ValueTypeECS.Components
 
         public ref TComponent GetComponent<TComponent>(int index) where TComponent : struct, IECSComponent
         {
-            var list = GetList<TComponent>();
+            UnorderedSegmentedList<TComponent> list = GetList<TComponent>();
             return ref list.GetReservedValue(index).Value;
         }
 
         public void RemoveComponent<TComponent>(int id) where TComponent : struct, IECSComponent
         {
-            var list = GetList<TComponent>();
+            UnorderedSegmentedList<TComponent> list = GetList<TComponent>();
             list.Free(id);
             Log($"<color=\"red\">RemoveComponent {typeof(TComponent)} with id {id}</color>");
         }
@@ -55,7 +55,7 @@ namespace Asteroids.ValueTypeECS.Components
 
         public void Reset()
         {
-            foreach (var segmentedList in _componentsCollection)
+            foreach (KeyValuePair<ECSTypeKey, ISegmentedList> segmentedList in _componentsCollection)
             {
                 segmentedList.Value.Clear();
             }
@@ -63,13 +63,13 @@ namespace Asteroids.ValueTypeECS.Components
 
         private UnorderedSegmentedList<TComponent> GetList<TComponent>() where TComponent : struct, IECSComponent
         {
-            var typeKey = ECSTypeService.GetType<TComponent>();
-            if (_componentsCollection.TryGetValue(typeKey, out var value))
+            ECSTypeKey typeKey = ECSTypeService.GetType<TComponent>();
+            if (_componentsCollection.TryGetValue(typeKey, out ISegmentedList value))
             {
                 return (UnorderedSegmentedList<TComponent>)value;
             }
 
-            var list = new UnorderedSegmentedList<TComponent>(_arraySizeInSegmentedList);
+            UnorderedSegmentedList<TComponent> list = new UnorderedSegmentedList<TComponent>(_arraySizeInSegmentedList);
             _componentsCollection.Add(typeKey, list);
             return list;
         }

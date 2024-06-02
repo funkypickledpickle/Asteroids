@@ -1,5 +1,6 @@
 using Asteroids.Installation;
 using Asteroids.GameplayECS.Components;
+using Asteroids.ValueTypeECS.Entities;
 using Asteroids.ValueTypeECS.EntityContainer;
 using UnityEngine;
 using Zenject;
@@ -38,14 +39,14 @@ namespace Asteroids.UI.Behaviours
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            var clientUnitId = other.GetComponent<UnitBehaviour>();
+            UnitBehaviour clientUnitId = other.GetComponent<UnitBehaviour>();
             if (clientUnitId == null)
             {
                 Debug.LogError($"There's no UnitId component in other.gameObject {other.gameObject.name}");
                 return;
             }
 
-            ref var collisionHost = ref _world.GetEntity(_entityId);
+            ref Entity collisionHost = ref _world.GetEntity(_entityId);
             if (!collisionHost.HasComponent<CollisionComponent>())
             {
                 collisionHost.CreateComponent(new CollisionComponent { EntityId = clientUnitId.EntityId });

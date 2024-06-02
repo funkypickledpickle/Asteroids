@@ -35,7 +35,7 @@ namespace Asteroids.GameplayECS.Systems.Score
 
         private void EntityAddedHandler(ref Entity scoreEntity)
         {
-            ref var scoreGainedComponent = ref scoreEntity.GetComponent<ReceivedScoreComponent>();
+            ref ReceivedScoreComponent scoreGainedComponent = ref scoreEntity.GetComponent<ReceivedScoreComponent>();
             if (_scoreGroup.Count != 0)
             {
                 _scoreGroup.GetFirst().GetComponent<ScoreComponent>().Score += scoreGainedComponent.Score;

@@ -48,37 +48,37 @@ namespace Asteroids.GameplayECS.Systems.Asteroid
 
         private void SpawnFragments(ref Entity parent)
         {
-            ref var asteroidConfigurationComponent = ref parent.GetComponent<AsteroidComponent>();
-            ref var rootPositionComponent = ref parent.GetComponent<PositionComponent>();
-            ref var rootVelocityComponent = ref parent.GetComponent<VelocityComponent>();
+            ref AsteroidComponent asteroidConfigurationComponent = ref parent.GetComponent<AsteroidComponent>();
+            ref PositionComponent rootPositionComponent = ref parent.GetComponent<PositionComponent>();
+            ref VelocityComponent rootVelocityComponent = ref parent.GetComponent<VelocityComponent>();
 
-            var groupConfigurationIndex = asteroidConfigurationComponent.GroupConfigurationIndex;
-            var stateIndex = asteroidConfigurationComponent.StateIndex + 1;
+            int groupConfigurationIndex = asteroidConfigurationComponent.GroupConfigurationIndex;
+            int stateIndex = asteroidConfigurationComponent.StateIndex + 1;
 
-            var groupConfiguration = _gameConfiguration.AsteroidGroupConfigurations[groupConfigurationIndex];
+            AsteroidGroupConfiguration groupConfiguration = _gameConfiguration.AsteroidGroupConfigurations[groupConfigurationIndex];
             if (stateIndex >= groupConfiguration.AsteroidStates.Count)
             {
                 return;
             }
 
-            var asteroidStateInfo = groupConfiguration.AsteroidStates[stateIndex];
-            var asteroidConfiguration = asteroidStateInfo.AsteroidConfiguration;
-            var quantity = asteroidStateInfo.Quantity;
+            AsteroidGroupConfiguration.StateInfo asteroidStateInfo = groupConfiguration.AsteroidStates[stateIndex];
+            AsteroidConfiguration asteroidConfiguration = asteroidStateInfo.AsteroidConfiguration;
+            int quantity = asteroidStateInfo.Quantity;
 
-            var velocityQuaternion = Quaternion.FromToRotation(Vector3.up, rootVelocityComponent.Velocity.normalized);
-            var velocityAngleDegrees = velocityQuaternion.eulerAngles.z;
-            var minAngle = velocityAngleDegrees - DirectionDegrees / 2;
-            var maxAngle = velocityAngleDegrees + DirectionDegrees / 2;
-            var difference = DirectionDegrees / quantity;
+            Quaternion velocityQuaternion = Quaternion.FromToRotation(Vector3.up, rootVelocityComponent.Velocity.normalized);
+            float velocityAngleDegrees = velocityQuaternion.eulerAngles.z;
+            float minAngle = velocityAngleDegrees - DirectionDegrees / 2;
+            float maxAngle = velocityAngleDegrees + DirectionDegrees / 2;
+            float difference = DirectionDegrees / quantity;
 
-            for (var i = minAngle + difference / 2; i < maxAngle; i += difference)
+            for (float i = minAngle + difference / 2; i < maxAngle; i += difference)
             {
-                var rotation = Quaternion.Euler(0, 0, i);
-                var direction = (rotation * Vector3.up).normalized;
+                Quaternion rotation = Quaternion.Euler(0, 0, i);
+                Vector3 direction = (rotation * Vector3.up).normalized;
 
-                var targetRotationDegrees = Random.Range(0, MaxAngle);
-                var targetAngularSpeed = asteroidConfiguration.MinMaxAngularSpeedDegrees.RandomRange();
-                var targetVelocity = rootVelocityComponent.Velocity.magnitude * direction * asteroidStateInfo.SpeedMultiplier;
+                float targetRotationDegrees = Random.Range(0, MaxAngle);
+                float targetAngularSpeed = asteroidConfiguration.MinMaxAngularSpeedDegrees.RandomRange();
+                Vector3 targetVelocity = rootVelocityComponent.Velocity.magnitude * direction * asteroidStateInfo.SpeedMultiplier;
                 _entityFactory.CreateMeteorite(groupConfigurationIndex, stateIndex, rootPositionComponent.Position, targetRotationDegrees, targetVelocity, targetAngularSpeed, asteroidStateInfo);
             }
         }

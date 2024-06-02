@@ -50,7 +50,7 @@ namespace Asteroids.ValueTypeECS.Entities
 
         public bool HasComponent<TComponent>() where TComponent : struct, IECSComponent
         {
-            var typeKey = ECSTypeService.GetType<TComponent>();
+            ECSTypeKey typeKey = ECSTypeService.GetType<TComponent>();
             return _components.ContainsKey(typeKey);
         }
 
@@ -61,9 +61,9 @@ namespace Asteroids.ValueTypeECS.Entities
                 throw new ArgumentException($"Entity {Id} already has component type of {typeof(TComponent)}");
             }
 
-            var typeKey = ECSTypeService.GetType<TComponent>();
-            ref var component = ref _componentsContainer.CreateComponent<TComponent>(out var id);
-            var componentKey = new ComponentKey(id, typeKey);
+            ECSTypeKey typeKey = ECSTypeService.GetType<TComponent>();
+            ref TComponent component = ref _componentsContainer.CreateComponent<TComponent>(out int id);
+            ComponentKey componentKey = new ComponentKey(id, typeKey);
             _components.Add(typeKey, componentKey);
             component = source;
             LogEntityComponents($"<color=\"green\">CreateComponent{typeof(TComponent)}: id #{id}</color>");
@@ -77,7 +77,7 @@ namespace Asteroids.ValueTypeECS.Entities
 
         public ref TComponent GetComponent<TComponent>() where TComponent : struct, IECSComponent
         {
-            var typeKey = ECSTypeService.GetType<TComponent>();
+            ECSTypeKey typeKey = ECSTypeService.GetType<TComponent>();
             if (!_components.ContainsKey(typeKey))
             {
                 throw new ArgumentException($"The entity_{Id} doesn't have the component type of {typeof(TComponent)}");
@@ -88,7 +88,7 @@ namespace Asteroids.ValueTypeECS.Entities
 
         public void RemoveComponent<TComponent>() where TComponent : struct, IECSComponent
         {
-            var typeKey = ECSTypeService.GetType<TComponent>();
+            ECSTypeKey typeKey = ECSTypeService.GetType<TComponent>();
             RemoveComponent(typeKey);
             LogEntityComponents($"<color=\"red\">RemoveComponent{typeof(TComponent)}</color>");
         }
@@ -100,8 +100,8 @@ namespace Asteroids.ValueTypeECS.Entities
                 throw new InvalidOperationException();
             }
 
-            var componentKey = _components[typeKey];
-            var componentIndex = componentKey.Index;
+            ComponentKey componentKey = _components[typeKey];
+            int componentIndex = componentKey.Index;
             _components.Remove(typeKey);
             _componentRemoved(ref this, componentKey);
             _componentsContainer.RemoveComponent(typeKey, componentIndex);
@@ -109,7 +109,7 @@ namespace Asteroids.ValueTypeECS.Entities
 
         public void Destroy()
         {
-            var keysCollection = _components.Keys;
+            Dictionary<ECSTypeKey, ComponentKey>.KeyCollection keysCollection = _components.Keys;
             while (keysCollection.Count > 0)
             {
                 RemoveComponent(keysCollection.First());

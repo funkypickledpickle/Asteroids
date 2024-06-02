@@ -23,19 +23,19 @@ namespace Asteroids.Services
                 throw new ArgumentException("Key is null or empty");
             }
 
-            if (_cachedResources.TryGetValue(key, out var resource))
+            if (_cachedResources.TryGetValue(key, out object resource))
             {
                 return (T)resource;
             }
 
-            var resourceType = GetResourceSource(key);
+            ResourceSource resourceType = GetResourceSource(key);
             switch (resourceType)
             {
                 case ResourceSource.Local:
                 {
-                    var assetPath = AssetPath(key);
+                    string assetPath = AssetPath(key);
                     {
-                        var asset = Resources.Load<T>(assetPath);
+                        T asset = Resources.Load<T>(assetPath);
                         if (asset == null)
                         {
                             this.LogWarning(LogCategory.Resources, $"Asset wasn't found by this key {key}");
@@ -54,7 +54,7 @@ namespace Asteroids.Services
 
         private static ResourceSource GetResourceSource(string key)
         {
-            var isLocal = key.IndexOf(ProjectConstants.ResourcePath, StringComparison.Ordinal) == 0;
+            bool isLocal = key.IndexOf(ProjectConstants.ResourcePath, StringComparison.Ordinal) == 0;
             if (isLocal)
             {
                 return ResourceSource.Local;
@@ -65,13 +65,13 @@ namespace Asteroids.Services
 
         private static string AssetPath(string key)
         {
-            var input = key;
-            var source = GetResourceSource(input);
+            string input = key;
+            ResourceSource source = GetResourceSource(input);
             switch (source)
             {
                 case ResourceSource.Local:
                 {
-                    var index = input.IndexOf(ProjectConstants.ResourcePath, StringComparison.Ordinal);
+                    int index = input.IndexOf(ProjectConstants.ResourcePath, StringComparison.Ordinal);
                     return input.Substring(index + ProjectConstants.ResourcePath.Length + 1);
                 }
                 default:

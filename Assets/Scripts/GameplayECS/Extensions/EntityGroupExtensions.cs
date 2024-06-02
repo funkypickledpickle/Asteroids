@@ -1,6 +1,7 @@
 using Asteroids.ValueTypeECS.Components;
 using Asteroids.ValueTypeECS.Delegates;
 using Asteroids.ValueTypeECS.Entities;
+using Asteroids.ValueTypeECS.EntityContainer;
 using Asteroids.ValueTypeECS.EntityGroup;
 
 namespace Asteroids.GameplayECS.Extensions
@@ -27,25 +28,25 @@ namespace Asteroids.GameplayECS.Extensions
     {
         public static void ForEach(this EntityGroup entityGroup, ActionReference<Entity> actionReference)
         {
-            var world = entityGroup.World;
-            foreach (var id in entityGroup) actionReference(ref world.GetEntity(id));
+            World world = entityGroup.World;
+            foreach (int id in entityGroup) actionReference(ref world.GetEntity(id));
         }
 
         public static void ForEach<TValue>(this EntityGroup entityGroup,
             ActionReferenceValue<Entity, TValue> actionReference, TValue value)
         {
-            var world = entityGroup.World;
-            foreach (var id in entityGroup) actionReference(ref world.GetEntity(id), value);
+            World world = entityGroup.World;
+            foreach (int id in entityGroup) actionReference(ref world.GetEntity(id), value);
         }
 
         public static void ForEachComponent<TComponent>(this EntityGroup entityGroup,
             ActionReference<Entity, TComponent> actionReference) where TComponent : struct, IECSComponent
         {
-            var world = entityGroup.World;
-            foreach (var id in entityGroup)
+            World world = entityGroup.World;
+            foreach (int id in entityGroup)
             {
-                ref var entity = ref world.GetEntity(id);
-                ref var component = ref entity.GetComponent<TComponent>();
+                ref Entity entity = ref world.GetEntity(id);
+                ref TComponent component = ref entity.GetComponent<TComponent>();
                 actionReference(ref entity, ref component);
             }
         }
@@ -54,11 +55,11 @@ namespace Asteroids.GameplayECS.Extensions
             ActionReferenceValue<Entity, TComponent, TValue> actionReference, TValue value)
             where TComponent : struct, IECSComponent
         {
-            var world = entityGroup.World;
-            foreach (var id in entityGroup)
+            World world = entityGroup.World;
+            foreach (int id in entityGroup)
             {
-                ref var entity = ref world.GetEntity(id);
-                ref var component = ref entity.GetComponent<TComponent>();
+                ref Entity entity = ref world.GetEntity(id);
+                ref TComponent component = ref entity.GetComponent<TComponent>();
                 actionReference(ref entity, ref component, value);
             }
         }
@@ -67,12 +68,12 @@ namespace Asteroids.GameplayECS.Extensions
             ActionReference<Entity, TComponent1, TComponent2> actionReferenceRef2)
             where TComponent1 : struct, IECSComponent where TComponent2 : struct, IECSComponent
         {
-            var world = entityGroup.World;
-            foreach (var id in entityGroup)
+            World world = entityGroup.World;
+            foreach (int id in entityGroup)
             {
-                ref var entity = ref world.GetEntity(id);
-                ref var component1 = ref entity.GetComponent<TComponent1>();
-                ref var component2 = ref entity.GetComponent<TComponent2>();
+                ref Entity entity = ref world.GetEntity(id);
+                ref TComponent1 component1 = ref entity.GetComponent<TComponent1>();
+                ref TComponent2 component2 = ref entity.GetComponent<TComponent2>();
                 actionReferenceRef2(ref entity, ref component1, ref component2);
             }
         }
@@ -83,13 +84,13 @@ namespace Asteroids.GameplayECS.Extensions
             where TComponent2 : struct, IECSComponent
             where TComponent3 : struct, IECSComponent
         {
-            var world = entityGroup.World;
-            foreach (var id in entityGroup)
+            World world = entityGroup.World;
+            foreach (int id in entityGroup)
             {
-                ref var entity = ref world.GetEntity(id);
-                ref var component1 = ref entity.GetComponent<TComponent1>();
-                ref var component2 = ref entity.GetComponent<TComponent2>();
-                ref var component3 = ref entity.GetComponent<TComponent3>();
+                ref Entity entity = ref world.GetEntity(id);
+                ref TComponent1 component1 = ref entity.GetComponent<TComponent1>();
+                ref TComponent2 component2 = ref entity.GetComponent<TComponent2>();
+                ref TComponent3 component3 = ref entity.GetComponent<TComponent3>();
                 actionReference(ref entity, ref component1, ref component2, ref component3);
             }
         }
@@ -98,12 +99,12 @@ namespace Asteroids.GameplayECS.Extensions
             ActionReference<TComponent1, TComponent2> actionReference) where TComponent1 : struct, IECSComponent
             where TComponent2 : struct, IECSComponent
         {
-            var world = entityGroup.World;
-            foreach (var id in entityGroup)
+            World world = entityGroup.World;
+            foreach (int id in entityGroup)
             {
-                ref var entity = ref world.GetEntity(id);
-                ref var component1 = ref entity.GetComponent<TComponent1>();
-                ref var component2 = ref entity.GetComponent<TComponent2>();
+                ref Entity entity = ref world.GetEntity(id);
+                ref TComponent1 component1 = ref entity.GetComponent<TComponent1>();
+                ref TComponent2 component2 = ref entity.GetComponent<TComponent2>();
                 actionReference(ref component1, ref component2);
             }
         }
@@ -112,12 +113,12 @@ namespace Asteroids.GameplayECS.Extensions
             ActionReferenceValue<TComponent1, TComponent2, TValue> actionReference, TValue value)
             where TComponent1 : struct, IECSComponent where TComponent2 : struct, IECSComponent
         {
-            var world = entityGroup.World;
-            foreach (var id in entityGroup)
+            World world = entityGroup.World;
+            foreach (int id in entityGroup)
             {
-                ref var entity = ref world.GetEntity(id);
-                ref var component1 = ref entity.GetComponent<TComponent1>();
-                ref var component2 = ref entity.GetComponent<TComponent2>();
+                ref Entity entity = ref world.GetEntity(id);
+                ref TComponent1 component1 = ref entity.GetComponent<TComponent1>();
+                ref TComponent2 component2 = ref entity.GetComponent<TComponent2>();
                 actionReference(ref component1, ref component2, value);
             }
         }

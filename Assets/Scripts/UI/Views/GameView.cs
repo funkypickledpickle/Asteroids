@@ -84,11 +84,11 @@ namespace Asteroids.UI.Views
                 return;
             }
 
-            ref var playerEntity = ref _playerGroup.GetFirst();
-            ref var positionComponent = ref playerEntity.GetComponent<PositionComponent>();
-            ref var rotationComponent = ref playerEntity.GetComponent<RotationComponent>();
-            ref var velocityComponent = ref playerEntity.GetComponent<VelocityComponent>();
-            ref var laserGunComponent = ref playerEntity.GetComponent<LaserGunComponent>();
+            ref Entity playerEntity = ref _playerGroup.GetFirst();
+            ref PositionComponent positionComponent = ref playerEntity.GetComponent<PositionComponent>();
+            ref RotationComponent rotationComponent = ref playerEntity.GetComponent<RotationComponent>();
+            ref VelocityComponent velocityComponent = ref playerEntity.GetComponent<VelocityComponent>();
+            ref LaserGunComponent laserGunComponent = ref playerEntity.GetComponent<LaserGunComponent>();
 
             _positionText.UpdateContent(positionComponent.Position);
             _positionLabel.SetText(_positionText.ToString());
@@ -102,9 +102,9 @@ namespace Asteroids.UI.Views
             _chargesCountText.UpdateContent(laserGunComponent.ChargesCount);
             _chargesCountLabel.SetText(_chargesCountText.ToString());
 
-            var laserReadyTime = laserGunComponent.LastFireTime + laserGunComponent.Configuration.FiringInterval;
-            var isLaserReady = laserReadyTime < _frameInfoService.StartTime;
-            var timerValue = isLaserReady ? 0 : laserReadyTime - _frameInfoService.StartTime;
+            float laserReadyTime = laserGunComponent.LastFireTime + laserGunComponent.Configuration.FiringInterval;
+            bool isLaserReady = laserReadyTime < _frameInfoService.StartTime;
+            float timerValue = isLaserReady ? 0 : laserReadyTime - _frameInfoService.StartTime;
             _rechargeTimerText.UpdateContent(timerValue);
             _rechargeTimerLabel.SetText(_rechargeTimerText.ToString());
         }
@@ -116,7 +116,7 @@ namespace Asteroids.UI.Views
 
         private void UpdateScore()
         {
-            ref var scoreComponent = ref _scoreGroup.GetFirst().GetComponent<ScoreComponent>();
+            ref ScoreComponent scoreComponent = ref _scoreGroup.GetFirst().GetComponent<ScoreComponent>();
             _scoreText.UpdateContent(scoreComponent.Score);
             _scoreLabel.SetText(_scoreText.ToString());
         }

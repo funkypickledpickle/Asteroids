@@ -29,12 +29,12 @@ namespace Asteroids.UI.Behaviours
 
         private void HandleWillBeVisible()
         {
-            var entityId = _unitBehaviour.EntityId;
+            int entityId = _unitBehaviour.EntityId;
             ref Entity entity = ref _world.GetEntity(entityId);
-            var targetScale = Vector3.one;
+            Vector3 targetScale = Vector3.one;
             if (entity.HasComponent<ScaleComponent>())
             {
-                ref var viewScaleComponent = ref entity.GetComponent<ScaleComponent>();
+                ref ScaleComponent viewScaleComponent = ref entity.GetComponent<ScaleComponent>();
                 targetScale = viewScaleComponent.Scale;
             }
 

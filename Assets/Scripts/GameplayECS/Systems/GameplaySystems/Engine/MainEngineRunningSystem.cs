@@ -39,20 +39,20 @@ namespace Asteroids.GameplayECS.Systems.Engine
 
         private static void Execute(ref Entity entity)
         {
-            ref var engineConfigurationComponent = ref entity.GetComponent<MainEngineConfigurationComponent>();
-            ref var engineComponent = ref entity.GetComponent<MainEngineComponent>();
+            ref MainEngineConfigurationComponent engineConfigurationComponent = ref entity.GetComponent<MainEngineConfigurationComponent>();
+            ref MainEngineComponent engineComponent = ref entity.GetComponent<MainEngineComponent>();
             if (!engineComponent.IsActive)
             {
                 return;
             }
 
-            ref var rotationComponent = ref entity.GetComponent<RotationComponent>();
-            ref var forceComponent = ref entity.GetComponent<UpdatableForceComponent>();
-            var rotationDegrees = entity.HasComponent<MainEngineMagicRotationComponent>() ? entity.GetComponent<MainEngineMagicRotationComponent>().Rotation : rotationComponent.RotationDegrees;
+            ref RotationComponent rotationComponent = ref entity.GetComponent<RotationComponent>();
+            ref UpdatableForceComponent forceComponent = ref entity.GetComponent<UpdatableForceComponent>();
+            float rotationDegrees = entity.HasComponent<MainEngineMagicRotationComponent>() ? entity.GetComponent<MainEngineMagicRotationComponent>().Rotation : rotationComponent.RotationDegrees;
 
-            var eulerAngles = Vector3.forward * rotationDegrees;
-            var rotation = Quaternion.Euler(eulerAngles);
-            var direction = (rotation * Vector3.up).normalized;
+            Vector3 eulerAngles = Vector3.forward * rotationDegrees;
+            Quaternion rotation = Quaternion.Euler(eulerAngles);
+            Vector3 direction = (rotation * Vector3.up).normalized;
             forceComponent.Force += (Vector2)(direction * engineConfigurationComponent.MaxForce * engineComponent.Acceleration);
         }
     }

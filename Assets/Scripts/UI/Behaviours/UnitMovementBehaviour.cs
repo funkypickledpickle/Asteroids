@@ -36,7 +36,7 @@ namespace Asteroids.UI.Behaviours
         private void Update()
         {
             ref Entity entity = ref _world.GetEntity(_entityId);
-            var entityTransform = transform;
+            Transform entityTransform = transform;
             entityTransform.position = entity.GetComponent<PositionComponent>().Position;
             entityTransform.eulerAngles = new Vector3(0, 0, entity.GetComponent<RotationComponent>().RotationDegrees);
         }

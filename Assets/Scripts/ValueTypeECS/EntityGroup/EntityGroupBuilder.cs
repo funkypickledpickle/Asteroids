@@ -42,7 +42,7 @@ namespace Asteroids.ValueTypeECS.EntityGroup
 
             public bool CheckEntity(ref Entity entity)
             {
-                for (var i = 0; i < _conditions.Count; i++)
+                for (int i = 0; i < _conditions.Count; i++)
                 {
                     if (!_conditions[i](ref entity))
                     {

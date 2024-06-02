@@ -40,8 +40,8 @@ namespace Asteroids.Gameplay.States
 
         private BaseState GetState<T>() where T : BaseState
         {
-            var type = typeof(T);
-            if (_gameStates.TryGetValue(type, out var state))
+            Type type = typeof(T);
+            if (_gameStates.TryGetValue(type, out BaseState state))
             {
                 return state;
             }

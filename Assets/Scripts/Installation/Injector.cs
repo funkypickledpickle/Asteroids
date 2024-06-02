@@ -1,5 +1,6 @@
 using Asteroids.UI;
 using UnityEngine;
+using Zenject;
 
 namespace Asteroids.Installation
 {
@@ -8,9 +9,9 @@ namespace Asteroids.Installation
     {
         private void Awake()
         {
-            var container = ContainersRegistry.GetContainer(Containers.SceneContainerId);
+            DiContainer container = ContainersRegistry.GetContainer(Containers.SceneContainerId);
 
-            foreach (var injectable in transform.GetComponents<IInjectable>())
+            foreach (IInjectable injectable in transform.GetComponents<IInjectable>())
             {
                 container.Inject(injectable);
             }

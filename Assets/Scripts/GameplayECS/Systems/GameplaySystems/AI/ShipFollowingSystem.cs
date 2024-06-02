@@ -52,8 +52,8 @@ namespace Asteroids.GameplayECS.Systems.AI
                 return;
             }
 
-            ref var targetPositionComponent = ref _ships.GetFirst().GetComponent<PositionComponent>();
-            var direction = targetPositionComponent.Position - shipPositionComponent.Position;
+            ref PositionComponent targetPositionComponent = ref _ships.GetFirst().GetComponent<PositionComponent>();
+            Vector2 direction = targetPositionComponent.Position - shipPositionComponent.Position;
             mainControlComponent.Acceleration = MainControlComponent.MaxAcceleration;
             mainControlComponent.Rotation = Quaternion.LookRotation(Vector3.forward, direction).eulerAngles.z;
         }

@@ -16,7 +16,7 @@ namespace Asteroids.UnsafeTools
 
         public Vector2MutableStringPresenter(NumericFormat numericFormat)
         {
-            var stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append(FormattingConstants.HorizontalAxisText);
             _horizontalAxisTextIndex = stringBuilder.Length;
             stringBuilder.Append(new string(FormattingConstants.EndStringCharacter, numericFormat.MaximumLength));
